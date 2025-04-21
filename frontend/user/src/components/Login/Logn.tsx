@@ -1,24 +1,70 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import axios from "axios";
-
-
+import { GoogleOAuthProvider,GoogleLogin ,CredentialResponse} from "@react-oauth/google";
+import { gapi } from "gapi-script";
+import { jwtDecode } from "jwt-decode";
+import axiosInstanceuser from "../../axios";
 interface LoginForm{
     email:string,
     password:string
 }
-
+interface GooglePayload{
+    email:string,
+    sub:string,
+    name:string
+}
 
 const Login:React.FC=()=>{
+    const clientId="699319272981-124dj113d9a2aqbmo2s756u6152bher2.apps.googleusercontent.com"
+
     const[formdata,setformdata]=useState<LoginForm>({
         email:"",
         password:""
     })
     const [loading, setloading]=useState(false);
     const[error,seterror]=useState<string |null>(null)
+    const [msg, setMsg] = useState<string>('');
+
+    useEffect(()=>{
+        function start(){
+            gapi.client.init({
+                clientId:clientId,
+                scope:""
+            })
+        } 
+
+        gapi.load('client:auth2', start)
+    })
 
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setformdata((prev)=>
            ( {...prev,[e.target.name]:e.target.value}))
+
+    }
+
+    const handleGoogleLogin=async(credentialresponse:CredentialResponse)=>{
+        console.log("fdaa")
+        if(credentialresponse?.credential){
+            try {
+                console.log(credentialresponse);
+
+                const credential=jwtDecode<GooglePayload>(credentialresponse.credential)
+                console.log(credential)
+
+                const{email, sub, name}=credential
+
+                console.log(email)
+                const response=await axiosInstanceuser.post('/googlelogin',{email,sub, name})
+                console.log(response?.data)
+            } catch (err: any) {
+                if (err.response && err.response.data && err.response.data.message) {
+                  seterror(err.response.data.message); // Server's custom message
+                } else {
+                  seterror('Something went wrong. Please try again.');
+                }
+                setMsg('');
+              }
+        }
 
     }
 
@@ -109,6 +155,17 @@ const Login:React.FC=()=>{
               >
                 {loading ? "Logging in..." : "LOGIN"}
               </button>
+
+              <GoogleOAuthProvider clientId={clientId}>
+                <div>
+                    <GoogleLogin
+                            onSuccess={handleGoogleLogin}
+                            onError={()=>{
+                                seterror("google login failed")
+                            }}
+                        />
+                </div>
+              </GoogleOAuthProvider>
   
               <div className="text-center text-sm text-gray-600 mt-3">
                 <a href="#" className="hover:underline">Forgot Password?</a><br />

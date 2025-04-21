@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from 'axios'
+import axiosInstanceuser from "../../axios";
 
 interface Signupform{
     name:string,
@@ -22,17 +22,19 @@ const Signup:React.FC=()=>{
     })
 
     const[loading,setloading]=useState(false)
-    const[error,seterror]=useState<string|null>(null)
+    const[error,seterror]=useState<Partial<Signupform>>({})
 
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setformdata((prev)=>({
-            ...prev,[e.target.name]:[e.target.value]
+            ...prev,
+            [e.target.name]: e.target.value
+
         }))
     }
 
     const handleSubmit=async(e:React.FormEvent)=>{
         e.preventDefault()
-        seterror(null)
+        seterror({})
         setloading(true)
 
         let formErrors:any={}
@@ -90,9 +92,9 @@ const Signup:React.FC=()=>{
         }
 
         try {
-            const response=await axios.post('/signup',formdata)
+            const response=await axiosInstanceuser.post('/signup',formdata)
             console.log(response?.data?.message)
-            seterror('')
+            
         } catch (error:any) {
             console.error("signup errror",error)
             seterror(error.response?.data?.message ||"Something went wrong")   
@@ -147,10 +149,11 @@ const Signup:React.FC=()=>{
                 value={formdata.name}
                 onChange={handleChange}
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
-              >
-                {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+              />
+                 {error.name && <p className="text-red-500 text-center text-sm">{error.name}</p>}
+          
+             
 
-              </input>
               <input
                 type="email"
                 name="email"
@@ -158,10 +161,11 @@ const Signup:React.FC=()=>{
                 value={formdata.email}
                 onChange={handleChange}
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
-              >
-                {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+              />
+                
 
-              </input>
+         
+              {error.email && <p className="text-red-500 text-center text-sm">{error.email}</p>}
 
               <input
                 type="password"
@@ -170,10 +174,11 @@ const Signup:React.FC=()=>{
                 value={formdata.password}
                 onChange={handleChange}
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
-              >
-                {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+                />
+               
 
-              </input>
+           
+              {error.password && <p className="text-red-500 text-center text-sm">{error.password}</p>}
               <input
                 type="confirmpassword"
                 name="confirmpassword"
@@ -181,10 +186,8 @@ const Signup:React.FC=()=>{
                 value={formdata.confirmpassword}
                 onChange={handleChange}
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
-              >
-                {error && <p className="text-red-500 text-center text-sm">{error}</p>}
-
-              </input>
+              />
+              {error.confirmpassword&& <p className="text-red-500 text-center text-sm">{error.confirmpassword}</p>}
               <input
                 type="phone"
                 name="phone"
@@ -192,10 +195,10 @@ const Signup:React.FC=()=>{
                 value={formdata.phone}
                 onChange={handleChange}
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
-              >
-                {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+              />
 
-              </input>
+              {error.phone && <p className="text-red-500 text-center text-sm">{error.phone}</p>}
+
   
              
   
