@@ -1,5 +1,6 @@
 import axios,{AxiosRequestConfig,AxiosError,InternalAxiosRequestConfig} from 'axios';
-
+import { store } from './app/store';
+import { addtoken } from './features/tokenSlice';
 // Axios instance
 const axiosInstanceuser = axios.create({
     baseURL: import.meta.env.VITE_PORT,
