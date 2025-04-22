@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axiosInstanceuser from "../../axios";
-
+import { useNavigate } from "react-router";
 interface Signupform{
     name:string,
     email:string,
@@ -23,7 +23,7 @@ const Signup:React.FC=()=>{
 
     const[loading,setloading]=useState(false)
     const[error,seterror]=useState<Partial<Signupform>>({})
-
+    const navigate=useNavigate()
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setformdata((prev)=>({
             ...prev,
@@ -93,6 +93,8 @@ const Signup:React.FC=()=>{
 
         try {
             const response=await axiosInstanceuser.post('/signup',formdata)
+      
+            navigate('/otp',{state:{details:formdata}})
             console.log(response?.data?.message)
             
         } catch (error:any) {

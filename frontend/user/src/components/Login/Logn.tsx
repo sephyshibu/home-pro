@@ -1,5 +1,9 @@
 import React, { useState ,useEffect} from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginuser } from "../../features/UserSlice";
+import { addtoken } from "../../features/tokenSlice";
+import { useNavigate } from "react-router";
 import { GoogleOAuthProvider,GoogleLogin ,CredentialResponse} from "@react-oauth/google";
 import { gapi } from "gapi-script";
 import { jwtDecode } from "jwt-decode";
@@ -24,6 +28,9 @@ const Login:React.FC=()=>{
     const [loading, setloading]=useState(false);
     const[error,seterror]=useState<string |null>(null)
     const [msg, setMsg] = useState<string>('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
 
     useEffect(()=>{
         function start(){
@@ -88,6 +95,10 @@ const Login:React.FC=()=>{
         }
         try {
             const response=await axios.post('/login',formdata)
+            dispatch(loginuser(response.data.user))
+            dispatch(addtoken({token:response.data.token}))
+            seterror('');
+            navigate('/');
             console.log("login data",response.data)
 
 
