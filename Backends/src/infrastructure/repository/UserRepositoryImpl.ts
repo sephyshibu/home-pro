@@ -1,10 +1,11 @@
 import { IUser } from "../../domain/models/User";
 import { userModel } from "../db/schemas/Usermodel";
+import { UserRepository } from "../../domain/repository/Userrepository";
 
-
-export class UserRepository{
+export class UserRepositoryImpl implements UserRepository{
     async createUser(userdata:IUser):Promise<IUser>{
-        return userModel.create(userdata)
+        const createdUser = await userModel.create(userdata);
+        return createdUser;
 
     }
     async findByEmail(email:string):Promise<IUser|null>{
