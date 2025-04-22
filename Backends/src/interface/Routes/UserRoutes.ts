@@ -18,7 +18,7 @@ const router=express.Router()
 //dependency injectionnnn
 const userRepository= new UserRepositoryImpl()
 const emailService= new EmailService()
-const signupuser= new Signup(userRepository)
+const signupuser= new Signup(userRepository,emailService)
 const checkemailUser= new CheckEmail(userRepository,emailService)
 const loginuser=new LoginUser(userRepository)
 const googleLogin= new GoogleLogin(userRepository)
@@ -42,7 +42,7 @@ const usercontroller= new UserController(
 router.post('/signup',(req,res)=>usercontroller.signup(req,res))
 router.post('/login',(req,res)=>usercontroller.login(req,res))
 router.post('/refresh',(req,res)=>usercontroller.refreshtokenController(req,res))
-router.post('/otp',(req, res)=>usercontroller.verifyotpcontroller(req,res))
+router.post('/verifyotp',(req, res)=>usercontroller.verifyotpcontroller(req,res))
 router.post('/resendotp',(req,res)=>usercontroller.resendotpcontroller(req,res))
 router.post('/googlelogin', (req, res) => usercontroller.googleLoginController(req, res));
 router.post('/check-email',(req,res)=>usercontroller.checkEmail(req,res))

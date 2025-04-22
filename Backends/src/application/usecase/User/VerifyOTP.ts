@@ -21,12 +21,15 @@ export class VerifyOTP{
             const hash = await bcrypt.hash(cachedData.password, 10);
 
             const newUser = await userModel.create({
-                username: cachedData.name,
+                name: cachedData.name,
                 email: cachedData.email,
                 password: hash,
-                phonenumber: cachedData.phone,
+                phone: cachedData.phone,
               });
-              await WalletModel.create({ userId: newUser._id });
+              await WalletModel.create({ 
+                ownerId: newUser._id,
+                userType: 'user',
+            });
 
               otpCache.del(cachedData.email);
               return "User created Successfully";

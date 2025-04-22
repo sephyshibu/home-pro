@@ -13,6 +13,7 @@ const Otp:React.FC=()=>{
     const navigate=useNavigate()
     const location=useLocation() 
     const details=location.state?.details
+    console.log(details)
 
     useEffect(()=>{
         let interval:ReturnType<typeof setInterval> 
@@ -39,7 +40,7 @@ const Otp:React.FC=()=>{
     const handleSubmit=async(e:React.FormEvent)=>{
         e.preventDefault()
         try {
-            const response=await axiosInstanceuser.post('/verifyotp',{otp:otp.otp},details)
+            const response=await axiosInstanceuser.post('/verifyotp',{otp:otp.otp,details})
             setmsg(response.data.message)
             seterror('');
             navigate('/login');

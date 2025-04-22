@@ -4,7 +4,10 @@ import { UserRepository } from "../../domain/repository/Userrepository";
 
 export class UserRepositoryImpl implements UserRepository{
     async createUser(userdata:IUser):Promise<IUser>{
+        console.log("userdata",userdata)
+        console.log("signnnnn")
         const createdUser = await userModel.create(userdata);
+        console.log("Createduser",createdUser)
         return createdUser;
 
     }

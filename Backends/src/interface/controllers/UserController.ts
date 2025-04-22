@@ -20,8 +20,10 @@ export class UserController{
     ){}
 
     async signup(req:Request, res:Response):Promise<void>{
+        console.log('signup')
         try{
             const{name, email, password,phone}=req.body;
+          
             const result=await this.signupuser.adduser(name,email,password,phone);
             res.status(201).json(result)
         }
@@ -60,6 +62,7 @@ export class UserController{
     async verifyotpcontroller(req:Request, res:Response):Promise<void>{
             try {
                 const{otp, details}=req.body;
+                console.log(otp,details)
                 const result=await this.verifyotp.verify(otp,details)
                 res.status(200).json({message:result})
             } catch (err: any) {
