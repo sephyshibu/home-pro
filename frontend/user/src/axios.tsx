@@ -1,4 +1,4 @@
-import axios,{AxiosRequestConfig,AxiosError,InternalAxiosRequestConfig} from 'axios';
+import axios,{AxiosError,InternalAxiosRequestConfig} from 'axios';
 import { store } from './app/store';
 import { addtoken } from './features/tokenSlice';
 // Axios instance

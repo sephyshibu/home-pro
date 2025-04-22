@@ -27,7 +27,7 @@ const Login:React.FC=()=>{
     })
     const [loading, setloading]=useState(false);
     const[error,seterror]=useState<string |null>(null)
-    const [msg, setMsg] = useState<string>('');
+    // const [msg, setMsg] = useState<string>('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -69,7 +69,7 @@ const Login:React.FC=()=>{
                 } else {
                   seterror('Something went wrong. Please try again.');
                 }
-                setMsg('');
+                
               }
         }
 
