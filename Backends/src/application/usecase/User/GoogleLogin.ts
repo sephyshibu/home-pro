@@ -7,8 +7,9 @@ export class GoogleLogin{
     constructor(private userRepository:UserRepository){}
 
     async GoogleLogin(email:string, sub:string,name:string):Promise<{user:any,token:string}>{
+        console.log(email,sub,name)
         let user= await this.userRepository.findByEmail(email)
-
+        console.log("google login", user)
         if(user){
             if(user.isBlocked){
                 throw new Error("user is Blocjked buy admin")
@@ -16,7 +17,7 @@ export class GoogleLogin{
         }
             else{
                 const newuser:IUser={
-                    _id:"",
+                  
                     name,
                     email,
                     phone:"",
@@ -25,7 +26,10 @@ export class GoogleLogin{
                     googleIds:sub
                 }
                 user=await this.userRepository.createUser(newuser)
-                await WalletModel.create({userId:user._id})
+                await WalletModel.create({
+                    ownerId:user._id,
+                    userType:"user"
+                })
             }
             const token=jwt.sign({email:user.email}, process.env.JWT_SECRET!, { expiresIn: "15m" });
             return {user, token};

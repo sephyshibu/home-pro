@@ -1,5 +1,4 @@
 import React, { useState ,useEffect} from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginuser } from "../../features/UserSlice";
 import { addtoken } from "../../features/tokenSlice";
@@ -8,6 +7,9 @@ import { GoogleOAuthProvider,GoogleLogin ,CredentialResponse} from "@react-oauth
 import { gapi } from "gapi-script";
 import { jwtDecode } from "jwt-decode";
 import axiosInstanceuser from "../../axios";
+import two from '../../../public/images/two.png'
+import one from '../../../public/images/one.png'
+import logo from '../../../public/images/Homepro/Logo Landscape.png'
 interface LoginForm{
     email:string,
     password:string
@@ -63,6 +65,9 @@ const Login:React.FC=()=>{
                 console.log(email)
                 const response=await axiosInstanceuser.post('/googlelogin',{email,sub, name})
                 console.log(response?.data)
+                const userId=response.data.user._id
+                localStorage.setItem("userId",userId)
+                navigate('/');
             } catch (err: any) {
                 if (err.response && err.response.data && err.response.data.message) {
                   seterror(err.response.data.message); // Server's custom message
@@ -93,13 +98,19 @@ const Login:React.FC=()=>{
             seterror("password is required")
             return
         }
+        
         try {
-            const response=await axios.post('/login',formdata)
+            const{email,password}=formdata
+            const response=await axiosInstanceuser.post('/login',{email,password})
             dispatch(loginuser(response.data.user))
             dispatch(addtoken({token:response.data.token}))
+            console.log(response)
+            console.log("login data",response.data)
+            const userId=response.data.user._id
+            localStorage.setItem("userId",userId)
             seterror('');
             navigate('/');
-            console.log("login data",response.data)
+      
 
 
         } catch (error:any) {
@@ -117,21 +128,20 @@ const Login:React.FC=()=>{
         <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A1D56] relative overflow-hidden px-4">
       
         {/* Logo and header */}
-        <div className="absolute top-8 flex flex-col items-center">
-          <img src="/your-logo.png" alt="HomePro Logo" className="w-32 h-32 mb-2" />
-          <h1 className="text-white text-3xl font-bold">HomePro</h1>
-          <p className="text-white text-sm">Your Home. Our Priority</p>
+        <div className="absolute top-10 flex flex-col items-center">
+          <img src={logo} alt="HomePro Logo" className="w-50 h-32 mt-60" />
+         
         </div>
   
         {/* Main Content */}
         <div className="flex items-center justify-center gap-8 mt-32">
           
           {/* Left Side Image */}
-          <div className="hidden lg:block w-64">
+          <div className="hidden lg:block w-80 h-90">
             <img 
-              src="/left-worker.png" 
+              src={one} 
               alt="Worker fixing door" 
-              className="rounded-lg shadow-lg object-cover h-80 w-full"
+              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 -translate-x-20"
             />
           </div>
   
@@ -180,17 +190,17 @@ const Login:React.FC=()=>{
   
               <div className="text-center text-sm text-gray-600 mt-3">
                 <a href="#" className="hover:underline">Forgot Password?</a><br />
-                <a href="#" className="hover:underline">Don't have an account?</a>
+                <a href="/signup" className="hover:underline">Don't have an account?</a>
               </div>
             </form>
           </div>
   
           {/* Right Side Image */}
-          <div className="hidden lg:block w-64">
+          <div className="hidden lg:block w-80 h-180">
             <img 
-              src="/right-worker.png" 
+              src={two}
               alt="Worker fixing sink" 
-              className="rounded-lg shadow-lg object-cover h-80 w-full"
+              className="rounded-lg shadow-lg object-cover w-full h-full scale-150 translate-x-20"
             />
           </div>
         </div>

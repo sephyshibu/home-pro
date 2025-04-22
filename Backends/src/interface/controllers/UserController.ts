@@ -44,7 +44,9 @@ export class UserController{
 
     async login(req:Request,res:Response):Promise<void>{
         try {
+          
             const{email,password}=req.body
+            console.log(req.body)
             const result=await this.loginuser.login(email, password)
             res.cookie("refreshtokenuser", result.refreshtoken,{
                 httpOnly:true,
@@ -83,6 +85,7 @@ export class UserController{
 
     async googleLoginController(req:Request, res:Response):Promise<void>{
         try {
+            console.log("google")
             const{email, sub, name}=req.body
             const result=await this.googleLogin.GoogleLogin(email, sub, name);
             res.status(200).json({ message: "Google Login Successful", user: result.user, token: result.token });

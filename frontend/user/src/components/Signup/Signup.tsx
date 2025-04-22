@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axiosInstanceuser from "../../axios";
 import { useNavigate } from "react-router";
+import two from '../../../public/images/two.png'
+import one from '../../../public/images/one.png'
+import logo from '../../../public/images/Homepro/Logo Landscape.png'
 interface Signupform{
     name:string,
     email:string,
@@ -24,12 +27,14 @@ const Signup:React.FC=()=>{
     const[loading,setloading]=useState(false)
     const[error,seterror]=useState<Partial<Signupform>>({})
     const navigate=useNavigate()
+
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setformdata((prev)=>({
             ...prev,
             [e.target.name]: e.target.value
 
         }))
+        
     }
 
     const handleSubmit=async(e:React.FormEvent)=>{
@@ -113,20 +118,19 @@ const Signup:React.FC=()=>{
       
         {/* Logo and header */}
         <div className="absolute top-8 flex flex-col items-center">
-          <img src="/your-logo.png" alt="HomePro Logo" className="w-32 h-32 mb-2" />
-          <h1 className="text-white text-3xl font-bold">HomePro</h1>
-          <p className="text-white text-sm">Your Home. Our Priority</p>
+          <img src={logo}alt="HomePro Logo" className="w-50 h-32 translate-x-20" />
+
         </div>
   
         {/* Main Content */}
         <div className="flex items-center justify-center gap-8 mt-32">
           
           {/* Left Side Image */}
-          <div className="hidden lg:block w-64">
+          <div className="hidden lg:block w-80 h-90">
             <img 
-              src="/left-worker.png" 
+              src={one} 
               alt="Worker fixing door" 
-              className="rounded-lg shadow-lg object-cover h-80 w-full"
+              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 -translate-x-20"
             />
           </div>
   
@@ -137,13 +141,7 @@ const Signup:React.FC=()=>{
             <form onSubmit={handleSubmit} className="space-y-5">
 
                 {/* Left Side Image */}
-          <div className="hidden lg:block w-64">
-            <img 
-              src="/left-worker.png" 
-              alt="Worker fixing door" 
-              className="rounded-lg shadow-lg object-cover h-80 w-full"
-            />
-          </div>
+          
               <input
                 type="name"
                 name="name"
@@ -182,7 +180,7 @@ const Signup:React.FC=()=>{
            
               {error.password && <p className="text-red-500 text-center text-sm">{error.password}</p>}
               <input
-                type="confirmpassword"
+                type="password"
                 name="confirmpassword"
                 placeholder="Enter Confirmpassword"
                 value={formdata.confirmpassword}
@@ -220,11 +218,11 @@ const Signup:React.FC=()=>{
           </div>
   
           {/* Right Side Image */}
-          <div className="hidden lg:block w-64">
+          <div className="hidden lg:block w-80 h-90">
             <img 
-              src="/right-worker.png" 
+              src={two} 
               alt="Worker fixing sink" 
-              className="rounded-lg shadow-lg object-cover h-80 w-full"
+              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 translate-x-20"
             />
           </div>
         </div>

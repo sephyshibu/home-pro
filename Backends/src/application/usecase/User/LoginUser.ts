@@ -7,6 +7,7 @@ export class LoginUser{
     constructor(private userRepository:UserRepository){}
 
     async login(email:string, password:string):Promise<{user:any,accesstoken:string, refreshtoken:string}>{
+        console.log("sdfwf",email, password)
         const user=await this.userRepository.findByEmail(email)
         if(!user){
             throw new Error("User Not found")
