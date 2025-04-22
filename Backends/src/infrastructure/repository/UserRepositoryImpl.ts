@@ -12,4 +12,9 @@ export class UserRepositoryImpl implements UserRepository{
         const user=await userModel.findOne({email})
         return user?user.toObject():null
     }
+
+    async findByGoogleId(googleId: string): Promise<IUser | null> {
+        const user=await userModel.findOne({googleId})
+        return user?user.toObject():null
+    }
 }
