@@ -1,4 +1,4 @@
-import { IWallet } from "../models/wallet";
+import { IWallet } from "../models/Wallet";
 
 export interface walletRepository{
     createWallet(wallet:Omit<IWallet,"id">):Promise<IWallet>

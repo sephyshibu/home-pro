@@ -1,5 +1,6 @@
 import mongoose,{Types,Schema,Document} from "mongoose";
-import { UserType } from "../../../domain/models/wallet";
+
+import { UserType } from "../../../domain/models/Wallet";
 
 export interface WalletDocument extends Document{
      _id:Types.ObjectId,

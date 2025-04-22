@@ -1,4 +1,4 @@
-import { IWallet } from "../../domain/models/wallet";
+import { IWallet } from "../../domain/models/Wallet";
 import { walletRepository } from "../../domain/repository/Walletrepository";
 import { WalletModel } from "../db/schemas/Walletmodel";
 

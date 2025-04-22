@@ -41,9 +41,10 @@ const usercontroller= new UserController(
 
 router.post('/signup',(req,res)=>usercontroller.signup(req,res))
 router.post('/login',(req,res)=>usercontroller.login(req,res))
-router.post('/refresh-token',(req,res)=>usercontroller.refreshtokenController(req,res))
-router.post('/verify-otp',(req, res)=>usercontroller.verifyotpcontroller(req,res))
-router.post('/google-login', (req, res) => usercontroller.googleLoginController(req, res));
+router.post('/refresh',(req,res)=>usercontroller.refreshtokenController(req,res))
+router.post('/otp',(req, res)=>usercontroller.verifyotpcontroller(req,res))
+router.post('/resendotp',(req,res)=>usercontroller.resendotpcontroller(req,res))
+router.post('/googlelogin', (req, res) => usercontroller.googleLoginController(req, res));
 router.post('/check-email',(req,res)=>usercontroller.checkEmail(req,res))
 
 export {router as userRouter}
