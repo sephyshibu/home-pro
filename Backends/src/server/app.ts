@@ -2,7 +2,7 @@ import express ,{Application} from 'express'
 import cors from 'cors';
 import dotenv from 'dotenv'
 import { userRouter } from '../interface/Routes/UserRoutes'
-
+import { adminRouter } from '../interface/Routes/Adminroutes';
 
 export class App{
     public app:Application;
@@ -25,5 +25,6 @@ export class App{
 
     private setRoutes():void{
         this.app.use('/',userRouter)
+        this.app.use('/admin', adminRouter)
     }
 }

@@ -52,14 +52,14 @@ const Login:React.FC=()=>{
         try {
             const{email,password}=formdata
             const response=await axiosInstanceadmin.post('/login',{email,password})
-           
+            console.log("response", response)
             dispatch(addtoken({token:response.data.token}))
             console.log(response)
             console.log("login data",response.data)
-            const adminId=response.data.user._id
+            const adminId=response.data.admin._id
             localStorage.setItem("adminId",adminId)
             seterror('');
-            navigate('/');
+            navigate('/admindashboard');
       
 
 
@@ -97,7 +97,7 @@ const Login:React.FC=()=>{
   
           {/* Center Login Card */}
           <div className="bg-white rounded-2xl shadow-lg p-20 max-w-full">
-            <h2 className="text-2xl font-bold text-center text-[#0A1D56] mb-6">USER LOGIN</h2>
+            <h2 className="text-2xl font-bold text-center text-[#0A1D56] mb-6">Admin LOGIN</h2>
             
             <form onSubmit={handleSubmit} className="space-y-5">
               <input

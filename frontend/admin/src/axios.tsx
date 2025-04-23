@@ -3,7 +3,7 @@ import { store } from './app/store';
 import { addtoken } from './features/tokenSlice';
 // Axios instance
 const axiosInstanceadmin = axios.create({
-    baseURL: import.meta.env.VITE_PORT,
+    baseURL: import.meta.env.VITE_ADMin_PORT,
     withCredentials: true,
   });
 
