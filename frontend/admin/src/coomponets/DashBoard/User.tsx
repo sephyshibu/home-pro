@@ -7,7 +7,7 @@ interface User{
     name:string,
     email:string,
     phone:string,
-    isBLocked:boolean
+    isBlocked:boolean
 }
 
 const User:React.FC=()=>{
@@ -29,10 +29,10 @@ const User:React.FC=()=>{
         }
     }
 
-    const handleToggle=async(userid:string,isBLocked:boolean)=>{
+    const handleToggle=async(userid:string,isBlocked:boolean)=>{
         try {
-            const updatedstatus=!isBLocked
-            const response=await axiosInstanceadmin.patch(`/user/${userid}`,{isBLocked:updatedstatus})
+            const updatedstatus=!isBlocked
+            const response=await axiosInstanceadmin.patch(`/user/${userid}`,{isBlocked:updatedstatus})
             console.log(response)
             fetchuser()
         } catch (error) {
@@ -69,15 +69,15 @@ const User:React.FC=()=>{
                     <tr key={use._id} className="border-b border-gray-200 hover:bg-gray-100">
                       <td className="px-6 py-4">{use.name}</td>
                       <td className="px-6 py-4">{use.email}</td>
-                      <td className="px-6 py-4">{use.isBLocked ? "Blocked" : "Active"}</td>
+                      <td className="px-6 py-4">{use.isBlocked ? "Blocked" : "Active"}</td>
                       <td className="px-6 py-4">
                         <button
-                          onClick={() => handleToggle(use._id, use.isBLocked)}
+                          onClick={() => handleToggle(use._id, use.isBlocked)}
                           className={`px-4 py-2 rounded-md text-white ${
-                            use.isBLocked ? "bg-green-500" : "bg-red-500"
+                            use.isBlocked ? "bg-green-500" : "bg-red-500"
                           }`}
                         >
-                          {use.isBLocked ? "Unblock" : "Block"}
+                          {use.isBlocked ? "Unblock" : "Block"}
                         </button>
                       </td>
                     </tr>

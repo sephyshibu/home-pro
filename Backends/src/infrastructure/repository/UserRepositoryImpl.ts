@@ -24,5 +24,19 @@ export class UserRepositoryImpl implements UserRepository{
         const users=await userModel.find()
         return users
     }
+
+    async blockunblock(userid: string, isBlocked: boolean): Promise<IUser> {
+        const user=await userModel.findByIdAndUpdate(
+            userid,
+            {isBlocked},
+            {new:true}
+        )
+        if(!user){
+            throw new Error("User not found")
+
+        }
+        return user
+
+    }
     
 }

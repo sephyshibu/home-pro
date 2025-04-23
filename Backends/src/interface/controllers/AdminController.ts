@@ -2,12 +2,14 @@ import { Request,Response } from "express";
 import {Login} from '../../application/usecase/Admin/LoginAdmin'
 import { RefreshToken } from "../../application/usecase/Admin/RefreshToken";
 import { fetchUser } from "../../application/usecase/Admin/FetchUser";
+import { BlockUnblock } from "../../application/usecase/Admin/BlockUnblock";
 
 export class AdminController{
     constructor(
         private loginadmin:Login,
         private refreshtoken:RefreshToken,
-        private fetchalluser:fetchUser
+        private fetchalluser:fetchUser,
+        private blockunblock:BlockUnblock
     ){}
 
 
@@ -45,6 +47,18 @@ export class AdminController{
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
           res.status(400).json({ message: err.message });
+        }
+    }
+
+    async blockUnblock(req:Request, res:Response):Promise<void>{
+        try {
+            const{userid}=req.params
+            const{isBlocked}=req.body
+            console.log(userid,isBlocked)
+            const updateduser=await this.blockunblock.blockunblock(userid,isBlocked)
+            res.status(200).json({message:"User Updated Successfully",user:updateduser})
+        }  catch (error: any) {
+            res.status(400).json({ message: error.message });
         }
     }
 }

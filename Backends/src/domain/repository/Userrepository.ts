@@ -5,5 +5,6 @@ export interface UserRepository{
     findByEmail(email:string):Promise<IUser|null>
     findByGoogleId(googleId:string):Promise<IUser|null>
     fetchUser():Promise<IUser[]>;
+    blockunblock(userid:string, isBlocked:boolean):Promise<IUser>
 
 }
