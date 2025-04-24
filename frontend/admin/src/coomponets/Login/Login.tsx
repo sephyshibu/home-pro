@@ -79,7 +79,7 @@ const Login:React.FC=()=>{
       
         {/* Logo and header */}
         <div className="absolute top-10 flex flex-col items-center">
-          <img src={logo} alt="HomePro Logo" className="w-50 h-32 mt-60" />
+          {/* <img src={logo} alt="HomePro Logo" className="w-50 h-32 mt-60" /> */}
          
         </div>
   
