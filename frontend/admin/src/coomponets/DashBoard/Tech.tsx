@@ -120,7 +120,7 @@ const Tech:React.FC=()=>{
                         onChange={handleChange}
                         placeholder="Phone Number"
                         className="w-full rounded-md border px-3 py-2 text-sm"
-                    />phone
+                    />
                      {error.phone && <p className="text-red-500 text-center text-sm">{error.phone}</p>}
                     
                     <input

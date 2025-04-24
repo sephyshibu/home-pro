@@ -3,13 +3,14 @@ import {Login} from '../../application/usecase/Admin/LoginAdmin'
 import { RefreshToken } from "../../application/usecase/Admin/RefreshToken";
 import { fetchUser } from "../../application/usecase/Admin/FetchUser";
 import { BlockUnblock } from "../../application/usecase/Admin/BlockUnblock";
-
+import { Signuptech } from "../../application/usecase/Tech/Register";
 export class AdminController{
     constructor(
         private loginadmin:Login,
         private refreshtoken:RefreshToken,
         private fetchalluser:fetchUser,
-        private blockunblock:BlockUnblock
+        private blockunblock:BlockUnblock,
+        private signuptechs:Signuptech
     ){}
 
 
@@ -61,5 +62,18 @@ export class AdminController{
             res.status(400).json({ message: error.message });
         }
     }
+   
+    async signuptech(req:Request,res:Response):Promise<void>{
+            console.log("signup tech")
     
-}
+            try {
+                const{email,password, phone}=req.body
+                const result=await this.signuptechs.addtech(email,password,phone)
+                res.status(200).json(result)
+            } 
+            catch (err:any) {
+                res.status(400).json({ message: err.message });
+              }
+        }
+    
+    }
