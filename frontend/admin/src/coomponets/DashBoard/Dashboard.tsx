@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import Category from './Category'
 import AddCategory from './AddCategory'
 import { persistor } from "../../app/store";
-const tabs = ["Dashboard", "User List", "Technician List", "Transactions"];
+const tabs = ["Dashboard", "User List", "Technician List","Category List", "Transactions"];
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("Dashboard");
@@ -64,7 +64,7 @@ const AdminDashboard: React.FC = () => {
               <TechList/>
             </div>
           </div>}
-          {activeTab === "Categories" && <div>
+          {activeTab === "Category List" && <div>
             <div>
               <AddCategory/>
             </div>

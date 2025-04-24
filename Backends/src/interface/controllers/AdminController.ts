@@ -6,6 +6,9 @@ import { BlockUnblock } from "../../application/usecase/Admin/BlockUnblock";
 import { Signuptech } from "../../application/usecase/Tech/Register";
 import { fetchtech } from "../../application/usecase/Admin/FetchTech";
 import { BlockUnBlock } from "../../application/usecase/Admin/BlockUnblockTech";
+import { AddCategory } from "../../application/usecase/Category/AddCategory";
+import { fetchCategory } from "../../application/usecase/Admin/Fetchcategory";
+import { BlockUnBlockCat } from "../../application/usecase/Admin/BlockUnBlockCategory";
 export class AdminController{
     constructor(
         private loginadmin:Login,
@@ -15,6 +18,9 @@ export class AdminController{
         private fetchalltech:fetchtech,
         private blockunblocktech:BlockUnBlock,
         private signuptechs:Signuptech,
+        private addcategory:AddCategory,
+        private fetchallCategory:fetchCategory,
+        private BlockUnblockCat:BlockUnBlockCat
     ){}
 
 
@@ -49,8 +55,17 @@ export class AdminController{
         try {
             const tech=await this.fetchalltech.fetch()
             res.status(200).json({tech})
-        } catch (error) {
-            
+        } catch (error:any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async fetchCategory(req:Request,res:Response):Promise<void>{
+        try {
+            const cat=await this.fetchallCategory.fetch()
+            res.status(200).json({cat})
+        } catch (error:any) {
+            res.status(500).json({ message: error.message });
         }
     }
 
@@ -73,6 +88,18 @@ export class AdminController{
             console.log(userid,isBlocked)
             const updateduser=await this.blockunblock.blockunblock(userid,isBlocked)
             res.status(200).json({message:"User Updated Successfully",user:updateduser})
+        }  catch (error: any) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
+    async blockunblockcatagory(req:Request,res:Response):Promise<void>{
+        try {
+            const {catid}=req.params
+            const{isBlocked}=req.body
+            console.log("catid", catid,isBlocked)
+            const updatecategory=await this.BlockUnblockCat.blockunblockcat(catid, isBlocked)
+            res.status(200).json({message:"category Updated Successfully",cat:updatecategory})
         }  catch (error: any) {
             res.status(400).json({ message: error.message });
         }
@@ -103,5 +130,19 @@ export class AdminController{
                 res.status(400).json({ message: err.message });
               }
         }
+
+    async addcategorys(req:Request,res:Response):Promise<void>{
+        try {
+            const{name, description, image}=req.body
+            const result=await this.addcategory.addCategory(name,description, image)
+            res.status(200).json(result)
+            } 
+            catch (err:any) {
+                console.error("Signup Tech Error:", err.message);
+                res.status(400).json({ message: err.message });
+              }
+    }
     
     }
+
+    

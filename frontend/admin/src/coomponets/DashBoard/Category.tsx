@@ -21,7 +21,7 @@ const CategoryList:React.FC=()=>{
     const fetchcategory=async()=>{
         try {
             const response=await axiosInstanceadmin.get('/fetchcategory')
-            setcategory(response.data?.category)
+            setcategory(response.data.cat)
         }catch (error) {
             console.error('Failed to fetch Category', error);
             
@@ -50,10 +50,11 @@ const CategoryList:React.FC=()=>{
             <table className="min-w-full table-auto text-left">
               <thead>
                 <tr className="text-gray-600 uppercase text-sm leading-normal">
-                  <th className="px-6 py-3">Email</th>
-                  <th className="px-6 py-3">Phone Number</th>
                  
-                  <th className="px-6 py-3">Status</th>
+                 
+                  <th className="px-6 py-3">Image</th>
+                  <th className="px-6 py-3">Name</th>
+                  <th className="px-6 py-3">Description</th>
                   <th className="px-6 py-3">Action</th>
                 </tr>
               </thead>
@@ -67,11 +68,12 @@ const CategoryList:React.FC=()=>{
                 ) : (
                   category.map((cat) => (
                     <tr key={cat._id} className="border-b border-gray-200 hover:bg-gray-100">
-                      <td className="px-6 py-4">{cat.name}</td>
-                      <td className="px-6 py-4">{cat.description}</td>
+                      
                       <td>
                         <img src={cat.image} alt={cat.name} className="h-32 w-full object-cover rounded-md"/>
                       </td>
+                      <td className="px-6 py-4">{cat.name}</td>
+                      <td className="px-6 py-4">{cat.description}</td>
                       <td className="px-6 py-4">{cat.isBlocked ? "Blocked" : "Active"}</td>
                       <td className="px-6 py-4">
                         <button

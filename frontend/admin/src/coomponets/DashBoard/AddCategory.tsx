@@ -42,17 +42,27 @@ const AddCategory:React.FC=()=>{
             imageurl=uploadurl
         }
         try {
-            await axiosInstanceadmin.post('/addcategory',{
-                ...addcat,
+            const sanitizedName = addcat.name.trim().toLowerCase();
+            const sanitizedDescription = addcat.description.trim();
+            const response=await axiosInstanceadmin.post('/addcategory',{
+                name:sanitizedName,
+                description:sanitizedDescription,
                 image:imageurl
             })
-            toast.success("Category added successfully!");
+            toast.success(response.data.message);
             setIsOpen(false);
             setaddcat({ name: "", description: "", image: "" });
             setImageFile(null);
-          } catch (err) {
-            console.error(err);
-            toast.error("Failed to add category.");
+          } catch (error:any) {
+            console.error(error);
+            if (error.response?.data?.message === "category already existed") {
+                toast.error("This category already added.");
+              } else {
+                toast.error("Something went wrong. Try again.");
+              }
+            setaddcat({ name: "", description: "", image: "" });
+            setImageFile(null);
+         
           }
     }  
     
@@ -74,7 +84,7 @@ const AddCategory:React.FC=()=>{
                             name="name"
                             value={addcat.name}
                             onChange={handleChange}
-                            placeholder="Email ID"
+                            placeholder="Name"
                             className="w-full rounded-md border px-3 py-2 text-sm"
                         />
                          {error.name && <p className="text-red-500 text-center text-sm">{error.name}</p>}
@@ -82,7 +92,7 @@ const AddCategory:React.FC=()=>{
                             name="description"
                             value={addcat.description}
                             onChange={handleChange}
-                            placeholder="Phone Number"
+                            placeholder="Description"
                             className="w-full rounded-md border px-3 py-2 text-sm"
                         />
                          {error.description && <p className="text-red-500 text-center text-sm">{error.description}</p>}
