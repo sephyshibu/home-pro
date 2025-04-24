@@ -4,13 +4,17 @@ import { RefreshToken } from "../../application/usecase/Admin/RefreshToken";
 import { fetchUser } from "../../application/usecase/Admin/FetchUser";
 import { BlockUnblock } from "../../application/usecase/Admin/BlockUnblock";
 import { Signuptech } from "../../application/usecase/Tech/Register";
+import { fetchtech } from "../../application/usecase/Admin/FetchTech";
+import { BlockUnBlock } from "../../application/usecase/Admin/BlockUnblockTech";
 export class AdminController{
     constructor(
         private loginadmin:Login,
         private refreshtoken:RefreshToken,
         private fetchalluser:fetchUser,
         private blockunblock:BlockUnblock,
-        private signuptechs:Signuptech
+        private fetchalltech:fetchtech,
+        private blockunblocktech:BlockUnBlock,
+        private signuptechs:Signuptech,
     ){}
 
 
@@ -41,6 +45,17 @@ export class AdminController{
           }
     }
 
+    async fetchtech(req:Request,res:Response):Promise<void>{
+        try {
+            const tech=await this.fetchalltech.fetch()
+            res.status(200).json({tech})
+        } catch (error) {
+            
+        }
+    }
+
+    
+
     async refreshtokenController(req:Request, res:Response):Promise<void>{
         try {
             const token=req.cookies?.refreshtokenadmin;
@@ -58,6 +73,18 @@ export class AdminController{
             console.log(userid,isBlocked)
             const updateduser=await this.blockunblock.blockunblock(userid,isBlocked)
             res.status(200).json({message:"User Updated Successfully",user:updateduser})
+        }  catch (error: any) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
+    async blockunblocktechs(req:Request,res:Response):Promise<void>{
+        try {
+            const {techid}=req.params
+            const{isBlocked}=req.body
+            console.log("techid", techid,isBlocked)
+            const updatetech=await this.blockunblocktech.blockunblocktech(techid, isBlocked)
+            res.status(200).json({message:"tech Updated Successfully",tech:updatetech})
         }  catch (error: any) {
             res.status(400).json({ message: error.message });
         }

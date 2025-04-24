@@ -16,4 +16,22 @@ export class TechRepositoryImpl implements TechRepository{
         const tech=await TechModel.findOne({email})
         return tech?tech.toObject():null
     }
+
+    async fetchTech(): Promise<ITech[]> {
+        const tech=await TechModel.find()
+        return tech
+    }
+
+    async blockunblock(techid: string, isBlocked: boolean): Promise<ITech> {
+        const tech=await TechModel.findByIdAndUpdate(
+            techid,
+            {isBlocked},
+            {new:true}
+        )
+
+        if(!tech){
+            throw new Error("tech Not found")
+        }
+        return tech
+    }
 }
