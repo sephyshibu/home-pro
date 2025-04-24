@@ -41,8 +41,11 @@ const Otp:React.FC=()=>{
 
     const handleSubmit=async(e:React.FormEvent)=>{
         e.preventDefault()
+        console.log("location.state", location.state); // Check if state exists
+        console.log("details", details); // Should print the email
         try {
-            const response=await axiosInstanceuser.post('/verifyotp',{otp:otp.otp,details})
+          
+            const response=await axiosInstanceuser.post('/forgetpassverifyotp',{otp:otp.otp,details})
             setmsg(response.data.message)
             seterror('');
             navigate('/changepassword',{state:{details:details}});
@@ -54,7 +57,7 @@ const Otp:React.FC=()=>{
 
     const handleResend=async()=>{
         try {
-            await axiosInstanceuser.post('/resendotp',{details})
+            await axiosInstanceuser.post('/forgetpassresendotp',{details})
             setmsg('OTP resent successfully!');
             seterror('');
             setmin(1);
@@ -71,7 +74,7 @@ const Otp:React.FC=()=>{
         <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A1D56] relative overflow-hidden px-4">
             {/* Logo and header */}
         <div className="absolute top-8 flex flex-col items-center">
-          <img src={logo}alt="HomePro Logo" className="w-50 h-32 translate-x-2 mt-80" />
+          {/* <img src={logo}alt="HomePro Logo" className="w-50 h-32 translate-x-2 mt-80" /> */}
 
         </div >
         <div  className="flex items-center justify-center gap-8 mt-32">

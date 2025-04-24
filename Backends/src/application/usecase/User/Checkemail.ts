@@ -24,7 +24,8 @@ export class CheckEmail{
     if(!emailsent){
         throw new Error("failed to send email")
     }
-    otpCache.set(email, { otp });
+    otpCache.set(email, { otp, details: email }, 300);
+
 
     return { message: "successful", email };
   }

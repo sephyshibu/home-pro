@@ -17,7 +17,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/otp' element={<Otp/>}/>
-        <Route path='/forget' element={<ForgetPassword/>}/>
+        <Route path='/forgetpassword' element={<ForgetPassword/>}/>
         <Route path='/forgetpassotp' element={<ForgetPasswordOTp/>}/>
         <Route path='/changepassword' element={<ChangePassword/>}/>
       </Routes>

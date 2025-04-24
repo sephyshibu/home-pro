@@ -54,5 +54,7 @@ router.post('/verifyotp',(req, res)=>usercontroller.verifyotpcontroller(req,res)
 router.post('/resendotp',(req,res)=>usercontroller.resendotpcontroller(req,res))
 router.post('/googlelogin', (req, res) => usercontroller.googleLoginController(req, res));
 router.post('/checkemail',(req,res)=>usercontroller.checkEmail(req,res))
-router.post('/changepassword',(req,res)=>usercontroller.changepassword(req,res))
+router.post('/chnagepasswords',(req,res)=>usercontroller.changepassword(req,res))
+router.post('/forgetpassverifyotp',(req,res)=>usercontroller.forgetpasswordVerifyOTP(req,res))
+router.post('/forgetpassresendotp',(req,res)=>usercontroller.forgetpasswordresnedOTP(req,res))
 export {router as userRouter}
