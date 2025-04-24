@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import User from "./User";
 import Tech from'./Tech'
-
+import TechList from './TechList'
 const tabs = ["Dashboard", "User List", "Technician List", "Transactions"];
 
 const AdminDashboard: React.FC = () => {
@@ -37,7 +37,15 @@ const AdminDashboard: React.FC = () => {
       <div className="flex-grow p-8">
         {/* {activeTab === "Dashboard" && <DashboardView />} */}
         {activeTab === "User List" && <User/>}
-        {activeTab === "Technician List" && <Tech/>}
+        {activeTab === "Technician List" && 
+        <div>
+            <div>
+              <Tech/>
+            </div>
+            <div>
+              <TechList/>
+            </div>
+          </div>}
         {/* {activeTab === "Transactions" && <TransactionsView />}  */}
       </div>
 
