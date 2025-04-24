@@ -1,7 +1,7 @@
 import { IUser } from "../../domain/models/User";
 import { userModel } from "../db/schemas/Usermodel";
 import { UserRepository } from "../../domain/repository/Userrepository";
-
+import bcrypt from 'bcryptjs'
 export class UserRepositoryImpl implements UserRepository{
     async createUser(userdata:IUser):Promise<IUser>{
         console.log("userdata",userdata)
@@ -14,6 +14,20 @@ export class UserRepositoryImpl implements UserRepository{
     async findByEmail(email:string):Promise<IUser|null>{
         const user=await userModel.findOne({email})
         return user?user.toObject():null
+    }
+
+    async findByEmailAndUpdate(password: string, email: string): Promise<IUser | null> {
+        const hash=await bcrypt.hash(password,10);
+        const user=await userModel.findOneAndUpdate(
+            {email},
+            {password:hash},
+            {new:true}
+        )
+        if(!user){
+            throw new Error("User not found")
+
+        }
+        return user
     }
 
     async findByGoogleId(googleId: string): Promise<IUser | null> {

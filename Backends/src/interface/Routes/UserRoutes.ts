@@ -9,9 +9,9 @@ import { GoogleLogin } from '../../application/usecase/User/GoogleLogin'
 import { resnedOTP } from '../../application/usecase/User/ResendOTP'
 import { VerifyOTP } from '../../application/usecase/User/VerifyOTP'
 import { RefreshToken } from '../../application/usecase/User/RefreshToken'
-
-
-
+import { ForgetpasswordVerifyOTP } from '../../application/usecase/User/ForgetpasswordVerifyOtp'
+import { forgetpasswordresnedOTP } from '../../application/usecase/User/ForgetpasswordresendOTP'
+import { changepassword } from '../../application/usecase/User/Changepassword'
 const router=express.Router()
 
 
@@ -23,8 +23,11 @@ const checkemailUser= new CheckEmail(userRepository,emailService)
 const loginuser=new LoginUser(userRepository)
 const googleLogin= new GoogleLogin(userRepository)
 const verifyotp= new VerifyOTP()
+const forgetpassverifyotp=new ForgetpasswordVerifyOTP()
+const forgetpassresendotp=new forgetpasswordresnedOTP(emailService)
 const resendotp=new resnedOTP(emailService)
 const refreshtoken= new RefreshToken()
+const chnagepassword= new changepassword(userRepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -34,6 +37,11 @@ const usercontroller= new UserController(
     verifyotp,
     resendotp,
     googleLogin,
+    forgetpassverifyotp,
+    forgetpassresendotp,
+    chnagepassword
+    
+  
     
 
 )
@@ -45,6 +53,6 @@ router.post('/refresh',(req,res)=>usercontroller.refreshtokenController(req,res)
 router.post('/verifyotp',(req, res)=>usercontroller.verifyotpcontroller(req,res))
 router.post('/resendotp',(req,res)=>usercontroller.resendotpcontroller(req,res))
 router.post('/googlelogin', (req, res) => usercontroller.googleLoginController(req, res));
-router.post('/check-email',(req,res)=>usercontroller.checkEmail(req,res))
-
+router.post('/checkemail',(req,res)=>usercontroller.checkEmail(req,res))
+router.post('/changepassword',(req,res)=>usercontroller.changepassword(req,res))
 export {router as userRouter}

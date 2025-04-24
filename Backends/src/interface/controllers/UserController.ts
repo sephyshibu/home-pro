@@ -6,8 +6,9 @@ import { LoginUser } from '../../application/usecase/User/LoginUser';
 import { RefreshToken } from '../../application/usecase/User/RefreshToken';
 import { resnedOTP } from '../../application/usecase/User/ResendOTP';
 import { VerifyOTP } from '../../application/usecase/User/VerifyOTP';
-
-
+import { ForgetpasswordVerifyOTP } from '../../application/usecase/User/ForgetpasswordVerifyOtp';
+import { forgetpasswordresnedOTP } from '../../application/usecase/User/ForgetpasswordresendOTP';
+import { changepassword } from '../../application/usecase/User/Changepassword';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -16,7 +17,10 @@ export class UserController{
         private refreshtoken:RefreshToken,
         private verifyotp:VerifyOTP,
         private resendOTP:resnedOTP,
-        private googleLogin:GoogleLogin
+        private googleLogin:GoogleLogin,
+        private forgetpasswordverifyOTP:ForgetpasswordVerifyOTP,
+        private forgtepasswordresendOtp:forgetpasswordresnedOTP,
+        private changePassword:changepassword
     ){}
 
     async signup(req:Request, res:Response):Promise<void>{
@@ -61,6 +65,8 @@ export class UserController{
     }
 
 
+
+
     async verifyotpcontroller(req:Request, res:Response):Promise<void>{
             try {
                 const{otp, details}=req.body;
@@ -70,6 +76,42 @@ export class UserController{
             } catch (err: any) {
                 res.status(400).json({ message: err.message });
               }
+    }
+
+    async forgetpasswordVerifyOTP(req:Request, res:Response):Promise<void>{
+        try {
+            const {otp,details}=req.body
+            console.log(otp,details)
+            const result=await this.forgetpasswordverifyOTP.verify(otp,details)
+            res.status(200).json({message:result})
+            } catch (err: any) {
+                res.status(400).json({ message: err.message });
+              }
+
+        
+    }
+
+    async changepassword(req:Request,res:Response):Promise<void>{
+        try {
+            const{password,email}=req.body
+            console.log(password,email)
+            const result=await this.changePassword.changepass(password,email)
+            res.status(200).json({message:result})
+        } catch (err: any) {
+            res.status(400).json({ message: err.message });
+          }
+    }
+
+    async forgetpasswordresnedOTP(req:Request, res:Response):Promise<void>{
+        try {
+            const {details}=req.body
+            const result=await this.forgtepasswordresendOtp.resend(details)
+            res.status(200).json({ message: result });
+        } catch (err: any) {
+          res.status(400).json({ message: err.message });
+        }
+
+      
     }
 
 

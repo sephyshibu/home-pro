@@ -1,32 +1,31 @@
 import React, { useState } from "react";
 import axiosInstanceuser from "../../axios";
-import { useNavigate } from "react-router";
+import { useNavigate,useLocation } from "react-router";
 import two from '../../../public/images/two.png'
 import one from '../../../public/images/one.png'
 import logo from '../../../public/images/Homepro/Logo Landscape.png'
-interface Signupform{
-    name:string,
-    email:string,
+interface ChangePasswordform{
+    
     password:string,
     confirmpassword:string,
-    phone:string,
+    
     
 
 }
 
 
-const Signup:React.FC=()=>{
-    const[formdata,setformdata]=useState<Signupform>({
-        name:"",
-        email:"",
+const ChangePassword:React.FC=()=>{
+    const[formdata,setformdata]=useState<ChangePasswordform>({
+        
         password:"",
         confirmpassword:"",
-        phone:""
+       
     })
-
+    const location=useLocation()
     const[loading,setloading]=useState(false)
-    const[error,seterror]=useState<Partial<Signupform>>({})
+    const[error,seterror]=useState<Partial<ChangePasswordform>>({})
     const navigate=useNavigate()
+    const email=location.state.details
 
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setformdata((prev)=>({
@@ -45,26 +44,7 @@ const Signup:React.FC=()=>{
         let formErrors:any={}
         let isValid=true
 
-        if(!formdata.name){
-            formErrors.name="username is requuired"
-            isValid=false
-        }
-        else if (!/^[A-Za-z]+$/.test(formdata.name)) {
-            formErrors.name = 'Username must only contain letters.';
-            isValid = false;
-        }
-
-        // Email validation (valid email format)
-        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (!formdata.email) {
-            formErrors.email = 'Email is required.';
-            isValid = false;
-        } else if (!emailPattern.test(formdata.email)) {
-            formErrors.email = 'Please enter a valid email address.';
-            isValid = false;
-        }
-
-
+        
         // Password validation (at least 6 characters, one uppercase, one lowercase, one special character)
          const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
         if (!formdata.password) {
@@ -80,14 +60,7 @@ const Signup:React.FC=()=>{
             isValid = false;
         }
 
-        if (!formdata.phone) {
-            formErrors.phone = 'Phone number is required.';
-            isValid = false;
-        } else if (!/^\d{10}$/.test(formdata.phone)) {
-            formErrors.phone = 'Phone number must be exactly 10 digits.';
-            isValid = false;
-        }
-
+        
         // If any validation fails, set error messages
         seterror(formErrors);
 
@@ -97,9 +70,10 @@ const Signup:React.FC=()=>{
         }
 
         try {
-            const response=await axiosInstanceuser.post('/signup',formdata)
+            const{password}=formdata
+            const response=await axiosInstanceuser.post('/chnagepasswords',{password,email})
       
-            navigate('/otp',{state:{details:formdata}})
+            navigate('/login')
             console.log(response?.data?.message)
             
         } catch (error:any) {
@@ -142,31 +116,7 @@ const Signup:React.FC=()=>{
 
                 {/* Left Side Image */}
           
-              <input
-                type="name"
-                name="name"
-                placeholder="Enter Username"
-                value={formdata.name}
-                onChange={handleChange}
-                className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
-              />
-                 {error.name && <p className="text-red-500 text-center text-sm">{error.name}</p>}
-          
-             
-
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter Email"
-                value={formdata.email}
-                onChange={handleChange}
-                className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
-              />
-                
-
-         
-              {error.email && <p className="text-red-500 text-center text-sm">{error.email}</p>}
-
+              
               <input
                 type="password"
                 name="password"
@@ -188,32 +138,17 @@ const Signup:React.FC=()=>{
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
               />
               {error.confirmpassword&& <p className="text-red-500 text-center text-sm">{error.confirmpassword}</p>}
-              <input
-                type="phone"
-                name="phone"
-                placeholder="Enter Phonenumber"
-                value={formdata.phone}
-                onChange={handleChange}
-                className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
-              />
-
-              {error.phone && <p className="text-red-500 text-center text-sm">{error.phone}</p>}
-
-  
-             
+              
   
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full bg-[#00A9FF] hover:bg-[#008BD1] text-white font-semibold py-3 rounded-md transition duration-300 transform hover:scale-105"
               >
-                {loading ? "Logging in..." : "LOGIN"}
+                {loading ? "Changingg..." : "Change Password"}
               </button>
   
-              <div className="text-center text-sm text-gray-600 mt-3">
-                <a href="/forget" className="hover:underline">Forgot Password?</a><br />
-                <a href="#" className="hover:underline">Don't have an account?</a>
-              </div>
+              
             </form>
           </div>
   
@@ -234,4 +169,4 @@ const Signup:React.FC=()=>{
       </div>
     )
 }
-export default Signup
+export default ChangePassword

@@ -79,6 +79,9 @@ const Login:React.FC=()=>{
         }
 
     }
+    const handleforget=async()=>{
+      navigate('/forgetpassword')
+    }
 
     const handleSubmit=async(e:React.FormEvent)=>{
         e.preventDefault()
@@ -189,7 +192,7 @@ const Login:React.FC=()=>{
               </GoogleOAuthProvider>
   
               <div className="text-center text-sm text-gray-600 mt-3">
-                <a href="#" className="hover:underline">Forgot Password?</a><br />
+                <a href="/forgetpassword" onClick={handleforget} className="hover:underline">Forgot Password?</a><br />
                 <a href="/signup" className="hover:underline">Don't have an account?</a>
               </div>
             </form>
