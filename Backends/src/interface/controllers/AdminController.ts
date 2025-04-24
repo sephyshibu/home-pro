@@ -99,6 +99,7 @@ export class AdminController{
                 res.status(200).json(result)
             } 
             catch (err:any) {
+                console.error("Signup Tech Error:", err.message);
                 res.status(400).json({ message: err.message });
               }
         }

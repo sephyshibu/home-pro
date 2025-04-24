@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog,DialogPanel,DialogTitle } from "@headlessui/react";
 import axiosInstanceadmin from "../../axios";
+import toast from "react-hot-toast";
 
 interface AddTechForm{
     email:string, 
@@ -8,20 +9,6 @@ interface AddTechForm{
     phone :string
 }
 
-// interface Tech{
-//     _id:string,
-//     email:string,
-//     phone:string,
-//     isBlocked:boolean,
-//     serviceablepinocde:string[]
-//     categoryid:string,
-//     noofworks:number,
-//     profileimgurl:string,
-//     workphotos:string[],
-//     rateperhour:number,
-//     consulationFee:number,
-//     isAvailable:boolean
-// }
 
 const Tech:React.FC=()=>{
     const [isOpen, setIsOpen] = useState(false);
@@ -80,11 +67,18 @@ const Tech:React.FC=()=>{
 
         try {
             const response= await axiosInstanceadmin.post('/addtech',techData)
-            console.log(response.data.message)
+            toast.success(response.data.message)
+            settechdata({ email: "", password: "", phone: "" }); // clear form even on error
             setIsOpen(false)
 
-        } catch (error) {
-            
+
+        } catch (error:any) {
+            if (error.response?.data?.message === "email already existed") {
+                toast.error("This email is already registered.");
+              } else {
+                toast.error("Something went wrong. Try again.");
+              }
+              settechdata({ email: "", password: "", phone: "" }); // clear form even on error
         }
     }
 
