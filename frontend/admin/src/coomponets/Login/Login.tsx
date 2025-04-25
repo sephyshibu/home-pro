@@ -3,7 +3,7 @@ import axiosInstanceadmin from "../../axios";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { addtoken } from "../../features/tokenSlice";
-import logo from '../../../public/images/Logo Landscape.png'
+import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
 import one from '../../../public/images/one.png'
 import two from '../../../public/images/two.png'
 interface LoginForm{
@@ -75,23 +75,22 @@ const Login:React.FC=()=>{
 
 
     return(
-        <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A1D56] relative overflow-hidden px-4">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-[#8EB69B] relative overflow-hidden px-4">
       
         {/* Logo and header */}
-        <div className="absolute top-10 flex flex-col items-center">
-          {/* <img src={logo} alt="HomePro Logo" className="w-50 h-32 mt-60" /> */}
+        <div className="absolute -top-10 flex flex-col items-center z-10">
+          <img src={logo} alt="HomePro Logo" className="w-80 h-39 mt-34" />
          
         </div>
-  
         {/* Main Content */}
         <div className="flex items-center justify-center gap-8 mt-32">
           
           {/* Left Side Image */}
-          <div className="hidden lg:block w-80 h-90">
-            <img 
-              src={one} 
-              alt="Worker fixing door" 
-              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 -translate-x-20"
+          <div className="hidden lg:block w-[300px] h-[400px]">
+            <img
+              src={one}
+              alt="Technician working"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
             />
           </div>
   
@@ -122,7 +121,7 @@ const Login:React.FC=()=>{
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#00A9FF] hover:bg-[#008BD1] text-white font-semibold py-3 rounded-md transition duration-300 transform hover:scale-105"
+                className="w-full bg-[#163] hover:bg-[#235347] text-white font-semibold py-3 rounded-md transition duration-300 transform hover:scale-105"
               >
                 {loading ? "Logging in..." : "LOGIN"}
               </button>
@@ -133,11 +132,11 @@ const Login:React.FC=()=>{
           </div>
   
           {/* Right Side Image */}
-          <div className="hidden lg:block w-80 h-180">
-            <img 
+          <div className="hidden lg:block w-[300px] h-[400px]">
+            <img
               src={two}
-              alt="Worker fixing sink" 
-              className="rounded-lg shadow-lg object-cover w-full h-full scale-150 translate-x-20"
+              alt="Technician working"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
             />
           </div>
         </div>

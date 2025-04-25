@@ -6,20 +6,26 @@ import Works from "./Works";
 import Gaurentee from "./Gaurentee";
 import Services from "./Services";
 import Hero from "./Hero";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import AboutSection from "./About";
 const App:React.FC=()=>{
     return(
-        <div className="font-sans">
+      <div className="font-sans">
       <Header />
-      <Hero />
-      <AboutSection/>
-      <Services />
-      <Gaurentee />
-      <Works />
-      <FAQ />
-      <CallAction/>
-      <Footer />
+      <section><Hero /></section>
+
+      {/* Section Wrapper with Padding */}
+      <div className="px-4 md:px-10 lg:px-20 py-8 space-y-16">
+       
+        <section><AboutSection /></section>
+        <section><Services /></section>
+        <section><Gaurentee /></section>
+        <section><Works /></section>
+        <section><FAQ /></section>
+        <section><CallAction /></section>
+      </div>
+
+      {/* <Footer /> */}
     </div>
     )
 }

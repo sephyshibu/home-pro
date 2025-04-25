@@ -140,11 +140,11 @@ const Login:React.FC=()=>{
         <div className="flex items-center justify-center gap-8 mt-32">
           
           {/* Left Side Image */}
-          <div className="hidden lg:block w-80 h-90">
-            <img 
-              src={one} 
-              alt="Worker fixing door" 
-              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 -translate-x-20"
+          <div className="hidden lg:block w-[300px] h-[400px]">
+            <img
+              src={one}
+              alt="Technician working"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
             />
           </div>
   
@@ -199,11 +199,11 @@ const Login:React.FC=()=>{
           </div>
   
           {/* Right Side Image */}
-          <div className="hidden lg:block w-80 h-180">
-            <img 
+          <div className="hidden lg:block w-[300px] h-[400px]">
+            <img
               src={two}
-              alt="Worker fixing sink" 
-              className="rounded-lg shadow-lg object-cover w-full h-full scale-150 translate-x-20"
+              alt="Technician working"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
             />
           </div>
         </div>

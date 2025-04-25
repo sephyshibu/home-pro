@@ -10,6 +10,18 @@ const FAQ: React.FC = () => {
             <h4 className="font-semibold">What is HomePro?</h4>
             <p className="text-gray-500 text-sm mt-1">It’s a home service platform for on-demand professionals.</p>
           </div>
+          <div className="border rounded p-4">
+            <h4 className="font-semibold">What is HomePro?</h4>
+            <p className="text-gray-500 text-sm mt-1">It’s a home service platform for on-demand professionals.</p>
+          </div>
+          <div className="border rounded p-4">
+            <h4 className="font-semibold">What is HomePro?</h4>
+            <p className="text-gray-500 text-sm mt-1">It’s a home service platform for on-demand professionals.</p>
+          </div>
+          <div className="border rounded p-4">
+            <h4 className="font-semibold">What is HomePro?</h4>
+            <p className="text-gray-500 text-sm mt-1">It’s a home service platform for on-demand professionals.</p>
+          </div>
 
         </div>
       </section>

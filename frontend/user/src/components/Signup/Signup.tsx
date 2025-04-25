@@ -93,6 +93,7 @@ const Signup:React.FC=()=>{
 
         // If any validation fails, return early
         if (!isValid) {
+          setloading(false); 
            return
         }
 
@@ -126,14 +127,13 @@ const Signup:React.FC=()=>{
         <div className="flex items-center justify-center gap-8 mt-32">
           
           {/* Left Side Image */}
-          <div className="hidden lg:block w-80 h-90">
-            <img 
-              src={one} 
-              alt="Worker fixing door" 
-              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 -translate-x-20"
+          <div className="hidden lg:block w-[300px] h-[400px]">
+            <img
+              src={one}
+              alt="Technician working"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
             />
           </div>
-  
           {/* Center Login Card */}
           <div className="bg-white rounded-2xl shadow-lg p-20 max-w-full">
             <h2 className="text-2xl font-bold text-center text-[#0A1D56] mb-6">USER SIGNUP</h2>
@@ -207,22 +207,19 @@ const Signup:React.FC=()=>{
                 disabled={loading}
                 className="w-full bg-[#00A9FF] hover:bg-[#008BD1] text-white font-semibold py-3 rounded-md transition duration-300 transform hover:scale-105"
               >
-                {loading ? "Logging in..." : "LOGIN"}
+                {loading ? "Signing in..." : "SignUp"}
               </button>
   
-              <div className="text-center text-sm text-gray-600 mt-3">
-                <a href="/forget" className="hover:underline">Forgot Password?</a><br />
-                <a href="#" className="hover:underline">Don't have an account?</a>
-              </div>
+              
             </form>
           </div>
   
           {/* Right Side Image */}
-          <div className="hidden lg:block w-80 h-90">
-            <img 
-              src={two} 
-              alt="Worker fixing sink" 
-              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 translate-x-20"
+          <div className="hidden lg:block w-[300px] h-[400px]">
+            <img
+              src={two}
+              alt="Technician working"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
             />
           </div>
         </div>

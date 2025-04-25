@@ -8,13 +8,13 @@ const Hero: React.FC = () => {
       <div className="container mx-auto grid lg:grid-cols-3 items-center px-6 gap-10">
         
         {/* Left Image */}
-        <div className="hidden lg:block w-80 h-90">
-          <img
-            src={doorTech}
-            alt="Technician at door"
-            className="rounded-lg shadow-lg object-cover h-full w-full scale-100 -translate-x 60"
-          />
-        </div>
+        <div className="hidden lg:block w-[300px] h-[400px]">
+            <img
+              src={doorTech}
+              alt="Technician working"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
+            />
+          </div>
 
         {/* Center Content */}
         <div className="text-center space-y-4">
@@ -43,13 +43,13 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Right Image */}
-        <div className="hidden lg:block w-80 h-90">
-          <img
-            src={toiletTech}
-            alt="Technician at toilet"
-            className="rounded-lg shadow-lg object-cover h-full w-full scale-100 -translate-x 20"
-          />
-        </div>
+        <div className="hidden lg:block w-[300px] h-[400px]">
+            <img
+              src={toiletTech}
+              alt="Technician working"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
+            />
+          </div>
       </div>
     </section>
   );

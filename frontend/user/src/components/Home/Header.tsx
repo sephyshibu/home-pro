@@ -1,6 +1,7 @@
 import React from 'react';
 import {persistor} from '../../app/store'
 import { useNavigate } from 'react-router';
+import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
 const Header: React.FC = () => {
 
     const userId=localStorage.getItem('userId')
@@ -17,23 +18,31 @@ const Header: React.FC = () => {
         }
     }
     return (
-        <nav className="bg-[#0A2342] text-white">
-        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-          <div className="text-2xl font-bold flex items-center gap-2">
-            <img src="logo.png" className="h-8" alt="Logo" />
-            HomePro
-          </div>
-          <nav className="space-x-6">
-            <a href="/" className="hover:text-orange-400">Home</a>
-            <a href="#" className="hover:text-orange-400">Services</a>
-            <a href="#" className="hover:text-orange-400">Contact</a>
-          </nav>
-          <div className="text-sm">My Profile</div>
-          <button type='button' onClick={handleLoginLogout}>
-            {userId?"LogOut":"Login"}
-                      </button>
+      <nav className="bg-[#0A2342] text-white py-2 px-6 shadow-md">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+    {/* Left: Logo */}
+    <div className="flex-shrink-0">
+      <img src={logo} alt="HomePro Logo" className="w-52" />
+    </div>
+
+        {/* Center: Navigation Links */}
+        <div className="hidden md:flex space-x-8 text-lg">
+          <a href="/" className="hover:text-orange-400 transition">Home</a>
+          <a href="#" className="hover:text-orange-400 transition">Services</a>
+          <a href="#" className="hover:text-orange-400 transition">Contact</a>
         </div>
-      </nav>
+
+        {/* Right: Profile + Login/Logout */}
+        <div className="flex items-center space-x-6">
+          <button className="mt-2 w-full cursor-pointer bg-emerald-700 hover:bg-emerald-800 text-white py-2 px-4 rounded-md">
+            {userId?"Myprofile":""}
+          </button>
+          <button type='button' className='mt-2 w-full cursor-pointer bg-red-600 hover:bg-emerald-800 text-white py-2 px-4 rounded-md' onClick={handleLoginLogout}>
+            {userId?"LogOut":"Login"}
+          </button>
+          </div>
+      </div>
+    </nav>
     )
   };
   
