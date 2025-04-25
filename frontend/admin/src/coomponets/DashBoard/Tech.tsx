@@ -59,7 +59,7 @@ const Tech:React.FC=()=>{
         }
 
         seterror(formErrors);
-
+        
         // If any validation fails, return early
         if (!isValid) {
            return

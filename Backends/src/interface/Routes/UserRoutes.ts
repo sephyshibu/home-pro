@@ -12,6 +12,8 @@ import { RefreshToken } from '../../application/usecase/User/RefreshToken'
 import { ForgetpasswordVerifyOTP } from '../../application/usecase/User/ForgetpasswordVerifyOtp'
 import { forgetpasswordresnedOTP } from '../../application/usecase/User/ForgetpasswordresendOTP'
 import { changepassword } from '../../application/usecase/User/Changepassword'
+import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory'
+import { categoryRepositoryImpl } from '../../infrastructure/repository/CategoryRepositoryImpl'
 // import { checkuserstatus } from '../../infrastructure/middleware/CheckUserStatus'
 
 const router=express.Router()
@@ -19,6 +21,8 @@ const router=express.Router()
 
 //dependency injectionnnn
 const userRepository= new UserRepositoryImpl()
+const categoryrepository= new categoryRepositoryImpl()
+
 const emailService= new EmailService()
 const signupuser= new Signup(userRepository,emailService)
 const checkemailUser= new CheckEmail(userRepository,emailService)
@@ -30,7 +34,7 @@ const forgetpassresendotp=new forgetpasswordresnedOTP(emailService)
 const resendotp=new resnedOTP(emailService)
 const refreshtoken= new RefreshToken()
 const chnagepassword= new changepassword(userRepository)
-
+const fetchcategories= new fetchCategory(categoryrepository)
 
 
 const usercontroller= new UserController(
@@ -44,6 +48,7 @@ const usercontroller= new UserController(
     forgetpassverifyotp,
     forgetpassresendotp,
     chnagepassword,
+    fetchcategories
     
   
     
@@ -61,7 +66,7 @@ router.post('/checkemail',(req,res)=>usercontroller.checkEmail(req,res))
 router.post('/chnagepasswords',(req,res)=>usercontroller.changepassword(req,res))
 router.post('/forgetpassverifyotp',(req,res)=>usercontroller.forgetpasswordVerifyOTP(req,res))
 router.post('/forgetpassresendotp',(req,res)=>usercontroller.forgetpasswordresnedOTP(req,res))
-
+router.get('/fetchcategory',(req,res)=>usercontroller.fetchCategory(req,res))
 
 
 

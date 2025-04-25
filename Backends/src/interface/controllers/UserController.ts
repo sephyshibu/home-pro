@@ -9,6 +9,7 @@ import { VerifyOTP } from '../../application/usecase/User/VerifyOTP';
 import { ForgetpasswordVerifyOTP } from '../../application/usecase/User/ForgetpasswordVerifyOtp';
 import { forgetpasswordresnedOTP } from '../../application/usecase/User/ForgetpasswordresendOTP';
 import { changepassword } from '../../application/usecase/User/Changepassword';
+import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -20,7 +21,8 @@ export class UserController{
         private googleLogin:GoogleLogin,
         private forgetpasswordverifyOTP:ForgetpasswordVerifyOTP,
         private forgtepasswordresendOtp:forgetpasswordresnedOTP,
-        private changePassword:changepassword
+        private changePassword:changepassword,
+        private fetchcat:fetchCategory
     ){}
 
     async signup(req:Request, res:Response):Promise<void>{
@@ -143,6 +145,15 @@ export class UserController{
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
           res.status(400).json({ message: err.message });
+        }
+    }
+
+    async fetchCategory(req:Request,res:Response):Promise<void>{
+        try {
+            const category=await this.fetchcat.fetch()
+            res.status(200).json({category})
+        } catch (error:any) {
+            res.status(500).json({ message: error.message });
         }
     }
 }
