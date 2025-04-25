@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import axiosInstanceuser from "../../axios";
 import { useNavigate } from "react-router";
 
-
+import two from '../../../public/images/two.png'
+import one from '../../../public/images/one.png'
+import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
 const ForgetPassword: React.FC = () => {
 
     interface foregtform{
@@ -69,11 +71,14 @@ const ForgetPassword: React.FC = () => {
       {/* Top Section */}
       <div className="flex-grow flex items-center justify-center px-4">
         <div className="w-full max-w-6xl bg-[#0A1D56] flex flex-col md:flex-row items-center justify-center gap-8">
-          
-          {/* Left Image */}
-          <div className="hidden md:block">
-            <img src="/images/locksmith.png" alt="Locksmith" className="h-96 object-cover rounded-md" />
-          </div>
+        
+        
+        <div className="absolute -top-10 flex flex-col items-center z-10">
+          <img src={logo} alt="HomePro Logo" className="w-80 h-39 mt-34" />
+         
+        </div>
+  
+         
 
           {/* Center Card */}
           <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
@@ -100,10 +105,7 @@ const ForgetPassword: React.FC = () => {
             </form>
           </div>
 
-          {/* Right Image */}
-          <div className="hidden md:block">
-            <img src="/images/plumber.png" alt="Plumber" className="h-96 object-cover rounded-md" />
-          </div>
+          
         </div>
       </div>
 

@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import axiosInstanceuser from "../../axios";
 import two from '../../../public/images/two.png'
 import one from '../../../public/images/one.png'
-import logo from '../../../public/images/Homepro/Logo Landscape.png'
+import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
 interface LoginForm{
     email:string,
     password:string
@@ -131,8 +131,8 @@ const Login:React.FC=()=>{
         <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A1D56] relative overflow-hidden px-4">
       
         {/* Logo and header */}
-        <div className="absolute top-10 flex flex-col items-center">
-          {/* <img src={logo} alt="HomePro Logo" className="w-80 h-39 mt-60" /> */}
+        <div className="absolute -top-10 flex flex-col items-center z-10">
+          <img src={logo} alt="HomePro Logo" className="w-80 h-39 mt-34" />
          
         </div>
   

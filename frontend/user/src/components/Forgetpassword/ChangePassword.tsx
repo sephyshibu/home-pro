@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import axiosInstanceuser from "../../axios";
 import { useNavigate,useLocation } from "react-router";
-import two from '../../../public/images/two.png'
-import one from '../../../public/images/one.png'
-import logo from '../../../public/images/Homepro/Logo Landscape.png'
+
+import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
 interface ChangePasswordform{
     
     password:string,
@@ -91,22 +90,14 @@ const ChangePassword:React.FC=()=>{
         <div className="min-h-screen flex flex-col items-center justify-center bg-[#0A1D56] relative overflow-hidden px-4">
       
         {/* Logo and header */}
-        <div className="absolute top-8 flex flex-col items-center">
-          <img src={logo}alt="HomePro Logo" className="w-50 h-32 translate-x-20" />
-
+        <div className="absolute -top-10 flex flex-col items-center z-10">
+          <img src={logo} alt="HomePro Logo" className="w-80 h-39 mt-34" />
+         
         </div>
-  
         {/* Main Content */}
         <div className="flex items-center justify-center gap-8 mt-32">
           
-          {/* Left Side Image */}
-          <div className="hidden lg:block w-80 h-90">
-            <img 
-              src={one} 
-              alt="Worker fixing door" 
-              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 -translate-x-20"
-            />
-          </div>
+         
   
           {/* Center Login Card */}
           <div className="bg-white rounded-2xl shadow-lg p-20 max-w-full">
@@ -152,14 +143,7 @@ const ChangePassword:React.FC=()=>{
             </form>
           </div>
   
-          {/* Right Side Image */}
-          <div className="hidden lg:block w-80 h-90">
-            <img 
-              src={two} 
-              alt="Worker fixing sink" 
-              className="rounded-lg shadow-lg object-cover h-full w-full scale-150 translate-x-20"
-            />
-          </div>
+          
         </div>
   
         {/* Footer */}
