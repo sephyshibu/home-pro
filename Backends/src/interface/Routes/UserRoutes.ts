@@ -12,6 +12,8 @@ import { RefreshToken } from '../../application/usecase/User/RefreshToken'
 import { ForgetpasswordVerifyOTP } from '../../application/usecase/User/ForgetpasswordVerifyOtp'
 import { forgetpasswordresnedOTP } from '../../application/usecase/User/ForgetpasswordresendOTP'
 import { changepassword } from '../../application/usecase/User/Changepassword'
+// import { checkuserstatus } from '../../infrastructure/middleware/CheckUserStatus'
+
 const router=express.Router()
 
 
@@ -29,6 +31,8 @@ const resendotp=new resnedOTP(emailService)
 const refreshtoken= new RefreshToken()
 const chnagepassword= new changepassword(userRepository)
 
+
+
 const usercontroller= new UserController(
     signupuser,
     checkemailUser,
@@ -39,7 +43,7 @@ const usercontroller= new UserController(
     googleLogin,
     forgetpassverifyotp,
     forgetpassresendotp,
-    chnagepassword
+    chnagepassword,
     
   
     
@@ -57,4 +61,9 @@ router.post('/checkemail',(req,res)=>usercontroller.checkEmail(req,res))
 router.post('/chnagepasswords',(req,res)=>usercontroller.changepassword(req,res))
 router.post('/forgetpassverifyotp',(req,res)=>usercontroller.forgetpasswordVerifyOTP(req,res))
 router.post('/forgetpassresendotp',(req,res)=>usercontroller.forgetpasswordresnedOTP(req,res))
+
+
+
+
+
 export {router as userRouter}

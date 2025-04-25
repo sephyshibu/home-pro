@@ -52,5 +52,16 @@ export class UserRepositoryImpl implements UserRepository{
         return user
 
     }
-    
+    async findById(userid: string): Promise<{ isBlocked: boolean; email: string } | null> {
+        try {
+            const user = await userModel.findById(userid); // Find user by ID from database
+            if (!user) {
+              return null;
+            }
+            return { isBlocked: user.isBlocked, email: user.email }; // Return status and email
+          } catch (error) {
+            console.error("Error finding user:", error);
+            return null;
+          }
+    }
 }
