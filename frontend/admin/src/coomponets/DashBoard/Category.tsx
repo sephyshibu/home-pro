@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstanceadmin from "../../axios";
-
+import { useNavigate } from "react-router";
 interface Category{
     _id:string,
     name:string,
@@ -12,7 +12,7 @@ interface Category{
 const CategoryList:React.FC=()=>{
     const[category, setcategory]=useState<Category[]>([])
     const[loading,setloading]=useState(false)
-    
+    const navigate=useNavigate()
 
     useEffect(()=>{
         fetchcategory()
@@ -39,6 +39,12 @@ const CategoryList:React.FC=()=>{
         }
     }
 
+    const handleEdit=async(catid:string)=>{
+        
+            navigate(`/editcategory/${catid}`)
+       
+    }
+
 
     return(
         <div className="flex-grow p-8">
@@ -56,6 +62,7 @@ const CategoryList:React.FC=()=>{
                   <th className="px-6 py-3">Name</th>
                   <th className="px-6 py-3">Description</th>
                   <th className="px-6 py-3">Action</th>
+                
                 </tr>
               </thead>
               <tbody className="text-gray-700 text-sm font-light">
@@ -76,6 +83,7 @@ const CategoryList:React.FC=()=>{
                       <td className="px-6 py-4">{cat.description}</td>
                       <td className="px-6 py-4">{cat.isBlocked ? "Blocked" : "Active"}</td>
                       <td className="px-6 py-4">
+                      <div className="flex gap-x-2">
                         <button
                           onClick={() => handleToggle(cat._id, cat.isBlocked)}
                           className={`px-4 py-2 rounded-md text-white ${
@@ -84,6 +92,11 @@ const CategoryList:React.FC=()=>{
                         >
                           {cat.isBlocked ? "Unblock" : "Block"}
                         </button>
+
+                        <button onClick={()=>handleEdit(cat._id)} className="bg-emerald-700 hover:bg-emerald-800 text-white py-2 px-4 rounded-md">
+                            Edit
+                        </button>
+                        </div>
                       </td>
                     </tr>
                   ))

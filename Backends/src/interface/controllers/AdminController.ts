@@ -9,6 +9,8 @@ import { BlockUnBlock } from "../../application/usecase/Admin/BlockUnblockTech";
 import { AddCategory } from "../../application/usecase/Category/AddCategory";
 import { fetchCategory } from "../../application/usecase/Admin/Fetchcategory";
 import { BlockUnBlockCat } from "../../application/usecase/Admin/BlockUnBlockCategory";
+import { EditCategory } from "../../application/usecase/Category/Editcategory";
+import { GetCategoryById } from "../../application/usecase/Category/GetCategory";
 export class AdminController{
     constructor(
         private loginadmin:Login,
@@ -20,7 +22,9 @@ export class AdminController{
         private signuptechs:Signuptech,
         private addcategory:AddCategory,
         private fetchallCategory:fetchCategory,
-        private BlockUnblockCat:BlockUnBlockCat
+        private BlockUnblockCat:BlockUnBlockCat,
+        private editcat:EditCategory,
+        private getCategoryById:GetCategoryById
     ){}
 
 
@@ -141,6 +145,27 @@ export class AdminController{
                 console.error("Signup Tech Error:", err.message);
                 res.status(400).json({ message: err.message });
               }
+    }
+
+    async fetchCategoryById(req: Request, res: Response) {
+        try {
+          const { catid } = req.params;
+          const category = await this.getCategoryById.getcategorybyId(catid);
+          res.status(200).json({ category });
+        } catch (err: any) {
+          res.status(400).json({ message: err.message });
+        }
+      }
+
+    async editcategory(req:Request,res:Response):Promise<void>{
+        try {
+            const{catid}=req.params
+            const{ name, description, image}=req.body
+            const result=await this.editcat.editCategory(catid, { name, description, image })
+            res.status(200).json({ message: "Category updated", category: result })
+        } catch (error:any) {
+            res.status(400).json({ message: error.message });
+        }
     }
     
     }

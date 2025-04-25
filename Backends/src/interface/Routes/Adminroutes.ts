@@ -14,6 +14,8 @@ import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory'
 import { AddCategory } from '../../application/usecase/Category/AddCategory'
 import { categoryRepositoryImpl } from '../../infrastructure/repository/CategoryRepositoryImpl'
 import { BlockUnBlockCat } from '../../application/usecase/Admin/BlockUnBlockCategory'
+import { EditCategory } from '../../application/usecase/Category/Editcategory'
+import { GetCategoryById } from '../../application/usecase/Category/GetCategory'
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
@@ -32,8 +34,8 @@ const addtech= new Signuptech(TechRepository)
 const fetchcat= new fetchCategory(categoryrepository)
 const addcat= new AddCategory(categoryrepository)
 const blockcat= new BlockUnBlockCat(categoryrepository)
-
-
+const editcategory=new EditCategory(categoryrepository)
+const getcategorybyId= new GetCategoryById(categoryrepository)
 
 const adminController= new AdminController(
     loginadmin,
@@ -45,7 +47,9 @@ const adminController= new AdminController(
     addtech,
     addcat,
     fetchcat,
-    blockcat
+    blockcat,
+    editcategory,
+    getcategorybyId
    
 )
 console.log("adminrouter")
@@ -59,4 +63,6 @@ router.patch('/tech/:techid',(req,res)=>adminController.blockunblocktechs(req,re
 router.get('/fetchcategory',(req,res)=>adminController.fetchCategory(req,res))
 router.post('/addcategory',(req,res)=>adminController.addcategorys(req,res))
 router.patch('/category/:catid',(req,res)=>adminController.blockunblockcatagory(req,res))
+router.patch('/editcategory/:catid',(req,res)=>adminController.editcategory(req,res))
+router.get('/category/:catid',(req,res)=>adminController.fetchCategoryById(req,res))
 export {router as adminRouter}

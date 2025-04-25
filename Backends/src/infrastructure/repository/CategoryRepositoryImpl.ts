@@ -36,4 +36,16 @@ export class categoryRepositoryImpl implements Categoryrepository{
             }
             return cat
         }
+
+    async fetchconecategory(catid: string): Promise<ICategory|null> {
+        return await CategoryModel.findById(catid)
+        
+    }
+
+    async editcategory(catid: string, update: Partial<ICategory>): Promise<ICategory> {
+        const updated = await CategoryModel.findByIdAndUpdate(catid, update, { new: true });
+        if (!updated) throw new Error("Category update failed. Category not found.");
+        return updated;
+    }
+    
 }
