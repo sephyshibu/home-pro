@@ -50,7 +50,7 @@ const LoginTech:React.FC=()=>{
         
         try {
             const{email,password}=formdata
-            const response=await axiosInstancetech.post('/',{email,password})
+            const response=await axiosInstancetech.post('/login',{email,password})
             dispatch(logintech(response.data.user))
             dispatch(addtoken({token:response.data.token}))
             console.log(response)
@@ -58,7 +58,7 @@ const LoginTech:React.FC=()=>{
             const techId=response.data.tech._id
             localStorage.setItem("techId",techId)
             seterror('');
-            navigate('/');
+            navigate('/techdashboard');
       
 
 

@@ -1,7 +1,7 @@
 import { TechRepository } from "../../../domain/repository/Techrepository";
 import { ITech } from "../../../domain/models/Tech";
 import bcrypt from 'bcryptjs'
-
+import { WalletModel } from "../../../infrastructure/db/schemas/Walletmodel";
 
 export class Signuptech{
     constructor(private techrepository:TechRepository){}
@@ -22,6 +22,9 @@ export class Signuptech{
             phone,
             isBlocked:false
         }
+
+       
+
 
         await this.techrepository.createtech(tech)
         return {message:"tech account created successfully"}

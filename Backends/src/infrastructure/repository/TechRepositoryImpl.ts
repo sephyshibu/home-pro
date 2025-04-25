@@ -1,7 +1,7 @@
 import { ITech } from "../../domain/models/Tech";
 import { TechModel } from "../db/schemas/techModel";
 import { TechRepository } from "../../domain/repository/Techrepository";
-
+import { WalletModel } from "../db/schemas/Walletmodel";
 
 export class TechRepositoryImpl implements TechRepository{
     async createtech(tech: ITech): Promise<ITech> {
@@ -9,6 +9,11 @@ export class TechRepositoryImpl implements TechRepository{
         console.log("tech sign in")
         const createdTech=await TechModel.create(tech)
         console.log(createdTech)
+
+        await WalletModel.create({
+            ownerId:createdTech._id,
+            userType:"technician"
+        })
         return createdTech
     }
 

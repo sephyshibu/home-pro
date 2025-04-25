@@ -28,6 +28,11 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
         console.log("if(token)", token);
         config.headers['Authorization'] = `Bearer ${token}`;
       }
+
+      if (user && user._id) {
+        config.headers['user-id'] = user._id; // 👈 Set userId in headers
+      }
+  
       return config
     },
     (error: AxiosError) => {

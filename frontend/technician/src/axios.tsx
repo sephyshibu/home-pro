@@ -3,7 +3,7 @@ import { store } from './componenst/app/store';
 import { addtoken } from './componenst/features/TokenSlice';
 // Axios instance
 const axiosInstancetech = axios.create({
-    baseURL: import.meta.env.VITE_PORT,
+    baseURL: import.meta.env.VITE_TECH_PORT,
     withCredentials: true,
   });
 
