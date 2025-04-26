@@ -5,17 +5,19 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 // import Category from './Category'
 // import AddCategory from './AddCategory'
+import logo from '../../../public/images/Resized/Logo Portrait.png'
 import {persistor} from '../app/store'
 const tabs = ["Upcoming Events", "Request", "Dashboard","Transactions"];
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("Upcoming Events");
-  const techId=localStorage.getItem('TechId')
+  const techId=localStorage.getItem('techId')
   const navigate=useNavigate()
 
 
   const handleLogOut=async()=>{
     if(techId){
+        console.log(techId)
       localStorage.removeItem('adminId')
       await persistor.purge()
       navigate('/')
@@ -23,14 +25,20 @@ const AdminDashboard: React.FC = () => {
       navigate('/techdashboard')
     }
   }
+
+  const handleClick=()=>{
+    navigate('/myprofile')
+  }
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Top Navbar */}
-      <div className="bg-[#FFDF00] text-black flex justify-between items-center px-6 py-4">
-        <div className="flex items-center gap-2">
-          <img src="/images/Logo.png" alt="HomePro Logo" className="h-10" />
-          <span className="font-bold text-xl">HomePro</span>
-        </div>
+      <div className="bg-[#FFDF00] text-black flex justify-between items-center px-6 py-2">
+  <div className="flex-shrink-0">
+    <img src={logo} alt="HomePro Logo" className="w-16" />
+  </div>
+        <button type="button" onClick={handleClick} className="bg-yellow-300 hover:bg-yellow-500 px-4 py-2 rounded-md text-black">
+          {techId?"My Profile":""}
+        </button>
         <button type="button" onClick={handleLogOut} className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md text-black">
           {techId?"LogOut":"LogIn"}
         </button>
