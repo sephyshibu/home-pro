@@ -10,6 +10,7 @@ import { ForgetpasswordVerifyOTP } from '../../application/usecase/User/Forgetpa
 import { forgetpasswordresnedOTP } from '../../application/usecase/User/ForgetpasswordresendOTP';
 import { changepassword } from '../../application/usecase/User/Changepassword';
 import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory';
+import { GetUserById } from '../../application/usecase/User/MyProfile/UserDetails';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -22,7 +23,8 @@ export class UserController{
         private forgetpasswordverifyOTP:ForgetpasswordVerifyOTP,
         private forgtepasswordresendOtp:forgetpasswordresnedOTP,
         private changePassword:changepassword,
-        private fetchcat:fetchCategory
+        private fetchcat:fetchCategory,
+        private getuserById:GetUserById
     ){}
 
     async signup(req:Request, res:Response):Promise<void>{
@@ -155,5 +157,16 @@ export class UserController{
         } catch (error:any) {
             res.status(500).json({ message: error.message });
         }
+    }
+
+
+    async fetchUserById(req:Request,res:Response){
+        try {
+            const {userId}=req.params
+            const user=await this.getuserById.getuserById(userId)
+            res.status(200).json({user})
+        } catch (err: any) {
+            res.status(400).json({ message: err.message });
+          }
     }
 }

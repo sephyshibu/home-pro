@@ -14,6 +14,7 @@ import { forgetpasswordresnedOTP } from '../../application/usecase/User/Forgetpa
 import { changepassword } from '../../application/usecase/User/Changepassword'
 import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory'
 import { categoryRepositoryImpl } from '../../infrastructure/repository/CategoryRepositoryImpl'
+import { GetUserById } from '../../application/usecase/User/MyProfile/UserDetails'
 // import { checkuserstatus } from '../../infrastructure/middleware/CheckUserStatus'
 
 const router=express.Router()
@@ -35,7 +36,7 @@ const resendotp=new resnedOTP(emailService)
 const refreshtoken= new RefreshToken()
 const chnagepassword= new changepassword(userRepository)
 const fetchcategories= new fetchCategory(categoryrepository)
-
+const getuserById= new GetUserById(userRepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -48,7 +49,8 @@ const usercontroller= new UserController(
     forgetpassverifyotp,
     forgetpassresendotp,
     chnagepassword,
-    fetchcategories
+    fetchcategories,
+    getuserById
     
   
     
@@ -67,7 +69,7 @@ router.post('/chnagepasswords',(req,res)=>usercontroller.changepassword(req,res)
 router.post('/forgetpassverifyotp',(req,res)=>usercontroller.forgetpasswordVerifyOTP(req,res))
 router.post('/forgetpassresendotp',(req,res)=>usercontroller.forgetpasswordresnedOTP(req,res))
 router.get('/fetchcategory',(req,res)=>usercontroller.fetchCategory(req,res))
-
+router.get('/fetchinguser/:userId',(req,res)=>usercontroller.fetchUserById(req,res))
 
 
 

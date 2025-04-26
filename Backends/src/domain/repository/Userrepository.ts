@@ -8,4 +8,5 @@ export interface UserRepository{
     blockunblock(userid:string, isBlocked:boolean):Promise<IUser>
     findByEmailAndUpdate(password:string, email:string):Promise<IUser|null>
     findById(userid:string):Promise<{ isBlocked: boolean; email: string }|null>
+    findOneuser(userId:string):Promise<IUser|null>
 }

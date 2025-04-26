@@ -64,4 +64,8 @@ export class UserRepositoryImpl implements UserRepository{
             return null;
           }
     }
+
+    async findOneuser(userId: string): Promise<IUser | null> {
+        return await userModel.findById(userId)
+    }
 }

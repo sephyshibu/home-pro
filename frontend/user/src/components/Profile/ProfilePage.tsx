@@ -30,7 +30,7 @@ const ProfilePage: React.FC = () => {
         return
       }
       try {
-        const response= await axiosInstanceuser.get(`/fetchsingleuser/${userId}`);
+        const response= await axiosInstanceuser.get(`/fetchinguser/${userId}`);
         setUser(response.data.user)
       } catch (error) {
         console.error('Failed to fetch users', error);
