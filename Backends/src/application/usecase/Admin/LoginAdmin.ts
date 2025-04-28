@@ -27,11 +27,12 @@ export class Login{
                 })
                 const accesstoken=jwt.sign({email:newadmin.email},process.env.JWT_SECRET!, { expiresIn: "15m" });
                 const refreshtoken=jwt.sign({email: newadmin.email }, process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
-            return {admin:newadmin,accesstoken, refreshtoken}
+                return {admin:newadmin,accesstoken, refreshtoken}
             }else{
-                if (admin.password !=="Adminpassword") {
+                if (password !="Adminpassword") {
                     throw new Error("Invalid password for admin.");
                 }
+                console.log(admin.password)
                 const accesstoken=jwt.sign({email:admin.email},process.env.JWT_SECRET!, { expiresIn: "15m" });
                 const refreshtoken=jwt.sign({email: admin.email }, process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
             return {admin:admin,accesstoken, refreshtoken}

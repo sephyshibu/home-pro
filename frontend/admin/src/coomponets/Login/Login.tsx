@@ -37,15 +37,18 @@ const Login:React.FC=()=>{
 
         if(!formdata.email && !formdata.password){
             seterror("email and password is required")
+            setloading(false)
             return
         }
 
         if(!formdata.email){
             seterror("Email is required")
+            setloading(false)
             return
         }
         if(!formdata.password){
             seterror("password is required")
+            setloading(false)
             return
         }
         

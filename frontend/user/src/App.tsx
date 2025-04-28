@@ -11,6 +11,9 @@ import ChangePassword from './components/Forgetpassword/ChangePassword'
 
 import UserLayout from './components/Profile/Userlayout'
 import ProfilePage from './components/Profile/ProfilePage'
+
+
+
 function App() {
  
 
@@ -18,7 +21,8 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/login' element={<Login/>}/>
+        <Route path='/login' element={
+              <Login />}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/otp' element={<Otp/>}/>
         <Route path='/forgetpassword' element={<ForgetPassword/>}/>

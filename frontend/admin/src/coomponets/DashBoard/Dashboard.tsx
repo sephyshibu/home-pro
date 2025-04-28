@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import Category from './Category'
 import AddCategory from './AddCategory'
 import { persistor } from "../../app/store";
+import logo from '../../../public/images/Resized/Logo Landscape.png'
 const tabs = ["Dashboard", "User List", "Technician List","Category List", "Transactions"];
 
 const AdminDashboard: React.FC = () => {
@@ -28,8 +29,8 @@ const AdminDashboard: React.FC = () => {
       {/* Top Navbar */}
       <div className="bg-[#8EB69B] text-white flex justify-between items-center px-6 py-4">
         <div className="flex items-center gap-2">
-          <img src="/images/Logo.png" alt="HomePro Logo" className="h-10" />
-          <span className="font-bold text-xl">HomePro</span>
+          <img src={logo} alt="HomePro Logo" className="h-10" />
+   
         </div>
         <button type="button" onClick={handleLogOut} className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md text-white">
           {adminId?"LogOut":"LogIn"}
@@ -37,7 +38,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Tab Menu */}
-      <div className="bg-gray-200 flex justify-center space-x-6 py-3">
+      <div className="bg-gray-200 flex justify-center space-x-6 py-3 mt-10">
         {tabs.map((tab) => (
           <button
             key={tab}

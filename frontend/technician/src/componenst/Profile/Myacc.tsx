@@ -87,9 +87,10 @@ const MyProfilePage = () => {
     const fetchCategories = async () => {
       try {
         const res = await axiosInstancetech.get('/fetchcategories');
+        const categories = res.data.category.filter((cat:any) => !cat.isBlocked);  // Filter out blocked categories
         console.log(res.data); // You get { category: [...] }
   
-        const categories = res.data.category; // <<== important
+        // const categories = res.data.category; // <<== important
         setCategories(categories);
       } catch (error) {
         console.error("Error fetching categories", error);

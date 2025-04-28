@@ -16,7 +16,8 @@ const Services: React.FC = () => {
     const fetchcategory=async()=>{
       try {
         const response= await axiosInstanceuser.get('/fetchcategory')
-        setcategories(response.data.category)
+        const categories=response.data.category.filter((cat:any)=>cat.isBlocked===false)
+        setcategories(categories)
       } catch (error) {
         console.error("Error fetching categories:", error);
       }

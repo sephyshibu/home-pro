@@ -33,8 +33,16 @@ const Login:React.FC=()=>{
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    useEffect(() => {
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        navigate("/"); // Redirect to home if user is logged in
+      }
+    }, [navigate]);
 
+    
     useEffect(()=>{
+
         function start(){
             gapi.client.init({
                 clientId:clientId,
@@ -43,7 +51,7 @@ const Login:React.FC=()=>{
         } 
 
         gapi.load('client:auth2', start)
-    })
+    },[])
 
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setformdata((prev)=>
