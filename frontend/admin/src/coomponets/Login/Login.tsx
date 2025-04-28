@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axiosInstanceadmin from "../../axios";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
@@ -21,7 +21,14 @@ const Login:React.FC=()=>{
     const navigate = useNavigate();
     const [loading, setloading]=useState(false);
     const[error,seterror]=useState<string |null>(null)
-
+        // ⬇️ NEW: Block already logged-in techs from accessing login page
+  useEffect(() => {
+    const adminId = localStorage.getItem('adminId');
+    if (adminId) {
+      navigate('/admindashboard'); // Redirect if already logged in
+    }
+  }, [navigate]);
+    
 
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setformdata((prev)=>

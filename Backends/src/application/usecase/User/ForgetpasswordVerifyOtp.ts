@@ -12,12 +12,13 @@ type OtpCacheData = {
   
 
 export class ForgetpasswordVerifyOTP{
-    async verify(otp:string,details:string):Promise<string>{
+    async verify(otp:string,details:{email:string}):Promise<string>{
       console.log("usecase",otp, details)
-        const cachedData = otpCache.get<OtpCacheData>(details);
+        const cachedData = otpCache.get<OtpCacheData>(details.email);
         console.log(cachedData)
         if(cachedData && otp===cachedData.otp){
               console.log("sdad")
+              console.log(cachedData.details)
               console.log(otp===cachedData.otp)
               otpCache.del(cachedData.details);
               return "Otp Verified Successfully";

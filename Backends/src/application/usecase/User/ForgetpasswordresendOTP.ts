@@ -6,7 +6,7 @@ export class forgetpasswordresnedOTP{
     constructor(private emailService:EmailService){}
     async resend(details:any):Promise<string>{
         const{ email}=details
-
+        console.log("backernd", email)
         const otp=generateOTP()
 
         const emailsent=await this.emailService.sendVerificationEmail(email, otp)

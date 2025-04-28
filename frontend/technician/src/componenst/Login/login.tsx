@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { logintech } from "../features/TechSlice";
 import { addtoken } from "../features/TokenSlice";
@@ -24,6 +24,15 @@ const LoginTech:React.FC=()=>{
     // const [msg, setMsg] = useState<string>('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+      // ⬇️ NEW: Block already logged-in techs from accessing login page
+  useEffect(() => {
+    const techId = localStorage.getItem('techId');
+    if (techId) {
+      navigate('/techdashboard'); // Redirect if already logged in
+    }
+  }, [navigate]);
+    
 
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setformdata((prev)=>

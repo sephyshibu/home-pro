@@ -1,6 +1,20 @@
 import { Outlet, NavLink } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
+import {persistor} from '../componenst/app/store'
 const TechnicianLayout = () => {
+
+  const navigate=useNavigate()
+  const techId=localStorage.getItem('techId')
+  const handleLogOut=async()=>{
+      if(techId){
+          console.log(techId)
+        localStorage.removeItem('techId')
+        await persistor.purge()
+        navigate('/')
+      }else{
+        navigate('/techdashboard')
+      }
+    }
   return (
     <div className="min-h-screen flex flex-col">
       {/* Topbar */}
@@ -16,7 +30,9 @@ const TechnicianLayout = () => {
 
         {/* Right Side Profile */}
         <div className="font-medium cursor-pointer">
-          My Profile ▼
+        <button type="button" onClick={handleLogOut} className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md text-black">
+          {techId?"LogOut":"LogIn"}
+        </button>
         </div>
       </div>
 

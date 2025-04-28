@@ -16,10 +16,11 @@ export class UserRepositoryImpl implements UserRepository{
         return user?user.toObject():null
     }
 
-    async findByEmailAndUpdate(password: string, email: string): Promise<IUser | null> {
+    async findByEmailAndUpdate(password: string, email: any): Promise<IUser | null> {
+        console.log("dffp",password,email.email)
         const hash=await bcrypt.hash(password,10);
         const user=await userModel.findOneAndUpdate(
-            {email},
+            {email:email.email},
             {password:hash},
             {new:true}
         )

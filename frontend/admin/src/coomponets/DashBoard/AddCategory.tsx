@@ -27,10 +27,22 @@ const AddCategory:React.FC=()=>{
       };
     const handleSubmit=async()=>{
         const newErrors: Partial<addCategoryForm> = {};
-        if (!addcat.name) newErrors.name = "Name is required";
-        if (!addcat.description) newErrors.description = "Description is required";
-        if (!imageFile) newErrors.image = "Image is required";
         
+        if (!imageFile) newErrors.image = "Image is required";
+        const validTextRegex = /^[A-Za-z0-9\s]+$/;
+
+        if (!addcat.name.trim()) {
+          newErrors.name = "Name is required";
+        } else if (!validTextRegex.test(addcat.name.trim())) {
+          newErrors.name = "Name must contain only letters, numbers, and spaces";
+        }
+      
+        if (!addcat.description.trim()) {
+          newErrors.description = "Description is required";
+        } else if (!validTextRegex.test(addcat.description.trim())) {
+          newErrors.description = "Description must contain only letters, numbers, and spaces";
+        }
+
         seterror(newErrors);
         if (Object.keys(newErrors).length > 0) return;
 
@@ -100,7 +112,7 @@ const AddCategory:React.FC=()=>{
                         <input
                             name="file"
                             type="file"
-                            accept="'image/*"
+                            accept="image/*"
                           
                             onChange={(e)=>setImageFile(e.target.files?.[0]||null)}
                             placeholder="Password"

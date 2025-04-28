@@ -13,7 +13,7 @@ const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("Upcoming Events");
   const techId=localStorage.getItem('techId')
   const navigate=useNavigate()
-
+  
 
   const handleLogOut=async()=>{
     if(techId){
@@ -32,7 +32,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Top Navbar */}
-      <div className="bg-[#FFDF00] text-black flex justify-between items-center px-6 py-2">
+      <div className="text-black flex justify-between items-center bg-yellow-400 p-4 ">
   <div className="flex-shrink-0">
     <img src={logo} alt="HomePro Logo" className="w-16" />
   </div>
