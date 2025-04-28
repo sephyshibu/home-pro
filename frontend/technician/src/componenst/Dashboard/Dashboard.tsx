@@ -18,7 +18,7 @@ const AdminDashboard: React.FC = () => {
   const handleLogOut=async()=>{
     if(techId){
         console.log(techId)
-      localStorage.removeItem('adminId')
+      localStorage.removeItem('techId')
       await persistor.purge()
       navigate('/')
     }else{
