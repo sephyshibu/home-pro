@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express"; 
-import { CheckUserStatus } from "../../application/usecase/User/CheckuserStatus";
+import { ChecktechStatus } from "../../application/usecase/Tech/CheckTechStatus";
 import { UserRepositoryImpl } from "../repository/UserRepositoryImpl";
 import jwt ,{TokenExpiredError} from 'jsonwebtoken';
-import { UserRepository } from "../../domain/repository/Userrepository";
-
-const userrepository: UserRepository = new UserRepositoryImpl();
-const checkuserstatuss = new CheckUserStatus(userrepository);
+import { TechRepository } from "../../domain/repository/Techrepository";
+import { TechRepositoryImpl } from "../repository/TechRepositoryImpl";
+const techrepository: TechRepository = new TechRepositoryImpl();
+const checkuserstatuss = new ChecktechStatus(techrepository);
 
 interface CustomRequest extends Request {
     userId?: string;
@@ -14,24 +14,24 @@ interface CustomRequest extends Request {
 // 👉 Export properly with correct types
 export const authToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const authHeader = req.headers['authorization'];
-  const userId = req.headers['user-id'] as string;
+  const techId = req.headers['tech-id'] as string;
   const token = authHeader && authHeader.split(' ')[1];
-    console.log(userId)
+    console.log(techId)
   if (!token) {
       res.status(401).json({ message: 'Access token required' });
       return;
   }
 
   try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
-      (req as CustomRequest).userId = decoded.userId; 
+      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { techId: string };
+      (req as CustomRequest).userId = decoded.techId; 
 
-      if (!userId) {
+      if (!techId) {
           res.status(400).json({ message: "User ID is required in headers" });
           return;
       }
 
-      await checkuserstatuss.checkstatus(userId);
+      await checkuserstatuss.checkstatus(techId);
 
       next();
   } catch (error: any) {
@@ -39,11 +39,11 @@ export const authToken = async (req: Request, res: Response, next: NextFunction)
         res.status(403).json({ message: "User is inactive. Please logout", action: "logout" });
         return;
     }
-    if (error.message === "User not found") {
+    if (error.message === "tech not found") {
         res.status(404).json({ message: "User not found" });
         return;
     }
-    if (error.message === "User is Blocked") {
+    if (error.message === "tech is Blocked") {
         res.status(403).json({ message: "User is blocked by admin", action: "blocked" });
         return;
     }

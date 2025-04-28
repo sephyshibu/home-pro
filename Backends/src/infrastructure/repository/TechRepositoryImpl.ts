@@ -39,4 +39,30 @@ export class TechRepositoryImpl implements TechRepository{
         }
         return tech
     }
+
+    async findOneTech(techid: string): Promise<ITech | null> {
+        console.log("findtech")
+        return await TechModel.findById(techid)
+    }
+
+    async edittech(techid: string, update: Partial<ITech>): Promise<ITech> {
+        console.log("edit tech",techid, update)
+        const updated=await TechModel.findByIdAndUpdate(techid,update,{new:true})
+        if(!updated) throw new Error("Tech Updation is failed")
+        return updated
+    }
+
+    async findById(techid: string): Promise<{ isBlocked: boolean; email: string } | null> {
+            try {
+                const tech = await TechModel.findById(techid); // Find user by ID from database
+                if (!tech) {
+                  return null;
+                }
+                return { isBlocked: tech.isBlocked, email: tech.email }; // Return status and email
+              } catch (error) {
+                console.error("Error finding tech:", error);
+                return null;
+              }
+        }
+    
 }

@@ -1,5 +1,5 @@
 import axios,{AxiosError,InternalAxiosRequestConfig} from 'axios';
-import { store } from './componenst/app/store';
+import { store,persistor } from './componenst/app/store';
 import { addtoken } from './componenst/features/TokenSlice';
 // Axios instance
 const axiosInstancetech = axios.create({
@@ -14,9 +14,9 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     (config: CustomAxiosRequestConfig) => {
       const state = store.getState();
       const token = state.token?.token;
-      const user = state.tech?.tech;
+      const tech = state.tech?.tech;
   
-      console.log("tech in axios", user);
+      console.log("tech in axios", tech);
       console.log("axios token", token);
       console.log("state", state);
   
@@ -27,6 +27,15 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
       if (token) {
         console.log("if(token)", token);
         config.headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      if (tech && tech._id) {
+        config.headers['tech-id'] = tech._id;
+      } else {
+        const techId = localStorage.getItem("techId");
+        if (techId) {
+          config.headers['tech-id'] = techId; // Fallback to localStorage if Redux state is empty
+        }
       }
       return config
     },
@@ -60,6 +69,18 @@ axiosInstancetech.interceptors.response.use(
           console.error("Token refresh failed:", refreshError);
           // store.dispatch(logoutuser());
           return Promise.reject(refreshError);
+        }
+      }
+      if (error.response?.status === 403) {
+        const data = error.response.data as { message: string; action?: string };
+        console.log("403 Error:", data); // 👈 Add this
+        if (data?.action === 'blocked') {
+         
+          localStorage.removeItem('techId')
+          await persistor.purge()
+          window.location.href = '/'
+
+          // Optionally: You can logout the user or redirect to login page if needed
         }
       }
       return Promise.reject(error);

@@ -5,7 +5,8 @@ import { ITech } from "../../../domain/models/Tech";
 const TechSchema= new mongoose.Schema<ITech>({
     name:{
         type:String,
-        required:false
+        required:false,
+        default: ""
     },
     email:{
         type:String,
@@ -36,7 +37,8 @@ const TechSchema= new mongoose.Schema<ITech>({
     categoryid:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"category",
-        required:false
+        required:false,
+        default:null
     },
     noofworks:{
         type:Number,

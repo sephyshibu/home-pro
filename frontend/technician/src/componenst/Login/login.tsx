@@ -38,22 +38,25 @@ const LoginTech:React.FC=()=>{
 
         if(!formdata.email && !formdata.password){
             seterror("email and password is required")
+            setloading(false)
             return
         }
 
         if(!formdata.email){
             seterror("Email is required")
+            setloading(false)
             return
         }
         if(!formdata.password){
             seterror("password is required")
+            setloading(false)
             return
         }
         
         try {
             const{email,password}=formdata
             const response=await axiosInstancetech.post('/login',{email,password})
-            dispatch(logintech(response.data.user))
+            dispatch(logintech(response.data.tech))
             dispatch(addtoken({token:response.data.token}))
             console.log(response)
             console.log("login tech data",response.data)

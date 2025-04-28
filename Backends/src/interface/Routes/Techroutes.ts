@@ -3,20 +3,38 @@ import { techController } from '../controllers/TechController'
 import { LoginTech } from '../../application/usecase/Tech/LoginTech'
 import { RefreshToken } from '../../application/usecase/Tech/RefreshToken'
 import { TechRepositoryImpl } from '../../infrastructure/repository/TechRepositoryImpl'
-
-
+import { EditTech } from '../../application/usecase/Tech/MyProfile/Edittech'
+import { GetTechById } from '../../application/usecase/Tech/MyProfile/TechDetails'
+import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory'
+import { categoryRepositoryImpl } from '../../infrastructure/repository/CategoryRepositoryImpl'
+import { authToken } from '../../infrastructure/middleware/CHeckTechStatus'
 const router=express.Router()
 
 const techrepository= new TechRepositoryImpl()
+const categoryrepository= new categoryRepositoryImpl()
+
+
 const logintechs= new LoginTech(techrepository)
 const refreshtoken= new RefreshToken()
+const fetchTechById= new GetTechById(techrepository)
+const editprofile=new EditTech(techrepository)
+const fetchCategories=new fetchCategory(categoryrepository)
 
 
 const TechController= new techController(
     logintechs,
-    refreshtoken
+    refreshtoken,
+    fetchTechById,
+    editprofile,
+    fetchCategories
 )
 
 router.post('/login',(req,res)=>TechController.login(req,res))
+
+
+
+router.get('/fetchtechprofile/:techId',authToken,(req,res)=>TechController.fetchTechById(req,res))
+router.put('/updatetech/:techId',authToken,(req,res)=>TechController.edittechs(req,res))
+router.get('/fetchcategories',authToken,(req,res)=>TechController.fetchCategory(req,res))
 
 export{router as techRouter}

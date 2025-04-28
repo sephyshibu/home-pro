@@ -1,10 +1,16 @@
 import { Request,Response } from "express";
 import { LoginTech } from "../../application/usecase/Tech/LoginTech";
 import { RefreshToken } from "../../application/usecase/Tech/RefreshToken";
+import { GetTechById } from "../../application/usecase/Tech/MyProfile/TechDetails";
+import { EditTech } from "../../application/usecase/Tech/MyProfile/Edittech";
+import { fetchCategory } from "../../application/usecase/Admin/Fetchcategory";
 export class techController{
     constructor(
         private logintech:LoginTech,
-        private refreshtoken:RefreshToken
+        private refreshtoken:RefreshToken,
+        private gettechbyid:GetTechById,
+        private edittech:EditTech,
+        private fetchcat:fetchCategory
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -34,5 +40,57 @@ export class techController{
           res.status(400).json({ message: err.message });
         }
     }
+
+    async fetchTechById(req:Request, res:Response){
+        try {
+            const{techId}=req.params
+           const tech= await this.gettechbyid.gettechbyid(techId)
+           res.status(200).json({tech})
+        } catch (err: any) {
+            res.status(400).json({ message: err.message });
+          }
+    }
+
+    async edittechs(req:Request,res:Response){
+        console.log("tech")
+        try {
+            const{techId}=req.params
+            const{name,email,
+                phone,
+                rateperhour,
+                serviceablepincode,
+                categoryid,
+                noofworks,
+                profileimgurl,
+                consulationFee,
+                workphotos}=req.body
+
+            console.log(req.body)
+            const result= await this.edittech.edittech(techId,{name,email,
+                phone,
+                rateperhour,
+                serviceablepincode,
+                categoryid,
+                noofworks,
+                profileimgurl,
+                consulationFee,
+                workphotos})
+            
+                res.status(200).json({message:"tech updated",tech:result})
+            } catch (error:any) {
+                res.status(400).json({ message: error.message });
+            }
+    }
+
+    async fetchCategory(req:Request,res:Response):Promise<void>{
+        try {
+            const category=await this.fetchcat.fetch()
+            res.status(200).json({category})
+        } catch (error:any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    
 
 }
