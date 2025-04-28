@@ -11,6 +11,7 @@ import { forgetpasswordresnedOTP } from '../../application/usecase/User/Forgetpa
 import { changepassword } from '../../application/usecase/User/Changepassword';
 import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory';
 import { GetUserById } from '../../application/usecase/User/MyProfile/UserDetails';
+import { EditProfile } from '../../application/usecase/User/MyProfile/EditProfile';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -24,7 +25,8 @@ export class UserController{
         private forgtepasswordresendOtp:forgetpasswordresnedOTP,
         private changePassword:changepassword,
         private fetchcat:fetchCategory,
-        private getuserById:GetUserById
+        private getuserById:GetUserById,
+        private editprofile:EditProfile
     ){}
 
     async signup(req:Request, res:Response):Promise<void>{
@@ -168,5 +170,16 @@ export class UserController{
         } catch (err: any) {
             res.status(400).json({ message: err.message });
           }
+    }
+
+    async edituser(req:Request,res:Response){
+        try {
+            const{userId}=req.params
+            const{name, email, phone}=req.body
+            const result=await this.editprofile.editprofile(userId,{name,email, phone})
+            res.status(200).json({message:"user updated",user:result})
+        } catch (error:any) {
+            res.status(400).json({ message: error.message });
+        }
     }
 }

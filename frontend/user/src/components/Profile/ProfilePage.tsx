@@ -19,6 +19,7 @@ const ProfilePage: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const [editData, setEditData] = useState<User>({email: "", name: "", phone: "" });
+  const [errors, setErrors] = useState<Partial<User>>({});
   const userId=localStorage.getItem('userId')
   const navigate=useNavigate()
 
@@ -53,6 +54,7 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleSave = async () => {
+    if (!validateForm()) return;
     try {
       const response = await axiosInstanceuser.put(`/updateuser/${userId}`, editData);
       setUser(editData); // Update the local state with new data
@@ -61,6 +63,43 @@ const ProfilePage: React.FC = () => {
       console.error("Failed to update user", error);
     }
   };
+
+  const validateForm = () => {
+    let formErrors: Partial<User> = {};
+    let isValid = true;
+  
+    // Validate name
+    if (!editData.name.trim()) {
+      formErrors.name = "Username is required";
+      isValid = false;
+    } else if (!/^[a-zA-Z0-9 ]+$/.test(editData.name.trim())) {
+      formErrors.name = "Username can only contain letters, numbers, and spaces";
+      isValid = false;
+    }
+  
+    // Validate email
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!editData.email.trim()) {
+      formErrors.email = "Email is required";
+      isValid = false;
+    } else if (!emailPattern.test(editData.email.trim())) {
+      formErrors.email = "Please enter a valid email address";
+      isValid = false;
+    }
+  
+    // Validate phone
+    if (!editData.phone?.trim()) {
+      formErrors.phone = "Phone number is required";
+      isValid = false;
+    } else if (!/^\d{10}$/.test(editData.phone.trim())) {
+      formErrors.phone = "Phone number must be exactly 10 digits";
+      isValid = false;
+    }
+  
+    setErrors(formErrors);
+    return isValid;
+  };
+  
 
 
     return (
@@ -121,6 +160,7 @@ const ProfilePage: React.FC = () => {
                 placeholder="Username"
                 className="w-full rounded-md border px-3 py-2 text-sm"
               />
+              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
               <input
                 name="email"
                 value={editData.email}
@@ -128,6 +168,7 @@ const ProfilePage: React.FC = () => {
                 placeholder="Email ID"
                 className="w-full rounded-md border px-3 py-2 text-sm"
               />
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               <input
                 name="phone"
                 value={editData.phone}
@@ -135,6 +176,7 @@ const ProfilePage: React.FC = () => {
                 placeholder="Phone Number"
                 className="w-full rounded-md border px-3 py-2 text-sm"
               />
+              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
             </div>
 
             <div className="mt-6 flex justify-end space-x-4">

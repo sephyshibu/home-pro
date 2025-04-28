@@ -68,4 +68,10 @@ export class UserRepositoryImpl implements UserRepository{
     async findOneuser(userId: string): Promise<IUser | null> {
         return await userModel.findById(userId)
     }
+
+    async edituser(userId: string, update: Partial<IUser>): Promise<IUser> {
+        const updated=await userModel.findByIdAndUpdate(userId,update,{new:true})
+        if(!updated) throw new Error("User Updated failedd")
+        return updated
+    }
 }

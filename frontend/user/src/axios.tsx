@@ -1,6 +1,8 @@
 import axios,{AxiosError,InternalAxiosRequestConfig} from 'axios';
-import { store } from './app/store';
+import { persistor, store } from './app/store';
 import { addtoken } from './features/tokenSlice';
+import {toast} from 'react-toastify'
+
 // Axios instance
 const axiosInstanceuser = axios.create({
     baseURL: import.meta.env.VITE_PORT,
@@ -65,6 +67,18 @@ axiosInstanceuser.interceptors.response.use(
           console.error("Token refresh failed:", refreshError);
           // store.dispatch(logoutuser());
           return Promise.reject(refreshError);
+        }
+      }
+      if (error.response?.status === 403) {
+        const data = error.response.data as { message: string; action?: string };
+        console.log("403 Error:", data); // 👈 Add this
+        if (data?.action === 'blocked') {
+          toast.error(data.message || "You are blocked by admin!");
+          localStorage.removeItem('userId')
+          await persistor.purge()
+          window.location.href = '/login'
+
+          // Optionally: You can logout the user or redirect to login page if needed
         }
       }
       return Promise.reject(error);
