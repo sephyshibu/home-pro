@@ -4,8 +4,11 @@ import Dashboard from './componenst/Dashboard/Dashboard'
 import TechnicianLayout from './Layouts/TechLayout'
 import './App.css'
 import MyProfilePage from './componenst/Profile/Myacc'
+import { Toaster } from 'react-hot-toast'
 function App() {
   return(
+    <>
+    <Toaster/>
     <Router>
       <Routes>
         <Route path='/' element={<LoginTech/>}/>
@@ -16,6 +19,8 @@ function App() {
            
       </Routes>
     </Router>
+    </>
+    
   )
  
 }

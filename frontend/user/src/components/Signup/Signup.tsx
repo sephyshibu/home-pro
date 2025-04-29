@@ -45,15 +45,14 @@ const Signup:React.FC=()=>{
         let formErrors:any={}
         let isValid=true
 
-        if(!formdata.name){
-            formErrors.name="username is requuired"
-            isValid=false
-        }
-        else if (!/^[A-Za-z]+$/.test(formdata.name)) {
-            formErrors.name = 'Username must only contain letters.';
-            isValid = false;
-        }
-
+        if (!formdata.name) {
+          formErrors.name = "Username is required";
+          isValid = false;
+      } else if (!/^[A-Za-z ]+$/.test(formdata.name)) {
+          formErrors.name = "Username must only contain letters and spaces.";
+          isValid = false;
+      }
+      
         // Email validation (valid email format)
         const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!formdata.email) {

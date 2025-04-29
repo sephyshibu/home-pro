@@ -3,6 +3,7 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import axiosInstancetech from '../../axios';
 import { useNavigate } from 'react-router';
 import { uploadImageToCloudinary } from '../../lib/CloudinaryUpload';
+import toast from 'react-hot-toast';
 
 
 interface Technician {
@@ -145,12 +146,12 @@ const MyProfilePage = () => {
   const handleAddPincode = async () => {
     if (!pincodeInput.trim()) return;
     if (editData.serviceablepincode.includes(pincodeInput)) {
-      alert('Pincode already added');
+      toast.error('Pincode already added');
       return;
     }
     const isValid = await validateKeralaPincode(pincodeInput);
     if (!isValid) {
-      alert('Invalid or non-Kerala pincode');
+      toast.error('Invalid or non-Kerala pincode');
       return;
     }
     setEditData(prev => ({
@@ -226,7 +227,7 @@ const MyProfilePage = () => {
       if (imageFile) {
         const uploadedUrl = await uploadImageToCloudinary(imageFile);
         if (!uploadedUrl) {
-          console.error('Image upload failed');
+          toast.error('Image upload failed');
           return;
         }
         imageurl = uploadedUrl;
@@ -236,6 +237,7 @@ const MyProfilePage = () => {
       await axiosInstancetech.put(`/updatetech/${techId}`, updatedData);
       setTechnician(updatedData);
       setIsOpen(false);
+      toast.success('Profile updated successfully!'); 
     } catch (error) {
       console.error('Failed to update technician:', error);
     } finally {
@@ -296,7 +298,7 @@ const MyProfilePage = () => {
               <div className="col-span-1">
                 <label className="block mb-1 font-medium">Category</label>
                 <select
-                  name="category"
+                  name="categoryid"
                   value={editData.categoryid}
                   onChange={handleSelectChange}
                   className="w-full rounded-md border px-4 py-2 text-sm"

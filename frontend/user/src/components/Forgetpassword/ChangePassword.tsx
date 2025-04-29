@@ -65,6 +65,7 @@ const ChangePassword:React.FC=()=>{
 
         // If any validation fails, return early
         if (!isValid) {
+          setloading(false)
            return
         }
 
