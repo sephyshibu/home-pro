@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser'
 import { userRouter } from '../interface/Routes/UserRoutes'
 import { adminRouter } from '../interface/Routes/Adminroutes';
 import { techRouter } from '../interface/Routes/Techroutes';
-// import { checkuserstatus } from '../infrastructure/middleware/CheckUserStatus';
+
 export class App{
     public app:Application;
 

@@ -126,7 +126,8 @@ const Signup:React.FC=()=>{
         <div className="flex items-center justify-center gap-8 mt-32">
           
           {/* Left Side Image */}
-          <div className="hidden lg:block w-[300px] h-[400px]">
+          <div className="hidden lg:block w-[280px] h-[380px] lg:w-[300px] lg:h-[400px]">
+
             <img
               src={one}
               alt="Technician working"
@@ -134,7 +135,8 @@ const Signup:React.FC=()=>{
             />
           </div>
           {/* Center Login Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-20 max-w-full">
+          <div className="bg-white rounded-2xl shadow-lg p-20 w-[400px] lg:w-[500px]">
+
             <h2 className="text-2xl font-bold text-center text-[#0A1D56] mb-6">USER SIGNUP</h2>
             
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -208,13 +210,17 @@ const Signup:React.FC=()=>{
               >
                 {loading ? "Signing in..." : "SignUp"}
               </button>
-  
+              <div className="text-center text-sm text-gray-600 mt-3">
+              
+                <a href="/login" className="hover:underline">Already have account?</a>
+              </div>
               
             </form>
           </div>
   
           {/* Right Side Image */}
-          <div className="hidden lg:block w-[300px] h-[400px]">
+          <div className="hidden lg:block w-[280px] h-[380px] lg:w-[300px] lg:h-[400px]">
+
             <img
               src={two}
               alt="Technician working"

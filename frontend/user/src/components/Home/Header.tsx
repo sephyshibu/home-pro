@@ -39,11 +39,11 @@ const Header: React.FC = () => {
         {/* Right: Profile + Login/Logout */}
         <div className="flex items-center space-x-6">
         {userId && (   // <-- Only show if userId exists
-          <button onClick={handleclick} className="mt-2 w-full cursor-pointer bg-emerald-700 hover:bg-emerald-800 text-white py-2 px-4 rounded-md">
+          <button onClick={handleclick} >
             My Profile
           </button>
         )}
-          <button type='button' className='mt-2 w-full cursor-pointer bg-red-600 hover:bg-emerald-800 text-white py-2 px-4 rounded-md' onClick={handleLoginLogout}>
+          <button type='button' onClick={handleLoginLogout}>
             {userId?"LogOut":"Login"}
           </button>
           </div>
