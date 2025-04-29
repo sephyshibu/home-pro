@@ -21,11 +21,11 @@ const Login:React.FC=()=>{
     const navigate = useNavigate();
     const [loading, setloading]=useState(false);
     const[error,seterror]=useState<string |null>(null)
-        // ⬇️ NEW: Block already logged-in techs from accessing login page
+        
   useEffect(() => {
     const adminId = localStorage.getItem('adminId');
     if (adminId) {
-      navigate('/admindashboard'); // Redirect if already logged in
+      navigate('/admindashboard'); 
     }
   }, [navigate]);
     

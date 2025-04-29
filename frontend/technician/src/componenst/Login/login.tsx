@@ -25,11 +25,11 @@ const LoginTech:React.FC=()=>{
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-      // ⬇️ NEW: Block already logged-in techs from accessing login page
+      
   useEffect(() => {
     const techId = localStorage.getItem('techId');
     if (techId) {
-      navigate('/techdashboard'); // Redirect if already logged in
+      navigate('/techdashboard'); 
     }
   }, [navigate]);
     
@@ -110,7 +110,7 @@ const LoginTech:React.FC=()=>{
               <input
                 type="email"
                 name="email"
-                placeholder="Enter Username"
+                placeholder="Enter email"
                 value={formdata.email}
                 onChange={handleChange}
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"

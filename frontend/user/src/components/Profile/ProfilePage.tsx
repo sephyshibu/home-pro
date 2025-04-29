@@ -164,7 +164,7 @@ const ProfilePage: React.FC = () => {
               <input
                 name="email"
                 value={editData.email}
-                onChange={handleChange}
+                // onChange={handleChange}
                 placeholder="Email ID"
                 className="w-full rounded-md border px-3 py-2 text-sm"
               />
