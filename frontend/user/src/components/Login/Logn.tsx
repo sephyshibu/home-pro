@@ -10,10 +10,12 @@ import axiosInstanceuser from "../../axios";
 import two from '../../../public/images/two.png'
 import one from '../../../public/images/one.png'
 import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
+
 interface LoginForm{
     email:string,
     password:string
 }
+
 interface GooglePayload{
     email:string,
     sub:string,

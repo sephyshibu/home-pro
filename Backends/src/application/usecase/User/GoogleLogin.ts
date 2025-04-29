@@ -12,7 +12,7 @@ export class GoogleLogin{
         console.log("google login", user)
         if(user){
             if(user.isBlocked){
-                throw new Error("user is Blocjked buy admin")
+                throw new Error("user is Blocjked by admin")
             }
         }
             else{

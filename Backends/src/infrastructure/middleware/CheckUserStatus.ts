@@ -11,7 +11,6 @@ interface CustomRequest extends Request {
     userId?: string;
 }
 
-// 👉 Export properly with correct types
 export const authToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const authHeader = req.headers['authorization'];
   const userId = req.headers['user-id'] as string;
