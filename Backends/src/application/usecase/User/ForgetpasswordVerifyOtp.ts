@@ -20,7 +20,7 @@ export class ForgetpasswordVerifyOTP{
               console.log("sdad")
               console.log(cachedData.details)
               console.log(otp===cachedData.otp)
-              otpCache.del(cachedData.details);
+              otpCache.del(details.email);
               return "Otp Verified Successfully";
             } else {
               throw new Error("Invalid OTP, Please try again");
