@@ -7,7 +7,7 @@ import Home from './components/Home/Home'
 import ForgetPassword from './components/Forgetpassword/Forgetpassword'
 import ForgetPasswordOTp from './components/Forgetpassword/ForgetPasswordOTp'
 import ChangePassword from './components/Forgetpassword/ChangePassword'
-
+import {Toaster} from 'react-hot-toast'
 
 import UserLayout from './components/Profile/Userlayout'
 import ProfilePage from './components/Profile/ProfilePage'
@@ -18,6 +18,8 @@ function App() {
  
 
   return (
+    <>
+    <Toaster/>
     <Router>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -42,6 +44,8 @@ function App() {
       
       </Routes>
     </Router>
+    </>
+    
   
   )
 }
