@@ -12,7 +12,11 @@ export interface ITech{
     workphotos?:string[],
     rateperhour?:number,
     consulationFee?:number,
-    isAvailable?:boolean
+    isAvailable?:boolean,
+    availableSlots?:{
+        date:string
+    }[],
+    role:string
 
 
 

@@ -20,7 +20,9 @@ export class Signuptech{
             email,
             password:hash,
             phone,
-            isBlocked:false
+            isBlocked:false,
+            availableSlots:[],
+            role:"tech"
         }
 
        

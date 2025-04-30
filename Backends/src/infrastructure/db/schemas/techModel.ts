@@ -59,6 +59,15 @@ const TechSchema= new mongoose.Schema<ITech>({
     isAvailable: {
         type: Boolean,
         default: false,
+    },
+    availableSlots:[
+        {
+            date:{type :String, required:true}
+        }
+    ],
+    role:{
+        type:String,
+        default:""
     }
 
 })
