@@ -53,9 +53,10 @@ axiosInstanceuser.interceptors.response.use(
         originalRequest._retry = true;
   
         try {
+          console.log('Triggering token refresh...');
           const response = await axiosInstanceuser.post<{ token: string }>('/refresh', {}, { withCredentials: true });
           const { token } = response.data;
-  
+          
           console.log("response axios ", token);
           store.dispatch(addtoken({ token })); // Update Redux with new token
   

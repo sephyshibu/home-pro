@@ -12,7 +12,8 @@ import { changepassword } from '../../application/usecase/User/Changepassword';
 import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory';
 import { GetUserById } from '../../application/usecase/User/MyProfile/UserDetails';
 import { EditProfile } from '../../application/usecase/User/MyProfile/EditProfile';
-import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/fetchTech';
+import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/FetchTech';
+import { GetCategoryById } from '../../application/usecase/Category/GetCategory';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -28,7 +29,8 @@ export class UserController{
         private fetchcat:fetchCategory,
         private getuserById:GetUserById,
         private editprofile:EditProfile,
-        private fetchtechonavailable:FetchTechBasedOnAvailable
+        private fetchtechonavailable:FetchTechBasedOnAvailable,
+        private getcatbyId:GetCategoryById
     ){}
 
     async signup(req:Request, res:Response):Promise<void>{
@@ -207,4 +209,14 @@ export class UserController{
             res.status(500).json({ message: "Internal server error" });
           }
     }
+
+    async fetchCategoryById(req: Request, res: Response) {
+        try {
+          const { catid } = req.params;
+          const category = await this.getcatbyId.getcategorybyId(catid);
+          res.status(200).json({ category });
+        } catch (err: any) {
+          res.status(400).json({ message: err.message });
+        }
+      }
 }

@@ -8,11 +8,10 @@ import ForgetPassword from './components/Forgetpassword/Forgetpassword'
 import ForgetPasswordOTp from './components/Forgetpassword/ForgetPasswordOTp'
 import ChangePassword from './components/Forgetpassword/ChangePassword'
 import {Toaster} from 'react-hot-toast'
-
 import UserLayout from './components/Profile/Userlayout'
 import ProfilePage from './components/Profile/ProfilePage'
-
-
+import TechnicianList from './components/AvailableTech.tsx/Availabletech'
+import TechnicianProfile from './components/Techprofile/Profile'
 
 function App() {
  
@@ -30,7 +29,8 @@ function App() {
         <Route path='/forgetpassword' element={<ForgetPassword/>}/>
         <Route path='/forgetpassotp' element={<ForgetPasswordOTp/>}/>
         <Route path='/changepassword' element={<ChangePassword/>}/>
-        
+        <Route path='/available-technicians' element={<TechnicianList/>}/>
+        <Route path='/viewprofile' element={<TechnicianProfile/>}/>
       
         <Route path='/myaccount' element={<UserLayout />}>
           {/* When /myaccount, redirect to /myaccount/profile */}
