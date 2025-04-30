@@ -20,7 +20,7 @@ import { authToken } from '../../infrastructure/middleware/CheckUserStatus'
 import { TechRepositoryImpl } from '../../infrastructure/repository/TechRepositoryImpl'
 import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/FetchTech'
 import { GetCategoryById } from '../../application/usecase/Category/GetCategory'
-
+import { fetchTechwithcategory } from '../../application/usecase/User/Tech/FetchTechById'
 const router=express.Router()
 
 
@@ -45,6 +45,7 @@ const getuserById= new GetUserById(userRepository)
 const editprofile=new EditProfile(userRepository)
 const fetchtechonavailble= new FetchTechBasedOnAvailable(techrepository)
 const getcategoryid= new GetCategoryById(categoryrepository)
+const fetchtechwithcat= new fetchTechwithcategory(techrepository)
 
 
 const usercontroller= new UserController(
@@ -62,6 +63,7 @@ const usercontroller= new UserController(
     getuserById,editprofile,
     fetchtechonavailble,
     getcategoryid,
+    fetchtechwithcat
 
   
     
@@ -88,5 +90,5 @@ router.get('/fetchinguser/:userId',authToken,(req,res)=>usercontroller.fetchUser
 router.put('/updateuser/:userId',authToken,(req,res)=>usercontroller.edituser(req,res))
 router.get('/technicians/available',authToken,(req,res)=>usercontroller.fetchTechBasedonavailble(req,res))
 router.get('/fetchparticularcategory/:catid',authToken,(req,res)=>usercontroller.fetchCategoryById(req,res))
-
+router.get('/fetchtech/:techid',authToken,(req,res)=>usercontroller.fetctechwithcat(req,res))
 export {router as userRouter}

@@ -14,7 +14,7 @@ import { GetUserById } from '../../application/usecase/User/MyProfile/UserDetail
 import { EditProfile } from '../../application/usecase/User/MyProfile/EditProfile';
 import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/FetchTech';
 import { GetCategoryById } from '../../application/usecase/Category/GetCategory';
-
+import { fetchTechwithcategory } from '../../application/usecase/User/Tech/FetchTechById';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -32,6 +32,7 @@ export class UserController{
         private editprofile:EditProfile,
         private fetchtechonavailable:FetchTechBasedOnAvailable,
         private getcatbyId:GetCategoryById,
+        private fetchtechwithcategory:fetchTechwithcategory
     
     ){}
 
@@ -197,16 +198,24 @@ export class UserController{
             console.log(pincode,date,categoryId)
             if(!pincode|| !date ||!categoryId){
                  res.status(400).json({message:"Missing required fields"})
+                 return
             }
 
             const technicians=await this.fetchtechonavailable.fetchTechBasedOnAvailble(pincode as string,date as string,categoryId as string)
             console.log(technicians)
             if (!technicians || technicians.length === 0) {
                  res.status(404).json({ message: "No technicians available" });
+                 return
               }
           
                res.status(200).json({ technicians });
         } catch (error: any) {
+
+            if (error.message === "technician not found") {
+                res.status(404).json({ message: "No technicians available for the selected slot." });
+              } else {
+                res.status(500).json({ message: "Internal server error" });
+              }
             console.error("Error fetching technicians:", error);
             res.status(500).json({ message: "Internal server error" });
           }
@@ -221,6 +230,18 @@ export class UserController{
           res.status(400).json({ message: err.message });
         }
       }
+    async fetctechwithcat(req:Request, res:Response){
+        try {
+            console.log("fetching")
+            const{techid}=req.params
+            console.log("techid",techid)
+            const technian=await this.fetchtechwithcategory.fetchtechwithcategory(techid)
+            console.log(technian)
+            res.status(200).json({technian})
+        } catch (err:any) {
+            res.status(400).json({ message: err.message });
+        }
+    }
 
      
 }

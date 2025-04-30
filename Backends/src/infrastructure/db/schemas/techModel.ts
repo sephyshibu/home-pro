@@ -36,7 +36,7 @@ const TechSchema= new mongoose.Schema<ITech>({
     },
     categoryid:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"category",
+        ref:"Category",
         required:false,
         default:null
     },

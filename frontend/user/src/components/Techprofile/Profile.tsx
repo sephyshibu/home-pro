@@ -1,6 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router";
+import { fetchTechById } from "../../api/fetchtechbyid";
+import { useNavigate } from "react-router";
 
-const TechnicianProfile = () => {
+interface Technician{
+  _id:string
+  name:string,
+  email:string,
+  phone:string,
+  serviceablepincode:string[],
+  rateperhour:number,
+  noofworks:number,
+  profileimgurl:string,
+  consulationFee:number,
+  categoryid:{
+    _id:string,
+    name:string,
+    description:string
+  }
+}
+
+interface Category{
+  _id:string,
+  name:string
+}
+
+const TechnicianProfile:React.FC=()=> {
+  const location=useLocation()
+  const techid=location.state?.techid
+  const navigate=useNavigate()
+  const[technician,settechnician]=useState<Technician>({
+    _id:'',
+    name: '',
+    email: '',
+    phone: '',
+    rateperhour: 0,
+    serviceablepincode: [],
+    noofworks: 0,
+    profileimgurl: '',
+    consulationFee: 0,
+    categoryid:{
+      _id:"",
+      name:"",
+      description:""
+    }
+  })
+
+  useEffect(()=>{
+    const fetchtech=async()=>{
+      try {
+        const response=await fetchTechById(techid)
+        settechnician(response)
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+
+    }
+    fetchtech()
+
+  },[])
+
+  const handleBook=async(techid:string)=>{
+        navigate('/addressselection',{state:{details:techid}})
+  }
+
+
   return (
     <div className="bg-white min-h-screen">
       {/* Navbar */}
@@ -20,64 +84,42 @@ const TechnicianProfile = () => {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto py-10 px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Personal Details */}
-        <div className="col-span-1 bg-gray-100 p-4 rounded shadow">
+        <div className="col-span-6 bg-gray-100 p-4 rounded shadow">
           <h2 className="text-xl font-bold mb-4">Technician Profile</h2>
-          <div className="bg-white p-4 rounded">
-            <h3 className="text-lg font-semibold mb-2">Personal Details</h3>
-            <div className="flex flex-col items-center mb-4">
-              <div className="w-24 h-24 bg-gray-300 rounded-full"></div>
+          <div className="bg-white p-6 rounded flex flex-col md:flex-row justify-between items-start gap-6">
+            {/* Left side - details */}
+            <div className="flex-1 space-y-3 text-base">
+              <h3 className="text-lg font-semibold mb-4">Personal Details</h3>
+              <p><strong>Name:</strong> {technician.name}</p>
+              <p><strong>Number of Works:</strong> {technician.noofworks}</p>
+              <p><strong>Phone Number:</strong> {technician.phone}</p>
+              <p><strong>Service Category:</strong> {technician.categoryid.name.toUpperCase()}</p>
+              <p><strong>Consultation Fee:</strong> ₹{technician.consulationFee}</p>
+              <p><strong>Rate per Hour:</strong> ₹ {technician.rateperhour} / hr</p>
+              <p><strong>Service Districts:</strong> {technician.serviceablepincode.join(", ")}</p>
             </div>
-            <div className="space-y-2 text-sm">
-              <p><strong>Name:</strong> Tech 1</p>
-              <p><strong>Years of Experience:</strong> 5 Years of Industry Experience</p>
-              <p><strong>Phone Number:</strong> +91 9876543210</p>
-              <p><strong>Service Category:</strong> Electrical Services</p>
-              <p><strong>Consultation Fee:</strong> ₹ 300</p>
-              <p><strong>Rate per Hour:</strong> ₹ 130 / hr</p>
-              <p><strong>Service Districts:</strong> District A, District B, District C, District C</p>
+
+            {/* Right side - profile image */}
+            <div className="w-40 h-40 rounded-full overflow-hidden shadow-md border-2 border-gray-300">
+              <img
+                src={technician.profileimgurl}
+                alt="Technician Profile"
+                className="w-full h-full object-cover"
+              />
             </div>
+          </div>
           </div>
         </div>
 
         {/* Work Photos */}
         <div className="col-span-1 md:col-span-2">
-          <div className="bg-gray-100 p-4 rounded shadow">
-            <h3 className="text-lg font-semibold mb-4">Work Photos</h3>
-            <div className="grid grid-cols-3 gap-3">
-              {[...Array(9)].map((_, index) => (
-                <div key={index} className="w-full h-24 bg-gray-300 rounded"></div>
-              ))}
-            </div>
-          </div>
-
-          {/* Customer Reviews */}
-          <div className="mt-6 bg-gray-100 p-4 rounded shadow">
-            <h3 className="text-lg font-semibold mb-4">Customer Reviews</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[1, 2].map((review, index) => (
-                <div key={index} className="bg-white p-4 rounded border">
-                  <div className="flex items-center text-yellow-400 mb-2">
-                    {"★★★★★".split("").map((star, idx) => (
-                      <span key={idx}>{star}</span>
-                    ))}
-                  </div>
-                  <h4 className="font-semibold">Review title</h4>
-                  <p className="text-sm text-gray-600">Review body</p>
-                  <div className="text-xs text-gray-500 mt-2">
-                    Reviewer name • Date
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex justify-end mt-6">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          <div className="flex justify-center mt-6">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onClick={()=>handleBook(techid)}>
               Book Technician
             </button>
           </div>
         </div>
-      </div>
+      
 
       {/* Footer */}
       <footer className="bg-[#0F1A3C] text-white py-8 mt-10">

@@ -45,6 +45,11 @@ export class TechRepositoryImpl implements TechRepository{
         return await TechModel.findById(techid)
     }
 
+    async fetchTechwithcategory(techid:string):Promise<ITech|null>{
+        console.log("impl")
+        return await TechModel.findById(techid).populate('categoryid',"name description")
+    }
+
     async edittech(techid: string, update: Partial<ITech>): Promise<ITech> {
         console.log("edit tech",techid, update)
         const updated=await TechModel.findByIdAndUpdate(techid,update,{new:true})
