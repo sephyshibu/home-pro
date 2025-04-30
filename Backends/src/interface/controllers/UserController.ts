@@ -12,6 +12,7 @@ import { changepassword } from '../../application/usecase/User/Changepassword';
 import { fetchCategory } from '../../application/usecase/Admin/Fetchcategory';
 import { GetUserById } from '../../application/usecase/User/MyProfile/UserDetails';
 import { EditProfile } from '../../application/usecase/User/MyProfile/EditProfile';
+import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/fetchTech';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -26,7 +27,8 @@ export class UserController{
         private changePassword:changepassword,
         private fetchcat:fetchCategory,
         private getuserById:GetUserById,
-        private editprofile:EditProfile
+        private editprofile:EditProfile,
+        private fetchtechonavailable:FetchTechBasedOnAvailable
     ){}
 
     async signup(req:Request, res:Response):Promise<void>{
@@ -145,6 +147,7 @@ export class UserController{
     async refreshtokenController(req:Request, res:Response):Promise<void>{
         try {
             const token=req.cookies?.refreshtokenuser;
+            console.log("refreshtokencontroller",token)
             const newaccesstoken=await this.refreshtoken.refresh(token);
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
@@ -181,5 +184,27 @@ export class UserController{
         } catch (error:any) {
             res.status(400).json({ message: error.message });
         }
+    }
+
+    async fetchTechBasedonavailble(req:Request,res:Response):Promise<void>{
+        console.log("controller")
+        try {
+            const{pincode,date,categoryId}=req.query
+            console.log(pincode,date,categoryId)
+            if(!pincode|| !date ||!categoryId){
+                 res.status(400).json({message:"Missing required fields"})
+            }
+
+            const technicians=await this.fetchtechonavailable.fetchTechBasedOnAvailble(pincode as string,date as string,categoryId as string)
+            console.log(technicians)
+            if (!technicians || technicians.length === 0) {
+                 res.status(404).json({ message: "No technicians available" });
+              }
+          
+               res.status(200).json({ technicians });
+        } catch (error: any) {
+            console.error("Error fetching technicians:", error);
+            res.status(500).json({ message: "Internal server error" });
+          }
     }
 }

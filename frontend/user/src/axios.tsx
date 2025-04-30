@@ -66,6 +66,10 @@ axiosInstanceuser.interceptors.response.use(
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
           // store.dispatch(logoutuser());
+          toast.error("Session expired. Please login again.");
+          await persistor.purge();
+          localStorage.removeItem("userId");
+          window.location.href = "/login";
           return Promise.reject(refreshError);
         }
       }

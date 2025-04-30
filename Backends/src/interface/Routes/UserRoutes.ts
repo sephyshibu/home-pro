@@ -17,12 +17,15 @@ import { categoryRepositoryImpl } from '../../infrastructure/repository/Category
 import { GetUserById } from '../../application/usecase/User/MyProfile/UserDetails'
 import { EditProfile } from '../../application/usecase/User/MyProfile/EditProfile'
 import { authToken } from '../../infrastructure/middleware/CheckUserStatus'
+import { TechRepositoryImpl } from '../../infrastructure/repository/TechRepositoryImpl'
+import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/fetchTech'
 const router=express.Router()
 
 
 //dependency injectionnnn
 const userRepository= new UserRepositoryImpl()
 const categoryrepository= new categoryRepositoryImpl()
+const techrepository= new TechRepositoryImpl()
 
 const emailService= new EmailService()
 const signupuser= new Signup(userRepository,emailService)
@@ -38,7 +41,7 @@ const chnagepassword= new changepassword(userRepository)
 const fetchcategories= new fetchCategory(categoryrepository)
 const getuserById= new GetUserById(userRepository)
 const editprofile=new EditProfile(userRepository)
-
+const fetchtechonavailble= new FetchTechBasedOnAvailable(techrepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -52,7 +55,8 @@ const usercontroller= new UserController(
     forgetpassresendotp,
     chnagepassword,
     fetchcategories,
-    getuserById,editprofile
+    getuserById,editprofile,
+    fetchtechonavailble
     
   
     
@@ -77,6 +81,6 @@ router.get('/fetchcategory',(req,res)=>usercontroller.fetchCategory(req,res))
 // router.use(authToken); 
 router.get('/fetchinguser/:userId',authToken,(req,res)=>usercontroller.fetchUserById(req,res))
 router.put('/updateuser/:userId',authToken,(req,res)=>usercontroller.edituser(req,res))
-
+router.get('/technicians/available',authToken,(req,res)=>usercontroller.fetchTechBasedonavailble(req,res))
 
 export {router as userRouter}

@@ -2,7 +2,7 @@ import { ITech } from "../../domain/models/Tech";
 import { TechModel } from "../db/schemas/techModel";
 import { TechRepository } from "../../domain/repository/Techrepository";
 import { WalletModel } from "../db/schemas/Walletmodel";
-
+import mongoose from "mongoose";
 export class TechRepositoryImpl implements TechRepository{
     async createtech(tech: ITech): Promise<ITech> {
         console.log("tech data", tech)
@@ -64,5 +64,27 @@ export class TechRepositoryImpl implements TechRepository{
                 return null;
               }
         }
+
+    async fetchTechbasedonavilablity(pincode: string, date: string, categoryId: string): Promise<ITech[] | null> {
+        console.log("impl repository",pincode, date, categoryId)
+        try {
+            const technicians=await TechModel.find({
+                isBlocked:false,
+                serviceablepincode: { $in: [pincode] },
+                categoryid:new mongoose.Types.ObjectId(categoryId),
+                bookedSlots: {
+                    $not: {
+                      $elemMatch: { date }
+                    }
+                  }
+            })
+            console.log("tech", technicians)
+
+            return technicians.length>0?technicians:null
+        } catch (error) {
+            console.error("Error fetching available technicians:", error);
+            return null;
+        }
+    }
     
 }

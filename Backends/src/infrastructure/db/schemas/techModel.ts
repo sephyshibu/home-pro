@@ -60,7 +60,7 @@ const TechSchema= new mongoose.Schema<ITech>({
         type: Boolean,
         default: false,
     },
-    availableSlots:[
+    bookedSlots:[
         {
             date:{type :String, required:true}
         }

@@ -21,7 +21,7 @@ export class Signuptech{
             password:hash,
             phone,
             isBlocked:false,
-            availableSlots:[],
+            bookedSlots:[],
             role:"tech"
         }
 

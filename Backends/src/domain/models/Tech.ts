@@ -13,7 +13,7 @@ export interface ITech{
     rateperhour?:number,
     consulationFee?:number,
     isAvailable?:boolean,
-    availableSlots?:{
+    bookedSlots?:{
         date:string
     }[],
     role:string

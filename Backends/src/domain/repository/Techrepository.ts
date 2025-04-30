@@ -8,5 +8,5 @@ export interface TechRepository{
     blockunblock(techid:string, isBlocked:boolean):Promise<ITech>
     findOneTech(techid:string):Promise<ITech|null>
     edittech(techid:string,update:Partial<ITech>):Promise<ITech>
-
+    fetchTechbasedonavilablity(pincode:string, date:string, categoryId:string):Promise<ITech[]|null>
 }
