@@ -12,6 +12,7 @@
     "lib": ["dom", "esnext"],
     "jsx": "react-jsx",  // Ensure this is set to "react-jsx" or "react"
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

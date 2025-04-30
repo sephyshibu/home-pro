@@ -4,6 +4,7 @@ import { Dialog,DialogPanel,DialogTitle } from '@headlessui/react';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast'
 import { fetchTechnicianbasedonavailableSlot } from '../../api/fetchtechnician';
+import { lookupKeralaPincode } from '../../utils/lookedKeralapinocde';
 interface Category{
   _id:string,
   name:string, 
@@ -52,18 +53,16 @@ const Services: React.FC = () => {
   const toggleExpand = (id: string) => {
     setExpandedCard(prev => (prev === id ? null : id));
   };
-
   const validateKeralaPincode = async (pincode: string): Promise<boolean> => {
     try {
-      const response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
-      const data = await response.json();
-      return data[0]?.Status === 'Success' && data[0]?.PostOffice[0]?.State.toLowerCase() === 'kerala';
+      const matched = lookupKeralaPincode(pincode);
+      return matched.length > 0; // ✅ return true if match found
     } catch (error) {
       console.error('Error validating pincode:', error);
       return false;
     }
   };
-
+  
     return (
         <section className="py-12 bg-gray-50">
         <div className="text-center mb-8">
@@ -148,6 +147,7 @@ const Services: React.FC = () => {
                   if (!bokkslot.pincode) errs.pincode = "Pincode is required";
                   else {
                     const isValid = await validateKeralaPincode(bokkslot.pincode);
+
                     if (!isValid) errs.pincode = "Enter a valid Kerala pincode";
                   }
 

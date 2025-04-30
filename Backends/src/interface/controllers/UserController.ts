@@ -14,6 +14,7 @@ import { GetUserById } from '../../application/usecase/User/MyProfile/UserDetail
 import { EditProfile } from '../../application/usecase/User/MyProfile/EditProfile';
 import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/FetchTech';
 import { GetCategoryById } from '../../application/usecase/Category/GetCategory';
+
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -30,7 +31,8 @@ export class UserController{
         private getuserById:GetUserById,
         private editprofile:EditProfile,
         private fetchtechonavailable:FetchTechBasedOnAvailable,
-        private getcatbyId:GetCategoryById
+        private getcatbyId:GetCategoryById,
+    
     ){}
 
     async signup(req:Request, res:Response):Promise<void>{
@@ -219,4 +221,6 @@ export class UserController{
           res.status(400).json({ message: err.message });
         }
       }
+
+     
 }
