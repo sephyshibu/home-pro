@@ -12,7 +12,7 @@ import UserLayout from './components/Profile/Userlayout'
 import ProfilePage from './components/Profile/ProfilePage'
 import TechnicianList from './components/AvailableTech.tsx/Availabletech'
 import TechnicianProfile from './components/Techprofile/Profile'
-
+import AddressPage from './components/Profile/Address'
 function App() {
  
 
@@ -38,7 +38,7 @@ function App() {
           
           {/* Child routes under /myaccount */}
           <Route path="profile" element={<ProfilePage />} />
-          {/* Add more nested routes like password, services, wallet later */}
+          <Route path='addressmanagment' element={<AddressPage/>}/>
         </Route>
       
       

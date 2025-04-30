@@ -14,7 +14,7 @@ const UserLayout: React.FC = () => {
           }>My Profile</NavLink>
           <NavLink to="password" className="block hover:bg-sky-700 py-2 px-4 rounded-lg">Password</NavLink>
           <NavLink to="services" className="block hover:bg-sky-700 py-2 px-4 rounded-lg">My Services</NavLink>
-          <NavLink to="addresses" className="block hover:bg-sky-700 py-2 px-4 rounded-lg">Addresses</NavLink>
+          <NavLink to="addressmanagment" className="block hover:bg-sky-700 py-2 px-4 rounded-lg">Addresses</NavLink>
           <NavLink to="wallet" className="block hover:bg-sky-700 py-2 px-4 rounded-lg">Wallet</NavLink>
         </nav>
       </div>
