@@ -31,9 +31,9 @@ const Header: React.FC = () => {
 
         {/* Center: Navigation Links */}
         <div className="hidden md:flex space-x-8 text-lg">
-          <a href="/" className="hover:text-orange-400 transition">Home</a>
-          <a href="#" className="hover:text-orange-400 transition">Services</a>
-          <a href="#" className="hover:text-orange-400 transition">Contact</a>
+          {/* <a href="/" className="hover:text-orange-400 transition">Home</a> */}
+          {/* <a href="#" className="hover:text-orange-400 transition">Services</a> */}
+          {/* <a href="#" className="hover:text-orange-400 transition">Contact</a> */}
         </div>
 
         {/* Right: Profile + Login/Logout */}

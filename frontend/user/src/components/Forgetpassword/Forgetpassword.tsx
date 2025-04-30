@@ -57,6 +57,9 @@ const ForgetPassword: React.FC = () => {
                 console.log(response?.data?.message)
             
             } catch (error:any) {
+              if(error.response.data.message=="email not found"){
+                alert("email not found")
+              }
                 console.error("signup errror",error)
                 seterror(error.response?.data?.message ||"Something went wrong")   
             }
