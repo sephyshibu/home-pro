@@ -16,7 +16,8 @@ import TechnicianProfile from './components/Techprofile/Profile'
 import AddressPage from './components/Profile/Address'
 import PaymentPage from './components/Payment/ProceedPayment'
 import ThankYouPage from './components/ThankYou/ThankYou';
-// import Services from './components/Profile/Service'
+import Services from './components/Profile/Service'
+import ViewBookingsProfile from './components/Profile/ViewBookings';
 function App() {
  
 
@@ -37,6 +38,7 @@ function App() {
         <Route path='/viewprofile' element={<TechnicianProfile/>}/>
         <Route path='/proceedpayment' element={<PaymentPage/>}/>
         <Route path='/thankyou' element={<ThankYouPage/>}/>
+        <Route path='/viewbookingddetails' element={<ViewBookingsProfile/>}/>
         <Route path='/myaccount' element={<UserLayout />}>
           {/* When /myaccount, redirect to /myaccount/profile */}
           <Route index element={<Navigate to="profile" replace />} />
@@ -44,7 +46,7 @@ function App() {
           {/* Child routes under /myaccount */}
           <Route path="profile" element={<ProfilePage />} />
           <Route path='addressmanagment' element={<AddressPage/>}/>
-          {/* <Route path='services' element={<Services/>}/> */}
+          <Route path='services' element={<Services/>}/>
         </Route>
       
       

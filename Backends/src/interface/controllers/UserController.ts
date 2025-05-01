@@ -21,6 +21,7 @@ import { Editaddress } from '../../application/usecase/Address/EditAddress';
 import { DeleteAddressById } from '../../application/usecase/Address/DeleteAddress';
 import { CreateBookingUseCase } from '../../application/usecase/User/Bookings/CreateBooking';
 import { ConfirmPayment } from '../../application/usecase/booking/confirmPayment';
+import { FetchBookingbyUserId } from '../../application/usecase/booking/fetchBookings';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -44,7 +45,8 @@ export class UserController{
         private getaddressbyid: GetAddressById,
         private deleteaddress: DeleteAddressById,
         private createBookingusecase:CreateBookingUseCase,
-        private confirmpayment:ConfirmPayment
+        private confirmpayment:ConfirmPayment,
+        private fetchbookByUserid:FetchBookingbyUserId
     
     ){}
 
@@ -374,6 +376,17 @@ export class UserController{
             } catch (error) {
               res.status(500).json({ message: "Payment failed", retry: true });
             }
+    }
+
+    async fetchbookingsbyuserId(req:Request,res:Response):Promise<void>{
+        try {
+            const{userId}=req.params
+            const booking=await this.fetchbookByUserid.fetchBookingdetails(userId)
+            res.status(200).json({booking})
+        } catch (err: any) {
+            res.status(500).json({ message: err.message });
+            
+        }
     }
     
     

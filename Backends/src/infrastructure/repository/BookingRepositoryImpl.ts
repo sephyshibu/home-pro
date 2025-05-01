@@ -99,5 +99,24 @@ export class bookingrepositoryImpl implements BookingRepository{
             consultationtransactionId:updated.consultationtransactionId,
         };
       }
+
+      async fetchbookingByUserId(userId:string):Promise<IBooking[]>{
+        const bookings=await BookingModels.find({userId})
+                        .populate({
+                            path:"technicianId",
+                            select:"name profileimgurl categoryid phone",
+                            populate:{
+                                path:"categoryid",
+                                select:"name"
+                            }
+                        })
+                        .populate({
+                            path:"addressId",
+                            select:"addressname"
+                        })
+                        .exec()
+        console.log("bookings",bookings)
+        return bookings
+      }
     
 }
