@@ -3,9 +3,14 @@ import { Pencil, Trash2 } from "lucide-react";
 import { fetchaddress } from "../../api/Address/fetchaddress";
 import { addaddress } from "../../api/Address/addaddress";
 import { useNavigate } from "react-router";
+import { Dialog,DialogPanel,DialogTitle } from "@headlessui/react";
+import { editAddress } from "../../api/Address/editAddress";
+import { deleteAddress } from "../../api/Address/deleteaddress";
+import toast from "react-hot-toast";
 interface Address {
-  id: string;
-  type: string;
+  _id: string;
+  types: string;
+  addressname : string,
   street: string;
   city: string;
   state: string;
@@ -16,8 +21,9 @@ interface Address {
 const AddressPage: React.FC = () => {
   const [addresses, setAddresses] = useState<Address[]>([
     {
-      id: "",
-      type: "",
+      _id: "",
+      types: "",
+      addressname:"",
       street: "",
       city: "",
       state: "",
@@ -27,8 +33,12 @@ const AddressPage: React.FC = () => {
     
   ]);
   const userId=localStorage.getItem('userId')
+  const[isOpen,setisopen]=useState(false)
+  const [editMode, setEditMode] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const [form, setForm] = useState({
-    type:"",
+    types:"",
+    addressname:"",
     street: "",
     city: "",
     state: "",
@@ -45,7 +55,7 @@ const AddressPage: React.FC = () => {
       }
       try {
       const adressdetails=await fetchaddress(userId)
-      setForm(adressdetails)
+      setAddresses(adressdetails)
     } catch (error) {
       console.error("Error fetching address:", error);
     }
@@ -54,7 +64,25 @@ const AddressPage: React.FC = () => {
   },[])
 
 
+  const handleedit=async(address:Address)=>{
+    setSelectedAddress(address)
+    console.log("fontend",address)
+    setisopen(true)
+    setEditMode(true)
+    setForm({
+      types: address.types,
+      addressname: address.addressname,
+      street: address.street,
+      city: address.city,
+      state: address.state,
+      country: address.country,
+      pincode: address.pincode,
+    });
 
+
+  }
+
+ 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -76,19 +104,68 @@ const AddressPage: React.FC = () => {
     try {
       const newaddress=await addaddress(userId,form)
       setForm({
-        type:"",
+        types:"",
+        addressname:"",
         street:"",
         city: "",
         state: "",
         country: "",
         pincode: "",
       })
-      console.log(newaddress.data.message)
+      toast.success(newaddress.message)
     } catch (error) {
       console.error("Error adding address:", error);
     }
   };
-
+  const handleSave=async()=>{
+    if(!userId){
+      return navigate('/login')
+    }   
+    if(editMode && selectedAddress){
+      try {
+        const editaddress=await editAddress(selectedAddress._id, form)
+        const updatedAddresses = addresses.map((addr) =>
+          addr._id === selectedAddress._id ? { ...addr, ...form } : addr
+        );
+        setAddresses(updatedAddresses)
+        toast.success("Address updated successfully");
+      setisopen(false);
+      setEditMode(false);
+      setSelectedAddress(null);
+      setForm({
+        types: "",
+        addressname: "",
+        street: "",
+        city: "",
+        state: "",
+        country: "",
+        pincode: "",
+      });
+    } catch (error) {
+      console.error("Error updating address:", error);
+      toast.error("Failed to update address");
+    }
+    }
+    
+    
+    
+  }
+  const handleDelete = async (addressId: string) => {
+    if (!userId) {
+      return navigate('/login');
+    }
+    console.log(addressId)
+    try {
+      await deleteAddress(addressId); // API call
+      const updatedAddresses = addresses.filter(addr => addr._id !== addressId);
+      setAddresses(updatedAddresses);
+      toast.success("Address deleted successfully");
+    } catch (error) {
+      console.error("Error deleting address:", error);
+      toast.error("Failed to delete address");
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
     
@@ -102,8 +179,8 @@ const AddressPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <label className="block mb-1 font-medium">Type</label>
             <select
-                  name="type"
-                  value={form.type}
+                  name="types"
+                  value={form.types}
                   onChange={handleSelect}
                   className="w-full rounded-md border px-4 py-2 text-sm"
             >
@@ -111,6 +188,13 @@ const AddressPage: React.FC = () => {
                 <option value="Home">Home</option>
                 <option value="Work">Work</option>
             </select>
+            <input
+              name="addressname"
+              value={form.addressname}
+              onChange={handleChange}
+              placeholder="Address name"
+              className="border rounded px-4 py-2"
+            />
             <input
               name="street"
               value={form.street}
@@ -157,15 +241,16 @@ const AddressPage: React.FC = () => {
 
           <h3 className="text-xl font-semibold mt-10 mb-4">Saved Address</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {addresses.map((addr) => (
-              <div key={addr.id} className="bg-gray-200 p-4 rounded shadow relative">
+            {addresses && addresses.map((addr) => (
+              <div key={addr._id} className="bg-gray-200 p-4 rounded shadow relative">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-lg font-semibold text-blue-900">{addr.type}</span>
+                  <span className="text-lg font-semibold text-blue-900">{addr.types}</span>
                   <div className="flex space-x-2">
-                    <Pencil size={16} className="cursor-pointer text-gray-600 hover:text-black" />
-                    <Trash2 size={16} className="cursor-pointer text-gray-600 hover:text-red-600" />
+                    <Pencil size={16} className="cursor-pointer text-gray-600 hover:text-black" onClick={()=>handleedit(addr)} />
+                    <Trash2 size={16} className="cursor-pointer text-gray-600 hover:text-red-600" onClick={()=>handleDelete(addr._id)}/>
                   </div>
                 </div>
+                <p>{addr.addressname},</p>
                 <p>{addr.street},</p>
                 <p>{addr.city}</p>
                 <p>{addr.state}</p>
@@ -173,6 +258,33 @@ const AddressPage: React.FC = () => {
               </div>
             ))}
           </div>
+
+          <Dialog open={isOpen} onClose={() => setisopen(false)} className="relative z-50">
+          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <DialogPanel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+              <DialogTitle className="text-lg font-bold">{editMode ? "Edit Address" : "Add Address"}</DialogTitle>
+              <div className="mt-4 space-y-3">
+                <select name="types" value={form.types} onChange={handleSelect} className="w-full rounded-md border px-3 py-2 text-sm">
+                  <option value="">Select type</option>
+                  <option value="Home">Home</option>
+                  <option value="Work">Work</option>
+                </select>
+                <input name="addressname" value={form.addressname} onChange={handleChange} placeholder="Address name" className="w-full rounded-md border px-3 py-2 text-sm" />
+                <input name="street" value={form.street} onChange={handleChange} placeholder="Street Address" className="w-full rounded-md border px-3 py-2 text-sm" />
+                <input name="city" value={form.city} onChange={handleChange} placeholder="City" className="w-full rounded-md border px-3 py-2 text-sm" />
+                <input name="state" value={form.state} onChange={handleChange} placeholder="State" className="w-full rounded-md border px-3 py-2 text-sm" />
+                <input name="country" value={form.country} onChange={handleChange} placeholder="Country" className="w-full rounded-md border px-3 py-2 text-sm" />
+                <input name="pincode" value={form.pincode} onChange={handleChange} placeholder="PIN Code" className="w-full rounded-md border px-3 py-2 text-sm" />
+
+                <button onClick={handleSave} className="mt-2 w-full bg-emerald-700 hover:bg-emerald-800 text-white py-2 px-4 rounded-md">
+                  {editMode ? "Update Address" : "Add Address"}
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
+        </Dialog>
+
         </main>
       </div>
 

@@ -21,6 +21,11 @@ import { TechRepositoryImpl } from '../../infrastructure/repository/TechReposito
 import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/FetchTech'
 import { GetCategoryById } from '../../application/usecase/Category/GetCategory'
 import { fetchTechwithcategory } from '../../application/usecase/User/Tech/FetchTechById'
+import { AddressRepositoryImpl } from '../../infrastructure/repository/AddressRepositoryImpl'
+import { GetAddressById } from '../../application/usecase/Address/Getaddress'
+import { AddAddress } from '../../application/usecase/Address/AddAddress'
+import { Editaddress } from '../../application/usecase/Address/EditAddress'
+import { DeleteAddressById } from '../../application/usecase/Address/DeleteAddress'
 const router=express.Router()
 
 
@@ -28,6 +33,7 @@ const router=express.Router()
 const userRepository= new UserRepositoryImpl()
 const categoryrepository= new categoryRepositoryImpl()
 const techrepository= new TechRepositoryImpl()
+const addressrepository= new AddressRepositoryImpl()
 
 const emailService= new EmailService()
 const signupuser= new Signup(userRepository,emailService)
@@ -46,7 +52,10 @@ const editprofile=new EditProfile(userRepository)
 const fetchtechonavailble= new FetchTechBasedOnAvailable(techrepository)
 const getcategoryid= new GetCategoryById(categoryrepository)
 const fetchtechwithcat= new fetchTechwithcategory(techrepository)
-
+const getaddressed= new GetAddressById(addressrepository)
+const editaddress= new Editaddress(addressrepository)
+const deleteaddress= new DeleteAddressById(addressrepository)
+const addaddressed= new AddAddress(addressrepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -63,8 +72,11 @@ const usercontroller= new UserController(
     getuserById,editprofile,
     fetchtechonavailble,
     getcategoryid,
-    fetchtechwithcat
-
+    fetchtechwithcat,
+    addaddressed,
+    editaddress,
+    getaddressed,
+    deleteaddress,
   
     
 
@@ -91,4 +103,8 @@ router.put('/updateuser/:userId',authToken,(req,res)=>usercontroller.edituser(re
 router.get('/technicians/available',authToken,(req,res)=>usercontroller.fetchTechBasedonavailble(req,res))
 router.get('/fetchparticularcategory/:catid',authToken,(req,res)=>usercontroller.fetchCategoryById(req,res))
 router.get('/fetchtech/:techid',authToken,(req,res)=>usercontroller.fetctechwithcat(req,res))
+router.post('/addaddress/:userId',authToken,(req,res)=>usercontroller.addUserAddress(req,res))
+router.get('/fetchaddress/:userId',authToken,(req,res)=>usercontroller.getUserAddresses(req,res))
+router.put('/editaddress/:addressId',authToken, (req,res)=>usercontroller.editUserAddress(req,res))
+router.delete('/deleteaddress/:addressId',authToken,(Req,res)=>usercontroller.deleteUserAddress(Req,res))
 export {router as userRouter}

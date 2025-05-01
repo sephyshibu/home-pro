@@ -15,6 +15,10 @@ import { EditProfile } from '../../application/usecase/User/MyProfile/EditProfil
 import { FetchTechBasedOnAvailable } from '../../application/usecase/User/Tech/FetchTech';
 import { GetCategoryById } from '../../application/usecase/Category/GetCategory';
 import { fetchTechwithcategory } from '../../application/usecase/User/Tech/FetchTechById';
+import { GetAddressById } from '../../application/usecase/Address/Getaddress';
+import { AddAddress } from '../../application/usecase/Address/AddAddress';
+import { Editaddress } from '../../application/usecase/Address/EditAddress';
+import { DeleteAddressById } from '../../application/usecase/Address/DeleteAddress';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -32,7 +36,11 @@ export class UserController{
         private editprofile:EditProfile,
         private fetchtechonavailable:FetchTechBasedOnAvailable,
         private getcatbyId:GetCategoryById,
-        private fetchtechwithcategory:fetchTechwithcategory
+        private fetchtechwithcategory:fetchTechwithcategory,
+        private addaddress: AddAddress,
+        private editaddress: Editaddress,
+        private getaddressbyid: GetAddressById,
+        private deleteaddress: DeleteAddressById,
     
     ){}
 
@@ -242,6 +250,79 @@ export class UserController{
             res.status(400).json({ message: err.message });
         }
     }
+    async addUserAddress(req: Request, res: Response): Promise<void> {
+        try {
+            const { userId}=req.params
+            const{types, addressname, street, city, state, country, pincode } = req.body;
+            console.log(userId)
+            console.log(req.body)
+            console.log(addressname)
+            const result = await this.addaddress.addaddress(
+                userId,
+                types,
+                addressname,
+                street,
+                city,
+                state,
+                country,
+                pincode
+            );
+            res.status(201).json({message:"added Successfully"});
+        } catch (err: any) {
+            res.status(400).json({ message: err.message });
+        }
+    }
+    async editUserAddress(req: Request, res: Response): Promise<void> {
+        try {
+            const { addressId } = req.params;
+            const { types, addressname, street, city, state, country, pincode } = req.body;
+            console.log(req.body)
+            console.log("delete",addressId)
+            const result = await this.editaddress.editaddress(addressId, {
+                types,
+                addressname,
+                street,
+                city,
+                state,
+                country,
+                pincode
+            });
+            res.status(200).json(result);
+        } catch (err: any) {
+            res.status(400).json({ message: err.message });
+        }
+    }
+    async deleteUserAddress(req: Request, res: Response): Promise<void> {
+        try {
+            const { addressId } = req.params;
+            console.log("delete",addressId)
+            const deleted = await this.deleteaddress.deleteaddressbyId(addressId);
+    
+            if (!deleted) {
+                res.status(404).json({ message: "Address not found or already deleted" });
+                return;
+            }
+    
+            res.status(200).json({ message: "Address deleted successfully" });
+        } catch (err: any) {
+            res.status(500).json({ message: err.message });
+        }
+    }
+    async getUserAddresses(req: Request, res: Response): Promise<void> {
+        try {
+            const { userId } = req.params;
+            
+            const addresses = await this.getaddressbyid.getaddressbyId(userId);
+
+            res.status(200).json({ addresses });
+        } catch (err: any) {
+            res.status(400).json({ message: err.message });
+        }
+    }
+    
+    
+    
+    
 
      
 }
