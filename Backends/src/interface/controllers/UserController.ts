@@ -19,6 +19,7 @@ import { GetAddressById } from '../../application/usecase/Address/Getaddress';
 import { AddAddress } from '../../application/usecase/Address/AddAddress';
 import { Editaddress } from '../../application/usecase/Address/EditAddress';
 import { DeleteAddressById } from '../../application/usecase/Address/DeleteAddress';
+import { CreateBookingUseCase } from '../../application/usecase/User/Bookings/CreateBooking';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -41,6 +42,7 @@ export class UserController{
         private editaddress: Editaddress,
         private getaddressbyid: GetAddressById,
         private deleteaddress: DeleteAddressById,
+        private createBookingusecase:CreateBookingUseCase
     
     ){}
 
@@ -319,7 +321,20 @@ export class UserController{
             res.status(400).json({ message: err.message });
         }
     }
-    
+    async createOrder(req: Request, res: Response): Promise<void> {
+        try {
+          const { amount } = req.body;
+          const userId = req.params.userId;
+      
+          const order = await this.createBookingusecase.execute(amount, userId);
+          res.status(200).json({ id: order.id,
+            amount: order.amount,
+            currency: order.currency,
+         });
+        } catch (err: any) {
+          res.status(500).json({ message: err.message });
+        }
+      }
     
     
     

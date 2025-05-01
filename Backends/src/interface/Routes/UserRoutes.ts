@@ -26,6 +26,8 @@ import { GetAddressById } from '../../application/usecase/Address/Getaddress'
 import { AddAddress } from '../../application/usecase/Address/AddAddress'
 import { Editaddress } from '../../application/usecase/Address/EditAddress'
 import { DeleteAddressById } from '../../application/usecase/Address/DeleteAddress'
+import { CreateBookingUseCase } from '../../application/usecase/User/Bookings/CreateBooking'
+import { RazorpayService } from '../../infrastructure/service/RazorpayService'
 const router=express.Router()
 
 
@@ -56,7 +58,8 @@ const getaddressed= new GetAddressById(addressrepository)
 const editaddress= new Editaddress(addressrepository)
 const deleteaddress= new DeleteAddressById(addressrepository)
 const addaddressed= new AddAddress(addressrepository)
-
+const razorpayservice= new RazorpayService()
+const createBookingUseCase= new CreateBookingUseCase(razorpayservice)
 const usercontroller= new UserController(
     signupuser,
     checkemailUser,
@@ -77,6 +80,7 @@ const usercontroller= new UserController(
     editaddress,
     getaddressed,
     deleteaddress,
+    createBookingUseCase
   
     
 
@@ -107,4 +111,6 @@ router.post('/addaddress/:userId',authToken,(req,res)=>usercontroller.addUserAdd
 router.get('/fetchaddress/:userId',authToken,(req,res)=>usercontroller.getUserAddresses(req,res))
 router.put('/editaddress/:addressId',authToken, (req,res)=>usercontroller.editUserAddress(req,res))
 router.delete('/deleteaddress/:addressId',authToken,(Req,res)=>usercontroller.deleteUserAddress(Req,res))
+router.post('/create-order/:userId', authToken, (req, res) => usercontroller.createOrder(req, res));
+
 export {router as userRouter}

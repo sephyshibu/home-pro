@@ -8,6 +8,7 @@ import { Dialog,DialogPanel, DialogTitle } from "@headlessui/react";
 import { toast } from "react-hot-toast";
 import { MapContainer,TileLayer,Marker,useMapEvents } from "react-leaflet";
 import L from "leaflet";
+import axiosInstanceuser from "../../axios";
 
 
 interface Address {
@@ -144,7 +145,41 @@ const PaymentPage: React.FC = () => {
         return null;
       };
     const handlePayment=async()=>{
-        console.log(selectedLocation)
+        if (!selectedLocation || !selectedMethod || !selectedAddressId) {
+            toast.error("Please select all required fields");
+            return;
+        }
+        const res= await axiosInstanceuser.post(`/create-order/${userId}`,{
+            amount:technician.consulationFee
+        })
+        const options = {
+            key: "rzp_test_qp0MD1b9oAJB0i ",
+            amount: res.data.amount,
+            currency: "INR",
+            name: "HomePro",
+            order_id: res.data.id,
+            handler: async (response:any) => {
+              await axiosInstanceuser.post("/api/confirm-payment", {
+                userId,
+                techid,
+                addressId: selectedAddressId,
+                location: selectedLocation,
+                date: bookingdetails.date,
+                amount: technician.consulationFee,
+                razorpay_payment_id: response.razorpay_payment_id,
+              });
+              toast.success("Payment successful!");
+            },
+            prefill: {
+              name: "User Name",
+              email: "user@example.com",
+              contact: "9999999999",
+            },
+          };
+        
+          const rzp = new window.Razorpay(options);
+          rzp.open();
+
     }
       
   return (
