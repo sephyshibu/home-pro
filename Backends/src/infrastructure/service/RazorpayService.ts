@@ -7,6 +7,12 @@ export class RazorpayService {
         currency,
         receipt,
       };
-      return await razorpay.orders.create(options);
+      console.log("service", options)
+      try {
+        return await razorpay.orders.create(options);
+      } catch (err: any) {
+        console.error("Razorpay Error:", err);
+        throw new Error("Razorpay order creation failed");
+      }
     }
   }

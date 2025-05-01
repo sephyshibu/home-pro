@@ -19,6 +19,7 @@
     "india-pincode-lookup": "^1.0.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
+    "nanoid": "^5.1.5",
     "node-cache": "^5.1.2",
     "nodemailer": "^6.10.1",
     "razorpay": "^2.9.6"

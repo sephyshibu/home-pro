@@ -43,6 +43,7 @@ interface Technician{
 const PaymentPage: React.FC = () => {
   const [selectedMethod, setSelectedMethod] = useState("RazorPay");
   const [addresses, setAddresses] = useState<Address[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
   const location=useLocation()
@@ -159,7 +160,7 @@ const PaymentPage: React.FC = () => {
             name: "HomePro",
             order_id: res.data.id,
             handler: async (response:any) => {
-              await axiosInstanceuser.post("/api/confirm-payment", {
+              await axiosInstanceuser.post("/confirm-payment", {
                 userId,
                 techid,
                 addressId: selectedAddressId,
@@ -247,15 +248,22 @@ const PaymentPage: React.FC = () => {
             <button onClick={() => setIsModalOpen(true)} className="text-blue-600 underline">+ Add New</button>
         </div>
         {addresses.length > 0 ? (
-            addresses.map((addr) => (
-            <div key={addr._id} className="border rounded p-3 bg-gray-100">
-                <p className="font-semibold">{addr.types} - {addr.addressname}</p>
-                <p>{addr.street}, {addr.city}, {addr.state}, {addr.country} - {addr.pincode}</p>
-            </div>
-            ))
-        ) : (
-            <p className="text-sm text-gray-500">No addresses found.</p>
-        )}
+  addresses.map((addr) => (
+    <div
+      key={addr._id}
+      className={`border rounded p-3 cursor-pointer ${
+        selectedAddressId === addr._id ? "bg-blue-100 border-blue-600" : "bg-gray-100"
+      }`}
+      onClick={() => setSelectedAddressId(addr._id)}
+    >
+      <p className="font-semibold">{addr.types} - {addr.addressname}</p>
+      <p>{addr.street}, {addr.city}, {addr.state}, {addr.country} - {addr.pincode}</p>
+    </div>
+    ))
+    ) : (
+    <p className="text-sm text-gray-500">No addresses found.</p>
+    )}
+
         </div>
       </div>
       <div className="h-64 mt-4">

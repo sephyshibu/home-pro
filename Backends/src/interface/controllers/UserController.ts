@@ -322,11 +322,18 @@ export class UserController{
         }
     }
     async createOrder(req: Request, res: Response): Promise<void> {
+        console.log("faf")
         try {
           const { amount } = req.body;
           const userId = req.params.userId;
+          console.log(amount, userId)
       
           const order = await this.createBookingusecase.execute(amount, userId);
+          console.log("Razorpay Order:", JSON.stringify(order, null, 2));
+
+          if (!order || !order.id) {
+            throw new Error("Failed to create Razorpay order.");
+          }
           res.status(200).json({ id: order.id,
             amount: order.amount,
             currency: order.currency,
