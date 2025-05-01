@@ -8,6 +8,7 @@ import { Dialog,DialogPanel, DialogTitle } from "@headlessui/react";
 import { toast } from "react-hot-toast";
 import { MapContainer,TileLayer,Marker,useMapEvents } from "react-leaflet";
 import L from "leaflet";
+import { useNavigate } from "react-router";
 import axiosInstanceuser from "../../axios";
 
 
@@ -47,6 +48,7 @@ const PaymentPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
   const location=useLocation()
+  const navigate=useNavigate()
   const userId=localStorage.getItem("userId")
   const[technician,settechnician]=useState<Technician>({
       _id:'',
@@ -170,6 +172,8 @@ const PaymentPage: React.FC = () => {
                 razorpay_payment_id: response.razorpay_payment_id,
               });
               toast.success("Payment successful!");
+              navigate('/thankyou')
+              
             },
             prefill: {
               name: "admin HonePro",
