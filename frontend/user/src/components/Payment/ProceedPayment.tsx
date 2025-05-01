@@ -154,7 +154,7 @@ const PaymentPage: React.FC = () => {
             amount:technician.consulationFee
         })
         const options = {
-            key: "rzp_test_qp0MD1b9oAJB0i ",
+            key: "rzp_test_qp0MD1b9oAJB0i",
             amount: res.data.amount,
             currency: "INR",
             name: "HomePro",

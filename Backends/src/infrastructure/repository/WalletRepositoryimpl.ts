@@ -1,7 +1,7 @@
 import { IWallet } from "../../domain/models/Wallet";
 import { walletRepository } from "../../domain/repository/Walletrepository";
 import { WalletModel } from "../db/schemas/Walletmodel";
-
+import mongoose from "mongoose";
 export class walletRepositoryimpl implements walletRepository{
     async createWallet(wallet:Omit<IWallet,"id">):Promise<IWallet>{
         const newWallet=new WalletModel(wallet)
@@ -14,5 +14,29 @@ export class walletRepositoryimpl implements walletRepository{
             balance:saved.balance
 
         };
+    }
+    async findById(ownerId: string): Promise<IWallet | null> {
+        try {
+          // Find the wallet by ID, return null if not found
+
+          if (!mongoose.Types.ObjectId.isValid(ownerId)) {
+            throw new Error("Invalid wallet ID format");
+        }
+        const wallet = await WalletModel.findOne({ ownerId }).exec();
+        console.log("Wallet dep:", wallet);
+        // Cast the result to IWallet interface
+        if (wallet) {
+            return {
+            id: wallet._id.toString(),
+            ownerId: wallet.ownerId.toString(),
+            userType: wallet.userType,
+            balance: wallet.balance,
+            };
+        }
+
+        return null;
+        } catch (error:any) {
+        throw new Error(`Error finding wallet: ${error.message}`);
+        }
     }
 }

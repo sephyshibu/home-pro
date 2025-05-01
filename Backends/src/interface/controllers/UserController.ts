@@ -20,6 +20,7 @@ import { AddAddress } from '../../application/usecase/Address/AddAddress';
 import { Editaddress } from '../../application/usecase/Address/EditAddress';
 import { DeleteAddressById } from '../../application/usecase/Address/DeleteAddress';
 import { CreateBookingUseCase } from '../../application/usecase/User/Bookings/CreateBooking';
+import { ConfirmPayment } from '../../application/usecase/booking/confirmPayment';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -42,7 +43,8 @@ export class UserController{
         private editaddress: Editaddress,
         private getaddressbyid: GetAddressById,
         private deleteaddress: DeleteAddressById,
-        private createBookingusecase:CreateBookingUseCase
+        private createBookingusecase:CreateBookingUseCase,
+        private confirmpayment:ConfirmPayment
     
     ){}
 
@@ -342,7 +344,37 @@ export class UserController{
           res.status(500).json({ message: err.message });
         }
       }
-    
+    async confirmpay(req:Request,res:Response):Promise<void>{
+        try {
+            const {
+                userId,
+                techid,
+                addressId,
+                location,
+                date,
+                amount,
+                razorpay_payment_id,
+              } = req.body;
+              console.log("controller",req.body)
+              const result=await this.confirmpayment.confirmPayment(
+                {
+                userId,
+                technicianId: techid,
+                addressId,
+                location,
+                booked_date: date,
+                consultationFee: amount,
+                consultationpaymethod: "RazorPay",
+                pincode: "000000", // if available
+                workstatus: "pending",
+              } ,
+              razorpay_payment_id,
+              "completed")
+              res.status(200).json(result.booking);
+            } catch (error) {
+              res.status(500).json({ message: "Payment failed", retry: true });
+            }
+    }
     
     
 

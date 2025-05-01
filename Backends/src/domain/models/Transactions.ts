@@ -4,9 +4,9 @@ export type PaymentMethod = 'RazorPay' | 'Wallet';
 
 export interface ITransaction {
   id?: string;
-  ownerId: string; // wallet id
+  ownerId: Object; // wallet id
   userType: 'user' | 'technician' | 'admin';
-  referenceId: string; // booking id
+  referenceId: Object; // booking id
   type: TransactionType;
   method: PaymentMethod;
   status: PaymentStatus;

@@ -1,20 +1,11 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { ITransaction } from "../../../domain/models/Transactions";
 
-export interface TransactionDocument extends Document {
-  ownerId: mongoose.Types.ObjectId;
-  userType: 'user' | 'technician' | 'admin';
-  referenceId: string;
-  type: 'CREDIT' | 'DEBIT';
-  method: 'RazorPay' | 'Wallet';
-  status: 'success' | 'failed';
-  purpose: string;
-  amount: number;
-}
 
-const transactionSchema = new Schema<TransactionDocument>({
+const transactionSchema = new mongoose.Schema<ITransaction>({
   ownerId: { type: Schema.Types.ObjectId, required: true, ref: 'Wallet' },
   userType: { type: String, enum: ['user', 'technician', 'admin'], required: true },
-  referenceId: { type: String, required: true },
+  referenceId: { type: Schema.Types.ObjectId, required: true, ref: 'Booking'},
   type: { type: String, enum: ['CREDIT', 'DEBIT'], required: true },
   method: { type: String, enum: ['RazorPay', 'Wallet'], required: true },
   status: { type: String, enum: ['success', 'failed'], required: true },
@@ -22,4 +13,4 @@ const transactionSchema = new Schema<TransactionDocument>({
   amount: { type: Number, required: true },
 }, { timestamps: true });
 
-export const TransactionModel = mongoose.model<TransactionDocument>('Transaction', transactionSchema);
+export const TransactionModel = mongoose.model<ITransaction>('Transaction', transactionSchema);

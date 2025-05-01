@@ -28,6 +28,10 @@ import { Editaddress } from '../../application/usecase/Address/EditAddress'
 import { DeleteAddressById } from '../../application/usecase/Address/DeleteAddress'
 import { CreateBookingUseCase } from '../../application/usecase/User/Bookings/CreateBooking'
 import { RazorpayService } from '../../infrastructure/service/RazorpayService'
+import { bookingrepositoryImpl } from '../../infrastructure/repository/BookingRepositoryImpl'
+import { ConfirmPayment } from '../../application/usecase/booking/confirmPayment'
+import { TransactionRepositoryImpl } from '../../infrastructure/repository/TransactionRepositoryImpl'
+import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 const router=express.Router()
 
 
@@ -36,6 +40,10 @@ const userRepository= new UserRepositoryImpl()
 const categoryrepository= new categoryRepositoryImpl()
 const techrepository= new TechRepositoryImpl()
 const addressrepository= new AddressRepositoryImpl()
+const bookingrepository= new bookingrepositoryImpl()
+const transactionrepository = new TransactionRepositoryImpl();
+const walletRepository= new walletRepositoryimpl()
+
 
 const emailService= new EmailService()
 const signupuser= new Signup(userRepository,emailService)
@@ -60,6 +68,8 @@ const deleteaddress= new DeleteAddressById(addressrepository)
 const addaddressed= new AddAddress(addressrepository)
 const razorpayservice= new RazorpayService()
 const createBookingUseCase= new CreateBookingUseCase(razorpayservice)
+const confirmPayment= new ConfirmPayment(bookingrepository,walletRepository,transactionrepository)
+
 const usercontroller= new UserController(
     signupuser,
     checkemailUser,
@@ -80,7 +90,8 @@ const usercontroller= new UserController(
     editaddress,
     getaddressed,
     deleteaddress,
-    createBookingUseCase
+    createBookingUseCase,
+    confirmPayment
   
     
 
@@ -112,5 +123,5 @@ router.get('/fetchaddress/:userId',authToken,(req,res)=>usercontroller.getUserAd
 router.put('/editaddress/:addressId',authToken, (req,res)=>usercontroller.editUserAddress(req,res))
 router.delete('/deleteaddress/:addressId',authToken,(Req,res)=>usercontroller.deleteUserAddress(Req,res))
 router.post('/create-order/:userId', authToken, (req, res) => usercontroller.createOrder(req, res));
-
+router.post('/confirm-payment',authToken,(req,res)=>usercontroller.confirmpay(req,res))
 export {router as userRouter}

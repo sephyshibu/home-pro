@@ -10,14 +10,14 @@ export interface WorkTime {
   }
   
   export interface IBooking {
-    id?: string;
-    userId: string;
-    technicianId: string;
-    addressId: string;
+    id?: Object;
+    userId: Object;
+    technicianId: Object;
+    addressId: Object;
     location: Location;
     booked_date: string;
-    rateperhour:number,
-    workstatus:'pending' | 'progress' | 'paused' | "completed",
+    rateperhour?:number,
+    workstatus?:'pending' | 'progress' | 'paused' | "completed",
     totalhours?:number,
     isStartAccept?:boolean,
     isEndAccept?:boolean,
@@ -35,7 +35,7 @@ export interface WorkTime {
     consultationpaymethod:'RazorPay' | 'Wallet',
     finalpaymethod?:'RazorPay' | 'Wallet',
     finalpayStatus?:'pending' | 'completed' | 'failed'
-    consultationpaymentStatus: 'pending' | 'completed' | 'failed';
+    consultationpayStatus?: 'pending' | 'completed' | 'failed';
     razorpayPaymentId: string;
     razorpayFinalPaymentId?:string,
     consultationtransactionId:string, 
