@@ -1,7 +1,7 @@
 import { IBooking } from "../models/Bookings";
 
 
-export interface IBookingRepository {
+export interface BookingRepository {
     create(booking: IBooking): Promise<IBooking>;
     update(bookingId: string, updatedBooking: Partial<IBooking>): Promise<IBooking>;
     getById(bookingId: string): Promise<IBooking | null>;

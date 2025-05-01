@@ -172,8 +172,8 @@ const PaymentPage: React.FC = () => {
               toast.success("Payment successful!");
             },
             prefill: {
-              name: "User Name",
-              email: "user@example.com",
+              name: "admin HonePro",
+              email: "admin@example.com",
               contact: "9999999999",
             },
           };

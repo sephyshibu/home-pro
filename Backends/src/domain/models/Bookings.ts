@@ -33,8 +33,8 @@ export interface WorkTime {
     admincommision?:number,
     techcommision?:number,
     consultationpaymethod:'RazorPay' | 'Wallet',
-    finalpaymenthod?:'RazorPay' | 'Wallet',
-    finalpaymentstatus?:'pending' | 'completed' | 'failed'
+    finalpaymethod?:'RazorPay' | 'Wallet',
+    finalpayStatus?:'pending' | 'completed' | 'failed'
     consultationpaymentStatus: 'pending' | 'completed' | 'failed';
     razorpayPaymentId: string;
     razorpayFinalPaymentId?:string,
