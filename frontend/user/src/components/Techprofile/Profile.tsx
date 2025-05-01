@@ -27,7 +27,7 @@ interface Category{
 
 const TechnicianProfile:React.FC=()=> {
   const location=useLocation()
-  const techid=location.state?.techid
+  const {techid,categoryId, time,date,pincode}=location.state||null
   const navigate=useNavigate()
   const[technician,settechnician]=useState<Technician>({
     _id:'',
@@ -61,7 +61,12 @@ const TechnicianProfile:React.FC=()=> {
   },[])
 
   const handleBook=async(techid:string)=>{
-        navigate('/addressselection',{state:{details:techid}})
+        navigate('/proceedpayment',{state:{techid,bookingdetails:{
+          date:location.state?.date,
+          time:location.state?.time,
+          categoryId:location.state?.categoryId,
+          pinocde:location.state?.pincode
+        }}})
   }
 
 

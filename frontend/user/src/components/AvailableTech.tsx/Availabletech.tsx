@@ -18,7 +18,7 @@ interface category{
 
 const TechnicianList: React.FC = () => {
   const location = useLocation();
-  const{technicians, categoryId}=location.state||{}
+  const{technicians, categoryId,date, time,pincode}=location.state||{}
   const[category, setcategory]=useState<category|null>(null)
   const navigate= useNavigate()
   useEffect(()=>{
@@ -32,7 +32,7 @@ const TechnicianList: React.FC = () => {
   },[categoryId])
 
   const handleViewProfile=async(techid:string)=>{
-    navigate('/viewprofile', {state:{techid}})
+    navigate('/viewprofile', {state:{techid,categoryId,date, time, pincode}})
   }
 
 

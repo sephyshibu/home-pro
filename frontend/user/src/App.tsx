@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes,Route,Navigate } from 'react-router'
 import './App.css'
+import "leaflet/dist/leaflet.css";
 import Login from './components/Login/Logn'
 import Signup from './components/Signup/Signup'
 import Otp from './components/OTP/Otp'
@@ -13,6 +14,7 @@ import ProfilePage from './components/Profile/ProfilePage'
 import TechnicianList from './components/AvailableTech.tsx/Availabletech'
 import TechnicianProfile from './components/Techprofile/Profile'
 import AddressPage from './components/Profile/Address'
+import PaymentPage from './components/Payment/ProceedPayment'
 function App() {
  
 
@@ -31,7 +33,7 @@ function App() {
         <Route path='/changepassword' element={<ChangePassword/>}/>
         <Route path='/available-technicians' element={<TechnicianList/>}/>
         <Route path='/viewprofile' element={<TechnicianProfile/>}/>
-      
+        <Route path='/proceedpayment' element={<PaymentPage/>}/>
         <Route path='/myaccount' element={<UserLayout />}>
           {/* When /myaccount, redirect to /myaccount/profile */}
           <Route index element={<Navigate to="profile" replace />} />
