@@ -9,7 +9,7 @@ export interface WorkTime {
     lng: number;
   }
   
-  export interface Booking {
+  export interface IBooking {
     id?: string;
     userId: string;
     technicianId: string;
@@ -18,27 +18,28 @@ export interface WorkTime {
     booked_date: string;
     rateperhour:number,
     workstatus:'pending' | 'progress' | 'paused' | "completed",
-    totalhours:number,
-    isStartAccept:boolean,
-    isEndAccept:boolean,
-    isconfirmedbyTech:boolean,
-    techremark:string,
-    userremark:string,
+    totalhours?:number,
+    isStartAccept?:boolean,
+    isEndAccept?:boolean,
+    isPauseAccept?:boolean,
+    isconfirmedbyTech?:'pending' | 'accepted' | 'rejected',
+    techremark?:string,
+    userremark?:string,
     pincode:string,
     consultationFee: number;
-    workTime: WorkTime[];
-    workFinalAmount: number;
-    totalFinalAmount: number;//(consultationFee+workfinalamount)
-    admincommision:number,
-    techcommision:number,
+    workTime?: WorkTime[];
+    workFinalAmount?: number;
+    totalFinalAmount?: number;//(consultationFee+workfinalamount)
+    admincommision?:number,
+    techcommision?:number,
     consultationpaymethod:'RazorPay' | 'Wallet',
-    finalpaymenthod:'RazorPay' | 'Wallet',
-    finalpaymentstatus:'pending' | 'completed' | 'failed'
+    finalpaymenthod?:'RazorPay' | 'Wallet',
+    finalpaymentstatus?:'pending' | 'completed' | 'failed'
     consultationpaymentStatus: 'pending' | 'completed' | 'failed';
     razorpayPaymentId: string;
-    razorpayFinalPaymentId:string,
+    razorpayFinalPaymentId?:string,
     consultationtransactionId:string, 
-    finalpaymenttransactionId:string,
+    finalpaymenttransactionId?:string,
     createdAt?: Date;
   }
   
