@@ -3,7 +3,7 @@ import axiosInstancetech from "../../axios";
 export const fetchrequest=async(techId:string)=>{
     try {
         const response=await axiosInstancetech.get(`/request/${techId}`)
-        return response.data.requests
+        return response.data.bokings
     }catch (error: any) {
         console.error("Error fetching request:", error);
         throw new Error(

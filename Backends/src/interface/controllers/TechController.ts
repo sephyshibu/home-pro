@@ -4,13 +4,15 @@ import { RefreshToken } from "../../application/usecase/Tech/RefreshToken";
 import { GetTechById } from "../../application/usecase/Tech/MyProfile/TechDetails";
 import { EditTech } from "../../application/usecase/Tech/MyProfile/Edittech";
 import { fetchCategory } from "../../application/usecase/Admin/Fetchcategory";
+import { FetchBookingByTechId } from "../../application/usecase/booking/fetchBookingsByTech";
 export class techController{
     constructor(
         private logintech:LoginTech,
         private refreshtoken:RefreshToken,
         private gettechbyid:GetTechById,
         private edittech:EditTech,
-        private fetchcat:fetchCategory
+        private fetchcat:fetchCategory,
+        private fetchbookingbytechbeforeaccept:FetchBookingByTechId
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -88,6 +90,18 @@ export class techController{
             res.status(200).json({category})
         } catch (error:any) {
             res.status(500).json({ message: error.message });
+        }
+    }
+
+    async fetchRequestByTech(req:Request,res:Response):Promise<void>{
+        try {
+            const{techId}=req.params
+            const bokings=await this.fetchbookingbytechbeforeaccept.fetchBookingDetailsRequest(techId)
+            console.log("contoller", bokings)
+            res.status(200).json({bokings})
+        } catch (err: any) {
+            res.status(500).json({ message: err.message });
+            
         }
     }
 

@@ -118,5 +118,34 @@ export class bookingrepositoryImpl implements BookingRepository{
         console.log("bookings",bookings)
         return bookings
       }
+
+      async fetchbookingByTechId(techId:string):Promise<IBooking[]|null>{
+        const bookings =await BookingModels.find({technicianId:techId,isconfirmedbyTech:"pending"})
+                        .populate({
+                          path:"userId",
+                          select:"name phone"
+                        })
+                        .populate({
+                          path:"technicianId",
+                          select:"categoryid",
+                          populate:{
+                            path:"categoryid",
+                            select:"name"
+                          }
+                        })
+                        .populate({
+                          path:"addressId",
+                          select:"addressname"
+                        })
+                        .exec()
+        if(!bookings){
+          return null
+        }
+        else{
+          console.log("fetch techId",bookings)
+          return bookings
+        }
+
+      }
     
 }

@@ -2,7 +2,7 @@ import { ITech } from "../models/Tech";
 
 export interface TechRepository{
     createtech(tech:ITech):Promise<ITech>
-    findById(techidL:string):Promise<{ isBlocked: boolean; email: string }|null>
+    findById(techid:string):Promise<{ isBlocked: boolean; email: string }|null>
     findByEmail(email:string):Promise<ITech|null>
     fetchTech():Promise<ITech[]>
     blockunblock(techid:string, isBlocked:boolean):Promise<ITech>

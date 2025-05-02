@@ -1,6 +1,7 @@
 import axios,{AxiosError,InternalAxiosRequestConfig} from 'axios';
 import { store,persistor } from './componenst/app/store';
 import { addtoken } from './componenst/features/TokenSlice';
+
 // Axios instance
 const axiosInstancetech = axios.create({
     baseURL: import.meta.env.VITE_TECH_PORT,
@@ -55,6 +56,7 @@ axiosInstancetech.interceptors.response.use(
         originalRequest._retry = true;
   
         try {
+          console.log('Triggering token refresh...');
           const response = await axiosInstancetech.post<{ token: string }>('/refresh', {}, { withCredentials: true });
           const { token } = response.data;
   
@@ -68,6 +70,10 @@ axiosInstancetech.interceptors.response.use(
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
           // store.dispatch(logoutuser());
+          console.log("Session expired. Please login again.");
+          await persistor.purge();
+          localStorage.removeItem("techId");
+          window.location.href = "/";
           return Promise.reject(refreshError);
         }
       }

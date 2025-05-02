@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router';
 import { fetchrequest } from '../../api/RequestFetch/requestfetch';
 interface Request {
     _id:string,
-    techimage:string;
-    technicianname: string;
+    username: string;
+    userphone:string;
     Category: string;
     techStatus: "Accepted" | "Rejected" |"Pending";
     workStatus: "InProgress" | "Pending" | "Paused" | "Completed";
     date: string;
     locationUrl:string,
     rateperhour:number,
+    isconfirmedByTech:string;
     techphone:string,
     consultationFee:string,
     consultationpaymentStatus:string,
@@ -22,13 +23,7 @@ interface Request {
   
   }
 
-const mockRequests: Request[] = [
-  { id: 1, name: 'User 1', profileUrl: '', contact: '+91 9999999999', district: 'Kottayam', date: '30-04-2025' },
-  { id: 2, name: 'User 2', profileUrl: '', contact: '+91 9999999999', district: 'Ernakulam', date: '30-04-2025' },
-  { id: 3, name: 'User 3', profileUrl: '', contact: '+91 9999999999', district: 'Kollam', date: '30-04-2025' },
-  { id: 4, name: 'User 4', profileUrl: '', contact: '+91 9999999999', district: 'Thrissur', date: '29-04-2025' },
-  { id: 5, name: 'User 5', profileUrl: '', contact: '+91 9999999999', district: 'Kottayam', date: '28-04-2025' },
-];
+
 
 const TechnicianRequestPage: React.FC = () => {
     const techId=localStorage.getItem("techId")
@@ -51,6 +46,23 @@ const TechnicianRequestPage: React.FC = () => {
         fecthbookinghavereq()
     },[])
 
+    const handleAccept=async(id:string)=>{
+        if(!techId) return
+
+        try {
+            await aceptRequest(id,techId);
+
+            setrequest((prev)=>
+                prev?prev.map((r)=>r._id===id?{...r,isconfirmedByTech:"accepted"}:r
+            ):null
+
+            )
+        } catch (error) {
+            
+        }
+
+    }
+
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -61,7 +73,7 @@ const TechnicianRequestPage: React.FC = () => {
       <main className="flex-grow flex justify-center items-start mt-8">
         <div className="bg-gray-100 p-6 rounded-xl w-full max-w-4xl shadow">
           <div className="grid grid-cols-6 font-semibold text-gray-700 text-sm border-b pb-3">
-            <div className="col-span-1">Profile Photo</div>
+            
             <div className="col-span-1">User Name</div>
             <div className="col-span-1">Contact Number</div>
             <div className="col-span-1">District</div>
@@ -69,17 +81,15 @@ const TechnicianRequestPage: React.FC = () => {
             <div className="col-span-1">Action</div>
           </div>
           <div className="mt-4 space-y-4">
-            {mockRequests.map((req) => (
-              <div key={req.id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3">
-                <div className="col-span-1 flex justify-center">
-                  <img src="/default-avatar.png" alt="Profile" className="w-10 h-10 rounded-full" />
-                </div>
-                <div className="col-span-1">{req.name}</div>
-                <div className="col-span-1">{req.contact}</div>
-                <div className="col-span-1">{req.district}</div>
+            {request && request.map((req) => (
+              <div key={req._id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3">
+                
+                <div className="col-span-1">{req.username}</div>
+                <div className="col-span-1">{req.userphone}</div>
+                <div className="col-span-1">{req.pincode}</div>
                 <div className="col-span-1">{req.date}</div>
                 <div className="col-span-1 text-center">
-                  <button className="bg-red-600 text-white px-3 py-1 rounded hover:bg-yellow-500">
+                  <button className="bg-red-600 text-white px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>handleAccept(req._id)}>
                     Accept
                   </button>
                   <button className="bg-green-400 text-white px-3 py-1 rounded hover:bg-yellow-500">
