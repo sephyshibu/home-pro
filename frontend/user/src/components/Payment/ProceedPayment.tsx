@@ -152,6 +152,7 @@ const PaymentPage: React.FC = () => {
             toast.error("Please select all required fields");
             return;
         }
+      try{
         const res= await axiosInstanceuser.post(`/create-order/${userId}`,{
             amount:technician.consulationFee
         })
@@ -184,6 +185,27 @@ const PaymentPage: React.FC = () => {
         
           const rzp = new window.Razorpay(options);
           rzp.open();
+           // Add payment failed handler
+    rzp.on("payment.failed", async (response: any) => {
+      await axiosInstanceuser.post("/payment-failed", {
+        userId,
+        techid,
+        addressId: selectedAddressId,
+        location: selectedLocation,
+        date: bookingdetails.date,
+        amount: technician.consulationFee,
+        error: response.error,
+      });
+
+      toast.error("Payment failed. Please try again.");
+    });
+
+      rzp.open();
+    } catch (error) {
+      toast.error("Error initiating payment");
+      console.error(error);
+    }
+          
 
     }
       

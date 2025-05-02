@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { BookingDetails } from "../../api/Service/fetchbooking";
 import { useNavigate } from "react-router";
+import axiosInstanceuser from "../../axios";
+import toast from "react-hot-toast";
 interface servicepage {
   _id:string,
   techimage:string;
@@ -63,6 +65,48 @@ const MyServicesPage: React.FC = () => {
       navigate('/viewbookingddetails',{state:bookingdetails})
     }
 
+    const retryPayment = async (bookingId: string, amount: string) => {
+      if (!userId) {
+        toast.error("User not logged in");
+        return;
+      }
+    
+      try {
+        const res = await axiosInstanceuser.post(`/create-order/${userId}`, {
+          amount,
+        });
+    
+        const options = {
+          key: "rzp_test_qp0MD1b9oAJB0i",
+          amount: res.data.amount,
+          currency: "INR",
+          name: "HomePro",
+          order_id: res.data.id,
+          handler: async (response: any) => {
+            await axiosInstanceuser.post("/confirm-payment", {
+              userId,
+              razorpay_payment_id: response.razorpay_payment_id,
+              bookingId, // reusing the same booking
+            });
+            toast.success("Payment retried successfully!");
+            window.location.reload(); // optional: reload to reflect new status
+          },
+          prefill: {
+            name: "User HomePro",
+            email: "user@example.com",
+            contact: "9876543210",
+          },
+        };
+    
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } catch (error) {
+        toast.error("Error initiating retry payment");
+        console.error(error);
+      }
+    };
+    
+
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -107,6 +151,17 @@ const MyServicesPage: React.FC = () => {
                       <button className="bg-[#00BFFF] hover:bg-[#009FCC] text-white px-4 py-1 rounded-md" onClick={()=>handleView(bookingItem)}>
                         View
                       </button>
+                    </td>
+                    <td>
+                    {bookingItem.consultationpaymentStatus === "failed" && (
+                    <button
+                      onClick={() => retryPayment(bookingItem._id, bookingItem.consultationFee)}
+                      className="mt-2 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                    >
+                      Retry Payment
+                    </button>
+                  )}
+
                     </td>
                   </tr>
                 ))}
