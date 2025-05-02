@@ -23,7 +23,7 @@ export class FetchBookingByTechId{
                 date:bookings.booked_date,
                 locationUrl,
                 rateperhour:bookings.rateperhour,
-                isconfirmedByTech:bookings.isconfirmedByTech,
+                isconfirmedByTech:bookings.isconfirmedbyTech,
                 techphone:bookings.technicianId.phone,
                 consultationFee:bookings.consultationFee,
                 consultationpaymentStatus:bookings.consultationpaymentStatus,

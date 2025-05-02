@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express"; 
 import { ChecktechStatus } from "../../application/usecase/Tech/CheckTechStatus";
-import { UserRepositoryImpl } from "../repository/UserRepositoryImpl";
 import jwt ,{TokenExpiredError} from 'jsonwebtoken';
 import { TechRepository } from "../../domain/repository/Techrepository";
 import { TechRepositoryImpl } from "../repository/TechRepositoryImpl";
@@ -35,7 +34,11 @@ export const authToken = async (req: Request, res: Response, next: NextFunction)
 
       next();
   } catch (error: any) {
-    if (error.message === "User is inactive") {
+    if (error instanceof TokenExpiredError) {
+        res.status(401).json({ message: "Token expired" });  // Send 401 when token is expired
+        return;
+    }
+    if (error.message === "Tech is inactive") {
         res.status(403).json({ message: "User is inactive. Please logout", action: "logout" });
         return;
     }

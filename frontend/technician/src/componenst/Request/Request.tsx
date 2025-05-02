@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { fetchrequest } from '../../api/RequestFetch/requestfetch';
+import { aceptRequest } from '../../api/AcceptRequest/acceptrequest';
 interface Request {
     _id:string,
     username: string;
