@@ -15,7 +15,7 @@ interface servicepage {
   rateperhour:number,
   techphone:string,
   consultationFee:string,
-  consultationpaymentStatus:string,
+  consultationpayStatus:string,
   finalpaymentStatus:string,
   worktime:[{}],
   workaddress:string,
@@ -83,7 +83,7 @@ const MyServicesPage: React.FC = () => {
           name: "HomePro",
           order_id: res.data.id,
           handler: async (response: any) => {
-            await axiosInstanceuser.post("/confirm-payment", {
+            await axiosInstanceuser.post("/confirm-payment-retry", {
               userId,
               razorpay_payment_id: response.razorpay_payment_id,
               bookingId, // reusing the same booking
@@ -153,7 +153,7 @@ const MyServicesPage: React.FC = () => {
                       </button>
                     </td>
                     <td>
-                    {bookingItem.consultationpaymentStatus === "failed" && (
+                    {bookingItem.consultationpayStatus === "failed" && (
                     <button
                       onClick={() => retryPayment(bookingItem._id, bookingItem.consultationFee)}
                       className="mt-2 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"

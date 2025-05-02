@@ -34,6 +34,8 @@ import { TransactionRepositoryImpl } from '../../infrastructure/repository/Trans
 import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 import { FetchBookingbyUserId } from '../../application/usecase/booking/fetchBookings'
 import { PasswordChange } from '../../application/usecase/User/Password/Changepassword'
+import { HandleFailedPayment } from '../../application/usecase/booking/handleFailedPayment'
+import { RetryConfirmPayment } from '../../application/usecase/booking/retryconfirmpayment'
 const router=express.Router()
 
 
@@ -73,6 +75,8 @@ const createBookingUseCase= new CreateBookingUseCase(razorpayservice)
 const confirmPayment= new ConfirmPayment(bookingrepository,walletRepository,transactionrepository)
 const fetchbook=new FetchBookingbyUserId(bookingrepository)
 const passchange= new PasswordChange(userRepository)
+const handlefailpayment= new HandleFailedPayment(bookingrepository)
+const retrypaymet=new RetryConfirmPayment(bookingrepository,walletRepository,transactionrepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -97,7 +101,9 @@ const usercontroller= new UserController(
     createBookingUseCase,
     confirmPayment,
     fetchbook,
-    passchange
+    passchange,
+    handlefailpayment,
+    retrypaymet
   
     
 
@@ -132,4 +138,6 @@ router.post('/create-order/:userId', authToken, (req, res) => usercontroller.cre
 router.post('/confirm-payment',authToken,(req,res)=>usercontroller.confirmpay(req,res))
 router.get('/fetchbookings/:userId', authToken,(req,res)=>usercontroller.fetchbookingsbyuserId(req,res))
 router.post('/password/:userId',authToken,(req,res)=>usercontroller.passwordChanges(req,res))
+router.post('/payment-failed',authToken,(req,res)=>usercontroller.Failedpayment(req,res))
+router.post('/confirm-payment-retry',authToken,(req,res)=>usercontroller.retryconfirmpayment(req,res))
 export {router as userRouter}

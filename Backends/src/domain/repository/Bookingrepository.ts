@@ -7,6 +7,9 @@ export interface BookingRepository {
     fetchbookingByUserId(userId:string):Promise<IBooking[]>
     fetchbookingByTechId(techId:string):Promise<IBooking[]|null>
     fetchupcomingevents(techId:string):Promise<IBooking[]|null>
+    createFailedPaymentBooking(data: IBooking): Promise<IBooking>;
+    findById(id: string): Promise<IBooking | null>;
+
     // getById(bookingId: string): Promise<IBooking | null>;
     // getByUserId(userId: string): Promise<IBooking[]>;
     // getByTechnicianId(technicianId: string): Promise<IBooking[]>;

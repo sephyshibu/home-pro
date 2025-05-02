@@ -25,20 +25,20 @@ export interface WorkTime {
     isconfirmedbyTech?:'pending' | 'accepted' | 'rejected',
     techremark?:string,
     userremark?:string,
-    pincode:string,
+    pincode?:string,
     consultationFee: number;
     workTime?: WorkTime[];
     workFinalAmount?: number;
     totalFinalAmount?: number;//(consultationFee+workfinalamount)
     admincommision?:number,
     techcommision?:number,
-    consultationpaymethod:'RazorPay' | 'Wallet',
+    consultationpaymethod?:'RazorPay' | 'Wallet',
     finalpaymethod?:'RazorPay' | 'Wallet',
     finalpayStatus?:'pending' | 'completed' | 'failed'
     consultationpayStatus?: 'pending' | 'completed' | 'failed';
-    razorpayPaymentId: string;
+    razorpayPaymentId?: string;
     razorpayFinalPaymentId?:string,
-    consultationtransactionId:string, 
+    consultationtransactionId?:string, 
     finalpaymenttransactionId?:string,
     createdAt?: Date;
   }

@@ -23,6 +23,8 @@ import { CreateBookingUseCase } from '../../application/usecase/User/Bookings/Cr
 import { ConfirmPayment } from '../../application/usecase/booking/confirmPayment';
 import { FetchBookingbyUserId } from '../../application/usecase/booking/fetchBookings';
 import { PasswordChange } from '../../application/usecase/User/Password/Changepassword';
+import { HandleFailedPayment } from '../../application/usecase/booking/handleFailedPayment';
+import { RetryConfirmPayment } from '../../application/usecase/booking/retryconfirmpayment';
 
 export class UserController{
     constructor(
@@ -49,7 +51,10 @@ export class UserController{
         private createBookingusecase:CreateBookingUseCase,
         private confirmpayment:ConfirmPayment,
         private fetchbookByUserid:FetchBookingbyUserId,
-        private passwordchnaging:PasswordChange
+        private passwordchnaging:PasswordChange,
+        private failpayment:HandleFailedPayment,
+        private retrypaymet:RetryConfirmPayment,
+ 
     
     ){}
 
@@ -381,10 +386,41 @@ export class UserController{
             }
     }
 
+    async retryconfirmpayment(req: Request, res: Response): Promise<void> {
+        try {
+          const {
+            userId,
+            bookingId,
+            razorpay_payment_id,
+          }: { userId: string; bookingId: string; razorpay_payment_id: string } = req.body;
+      
+          if (!userId || !bookingId || !razorpay_payment_id) {
+            res.status(400).json({ message: "Missing required fields" });
+            return;
+          }
+          const result = await this.retrypaymet.retryconfirmPayment(
+            {
+              id: bookingId, // include ID explicitly
+              userId,
+            },
+            razorpay_payment_id,
+            "completed"
+          );
+      
+          res.status(200).json({ success: true, booking: result.booking });
+        } catch (err) {
+          console.error("❌ Error confirming payment:", err);
+          res.status(500).json({ message: "Internal server error" });
+        }
+      }
+      
+    
+
     async fetchbookingsbyuserId(req:Request,res:Response):Promise<void>{
         try {
             const{userId}=req.params
             const booking=await this.fetchbookByUserid.fetchBookingdetails(userId)
+            console.log("controller",booking)
             res.status(200).json({booking})
         } catch (err: any) {
             res.status(500).json({ message: err.message });
@@ -403,6 +439,36 @@ export class UserController{
             res.status(500).json({ message: err.message });
             
         }
+    }
+    async Failedpayment(req:Request,res:Response){
+        try {
+            const {
+              userId,
+              techid,
+              addressId,
+              location,
+              date,
+              amount,
+      
+            } = req.body;
+        
+            const booking = await this.failpayment.execute({
+              userId,
+              technicianId:techid,
+              addressId,
+              location,
+              booked_date:date,
+              consultationFee:amount,
+              consultationpayStatus: 'failed',
+              
+            });
+        
+            res.status(201).json({ success: true, booking });
+          } catch (error) {
+            console.error("Failed to log payment failure:", error);
+            res.status(500).json({ success: false, message: "Internal Server Error" });
+          }
+
     }
     
 

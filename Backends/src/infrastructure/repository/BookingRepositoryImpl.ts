@@ -175,5 +175,52 @@ export class bookingrepositoryImpl implements BookingRepository{
                         return bookings
                       }
       }
+      async createFailedPaymentBooking(data: IBooking): Promise<IBooking> {
+        const booking = new BookingModels(data);
+        return await booking.save();
+      }
+
+      async findById(id: string): Promise<IBooking | null> {
+        try {
+          const booking = await BookingModels.findById(id);
+          if (!booking) return null;
+    
+          return {
+            id: booking._id.toString(),
+            userId: booking.userId.toString(),
+            technicianId: booking.technicianId?.toString(),
+            addressId: booking.addressId?.toString(),
+            location: booking.location,
+            booked_date: booking.booked_date,
+            rateperhour: booking.rateperhour,
+            workstatus: booking.workstatus,
+            totalhours: booking.totalhours,
+            isStartAccept: booking.isStartAccept,
+            isEndAccept: booking.isEndAccept,
+            isPauseAccept: booking.isPauseAccept,
+            isconfirmedbyTech: booking.isconfirmedbyTech,
+            techremark: booking.techremark,
+            userremark: booking.userremark,
+            pincode: booking.pincode,
+            workTime: booking.workTime,
+            workFinalAmount: booking.workFinalAmount,
+            totalFinalAmount: booking.totalFinalAmount,
+            consultationFee: booking.consultationFee,
+            razorpayPaymentId: booking.razorpayPaymentId,
+            finalpayStatus: booking.finalpayStatus,
+            finalpaymenttransactionId: booking.finalpaymenttransactionId,
+            admincommision: booking.admincommision,
+            techcommision: booking.techcommision,
+            consultationpaymethod: booking.consultationpaymethod,
+            finalpaymethod: booking.finalpaymethod,
+            consultationpayStatus: booking.consultationpayStatus,
+            razorpayFinalPaymentId: booking.razorpayFinalPaymentId,
+            consultationtransactionId: booking.consultationtransactionId,
+          };
+        } catch (error) {
+          console.error("❌ Error finding booking by ID:", error);
+          throw error;
+        }
+      }
     
 }
