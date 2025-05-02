@@ -33,6 +33,7 @@ import { ConfirmPayment } from '../../application/usecase/booking/confirmPayment
 import { TransactionRepositoryImpl } from '../../infrastructure/repository/TransactionRepositoryImpl'
 import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 import { FetchBookingbyUserId } from '../../application/usecase/booking/fetchBookings'
+import { PasswordChange } from '../../application/usecase/User/Password/Changepassword'
 const router=express.Router()
 
 
@@ -71,6 +72,7 @@ const razorpayservice= new RazorpayService()
 const createBookingUseCase= new CreateBookingUseCase(razorpayservice)
 const confirmPayment= new ConfirmPayment(bookingrepository,walletRepository,transactionrepository)
 const fetchbook=new FetchBookingbyUserId(bookingrepository)
+const passchange= new PasswordChange(userRepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -94,7 +96,8 @@ const usercontroller= new UserController(
     deleteaddress,
     createBookingUseCase,
     confirmPayment,
-    fetchbook
+    fetchbook,
+    passchange
   
     
 
@@ -128,4 +131,5 @@ router.delete('/deleteaddress/:addressId',authToken,(Req,res)=>usercontroller.de
 router.post('/create-order/:userId', authToken, (req, res) => usercontroller.createOrder(req, res));
 router.post('/confirm-payment',authToken,(req,res)=>usercontroller.confirmpay(req,res))
 router.get('/fetchbookings/:userId', authToken,(req,res)=>usercontroller.fetchbookingsbyuserId(req,res))
+router.post('/password/:userId',authToken,(req,res)=>usercontroller.passwordChanges(req,res))
 export {router as userRouter}

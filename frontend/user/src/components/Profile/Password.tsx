@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { Changepasswordapi } from "../../api/Changepassword/password";
-import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
+
 interface ChangePasswordform{
     
     password:string,
@@ -79,6 +79,7 @@ const ChangePasswords:React.FC=()=>{
                 navigate('/login')
                 return
             }
+            console.log(password)
             const result=await Changepasswordapi(userId,password)
       
          

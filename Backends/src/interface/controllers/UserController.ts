@@ -22,6 +22,7 @@ import { DeleteAddressById } from '../../application/usecase/Address/DeleteAddre
 import { CreateBookingUseCase } from '../../application/usecase/User/Bookings/CreateBooking';
 import { ConfirmPayment } from '../../application/usecase/booking/confirmPayment';
 import { FetchBookingbyUserId } from '../../application/usecase/booking/fetchBookings';
+import { PasswordChange } from '../../application/usecase/User/Password/Changepassword';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -46,7 +47,8 @@ export class UserController{
         private deleteaddress: DeleteAddressById,
         private createBookingusecase:CreateBookingUseCase,
         private confirmpayment:ConfirmPayment,
-        private fetchbookByUserid:FetchBookingbyUserId
+        private fetchbookByUserid:FetchBookingbyUserId,
+        private passwordchnaging:PasswordChange
     
     ){}
 
@@ -388,7 +390,19 @@ export class UserController{
             
         }
     }
-    
+    async passwordChanges(req:Request, res:Response):Promise<void>{
+        try {
+        
+            const{userId}=req.params
+            const{password}=req.body
+            console.log(req.body)
+            const result=await this.passwordchnaging.editpassword(userId, password)
+            res.status(200).json({message:result.message})
+        } catch (err: any) {
+            res.status(500).json({ message: err.message });
+            
+        }
+    }
     
 
      
