@@ -10,6 +10,7 @@ import { categoryRepositoryImpl } from '../../infrastructure/repository/Category
 import { authToken } from '../../infrastructure/middleware/CHeckTechStatus'
 import { bookingrepositoryImpl } from '../../infrastructure/repository/BookingRepositoryImpl'
 import { FetchBookingByTechId } from '../../application/usecase/booking/fetchBookingsByTech'
+import { bookingRequestAcceptByTech } from '../../application/usecase/booking/requestaccept'
 const router=express.Router()
 
 const techrepository= new TechRepositoryImpl()
@@ -23,7 +24,7 @@ const fetchTechById= new GetTechById(techrepository)
 const editprofile=new EditTech(techrepository)
 const fetchCategories=new fetchCategory(categoryrepository)
 const fetchbookingbeforeacceptbytech= new FetchBookingByTechId(bookingrepository)
-
+const requestacceptbytech= new bookingRequestAcceptByTech(bookingrepository)
 
 const TechController= new techController(
     logintechs,
@@ -31,7 +32,8 @@ const TechController= new techController(
     fetchTechById,
     editprofile,
     fetchCategories,
-    fetchbookingbeforeacceptbytech
+    fetchbookingbeforeacceptbytech,
+    requestacceptbytech
 )
 
 router.post('/login',(req,res)=>TechController.login(req,res))
@@ -42,4 +44,5 @@ router.get('/fetchtechprofile/:techId',authToken,(req,res)=>TechController.fetch
 router.put('/updatetech/:techId',authToken,(req,res)=>TechController.edittechs(req,res))
 router.get('/fetchcategories',authToken,(req,res)=>TechController.fetchCategory(req,res))
 router.get('/request/:techId',authToken,(req,res)=>TechController.fetchRequestByTech(req,res))
+router.post('/request/:bookingId', authToken,(req,res)=>TechController.bookingrequest(req,res))
 export{router as techRouter}

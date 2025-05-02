@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { fetchrequest } from '../../api/RequestFetch/requestfetch';
 import { aceptRequest } from '../../api/AcceptRequest/acceptrequest';
+import toast, { Toast } from 'react-hot-toast';
 interface Request {
     _id:string,
     username: string;
@@ -51,15 +52,17 @@ const TechnicianRequestPage: React.FC = () => {
         if(!techId) return
 
         try {
-            await aceptRequest(id,techId);
+            await aceptRequest(id);
 
-            setrequest((prev)=>
-                prev?prev.map((r)=>r._id===id?{...r,isconfirmedByTech:"accepted"}:r
-            ):null
-
-            )
-        } catch (error) {
+            setrequest((prev) =>
+                prev ? prev.filter((r) => r._id !== id) : null
+              );
+          
             
+            toast.success("request accepted")
+
+        } catch (error) {
+            console.error("Error accepting request:", error);
         }
 
     }

@@ -5,6 +5,7 @@ import { GetTechById } from "../../application/usecase/Tech/MyProfile/TechDetail
 import { EditTech } from "../../application/usecase/Tech/MyProfile/Edittech";
 import { fetchCategory } from "../../application/usecase/Admin/Fetchcategory";
 import { FetchBookingByTechId } from "../../application/usecase/booking/fetchBookingsByTech";
+import { bookingRequestAcceptByTech } from "../../application/usecase/booking/requestaccept";
 export class techController{
     constructor(
         private logintech:LoginTech,
@@ -12,7 +13,8 @@ export class techController{
         private gettechbyid:GetTechById,
         private edittech:EditTech,
         private fetchcat:fetchCategory,
-        private fetchbookingbytechbeforeaccept:FetchBookingByTechId
+        private fetchbookingbytechbeforeaccept:FetchBookingByTechId,
+        private requestacceptbytech:bookingRequestAcceptByTech
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -99,6 +101,18 @@ export class techController{
             const bokings=await this.fetchbookingbytechbeforeaccept.fetchBookingDetailsRequest(techId)
             console.log("contoller", bokings)
             res.status(200).json({bokings})
+        } catch (err: any) {
+            res.status(500).json({ message: err.message });
+            
+        }
+    }
+
+    async bookingrequest(req:Request, res:Response):Promise<void>{
+        try {
+            const{bookingId}=req.params
+            const result=await this.requestacceptbytech.bookingreacceptbytech(bookingId)
+            console.log("controller",result)
+            res.status(200).json({result})
         } catch (err: any) {
             res.status(500).json({ message: err.message });
             
