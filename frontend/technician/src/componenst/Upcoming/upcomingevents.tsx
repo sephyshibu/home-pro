@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { fetchrequest } from '../../api/RequestFetch/requestfetch';
-import { aceptRequest } from '../../api/AcceptRequest/acceptrequest';
-import toast, { Toast } from 'react-hot-toast';
-import { Dialog,DialogPanel,DialogTitle } from '@headlessui/react';
-interface Request {
+import { fetchupcomingevents } from '../../api/Upcomingevents/upcomingevents';
+// import { aceptRequest } from '../../api/AcceptRequest/acceptrequest';
+// import toast, {  } from 'react-hot-toast';
+import { Dialog } from '@headlessui/react';
+
+interface Events {
     _id:string,
     username: string;
     userphone:string;
@@ -28,49 +29,30 @@ interface Request {
 
 
 
-const TechnicianRequestPage: React.FC = () => {
+const TechnicianUpcoming: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+    const [selectedRequest, setSelectedRequest] = useState<Events | null>(null);
     const techId=localStorage.getItem("techId")
-    const[request,setrequest]=useState<Request[]|null>([])
+    const[upcoming,setupcoming]=useState<Events[]|null>([])
     const navigate=useNavigate()
     useEffect(()=>{
-        const fecthbookinghavereq=async()=>{
+        const fetchupcomingevent=async()=>{
             if(!techId){
                 navigate('/')
                 return
             }
             try {
-                const requestdetails=await fetchrequest(techId)
-                console.log(requestdetails)
-                setrequest(requestdetails)
+                const upcomingeventsdetails=await fetchupcomingevents(techId)
+                console.log(upcomingeventsdetails)
+                setupcoming(upcomingeventsdetails)
             }  catch (error) {
-                console.error("Error fetching request:", error);
+                console.error("Error fetching upcoming events:", error);
             }
         }
-        fecthbookinghavereq()
+        fetchupcomingevent()
     },[])
 
-    const handleAccept=async(id:string)=>{
-        if(!techId) return
-
-        try {
-            await aceptRequest(id);
-
-            setrequest((prev) =>
-                prev ? prev.filter((r) => r._id !== id) : null
-              );
-          
-            
-            toast.success("request accepted")
-
-        } catch (error) {
-            console.error("Error accepting request:", error);
-        }
-
-    }
-
-    const openModal = (req: Request) => {
+    const openModal = (req: Events) => {
         setSelectedRequest(req);
         setIsOpen(true);
       };
@@ -95,24 +77,23 @@ const TechnicianRequestPage: React.FC = () => {
             <div className="col-span-1">Contact Number</div>
             <div className="col-span-1">District</div>
             <div className="col-span-1">Date of Work</div>
+            <div className="col-span-1">Work Status</div>
             <div className="col-span-1">Action</div>
           </div>
           <div className="mt-4 space-y-4">
-            {request && request.map((req) => (
-              <div key={req._id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3" onClick={()=>openModal(req)}>
+            {upcoming && upcoming.map((req) => (
+              <div key={req._id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3">
                 
                 <div className="col-span-1">{req.username}</div>
                 <div className="col-span-1">{req.userphone}</div>
                 <div className="col-span-1">{req.pincode}</div>
                 <div className="col-span-1">{req.date}</div>
-                <div className="col-span-1 text-center mt-6 flex justify-center gap-4">
-
-                  <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>handleAccept(req._id)}>
-                    Accept
+                <div className="col-span-1">{req.workStatus}</div>
+                <div className="col-span-1 text-center">
+                  <button className="bg-[#FFDF00] text-black px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>openModal(req)} >
+                    View
                   </button>
-                  <button className="bg-red-600 text-white px-3 py-1 rounded hover:bg-yellow-500">
-                   Reject
-                  </button>
+                 
                 </div>
               </div>
             ))}
@@ -143,13 +124,15 @@ const TechnicianRequestPage: React.FC = () => {
                 <a href={selectedRequest.locationUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Location</a>
               </div>
             )}
-            <div className="mt-4 text-right">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={closeModal}>Close</button>
+           <div className="mt-6 flex justify-center gap-4">
+                <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Accept</button>
+                <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">Pause</button>
+                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">End</button>
             </div>
             
           </Dialog.Panel>
         </div>
-      </Dialog>
+      </Dialog> 
 
       {/* Footer */}
       <footer className="bg-black text-white text-sm py-6 mt-12">
@@ -169,4 +152,4 @@ const TechnicianRequestPage: React.FC = () => {
   );
 };
 
-export default TechnicianRequestPage;
+export default TechnicianUpcoming;

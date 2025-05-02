@@ -6,6 +6,7 @@ export interface BookingRepository {
     update(bookingId: Object, updatedBooking: Partial<IBooking>): Promise<IBooking>;
     fetchbookingByUserId(userId:string):Promise<IBooking[]>
     fetchbookingByTechId(techId:string):Promise<IBooking[]|null>
+    fetchupcomingevents(techId:string):Promise<IBooking[]|null>
     // getById(bookingId: string): Promise<IBooking | null>;
     // getByUserId(userId: string): Promise<IBooking[]>;
     // getByTechnicianId(technicianId: string): Promise<IBooking[]>;

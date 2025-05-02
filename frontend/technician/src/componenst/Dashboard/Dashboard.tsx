@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TechnicianRequestPage from "../Request/Request";
-// import Tech from'./Tech'
+import TechnicianUpcoming from "../Upcoming/upcomingevents";
 // import TechList from './TechList'
 import { useNavigate } from "react-router";
 // import Category from './Category'
@@ -62,6 +62,7 @@ const AdminDashboard: React.FC = () => {
       {/* Main Content */}
       <div className="flex-grow p-8">
          {/* {activeTab === "Dashboard" && <DashboardView />}  */}
+         {activeTab === "Upcoming Events" && <TechnicianUpcoming/>}
          {activeTab === "Request" && <TechnicianRequestPage/>}
         {/* {activeTab === "Dashboard" && 
         <div>
