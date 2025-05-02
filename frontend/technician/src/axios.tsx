@@ -1,7 +1,7 @@
 import axios,{AxiosError,InternalAxiosRequestConfig} from 'axios';
 import { store,persistor } from './componenst/app/store';
 import { addtoken } from './componenst/features/TokenSlice';
-
+import{toast} from 'react-toastify'
 // Axios instance
 const axiosInstancetech = axios.create({
     baseURL: import.meta.env.VITE_TECH_PORT,
@@ -32,12 +32,7 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 
       if (tech && tech._id) {
         config.headers['tech-id'] = tech._id;
-      } else {
-        const techId = localStorage.getItem("techId");
-        if (techId) {
-          config.headers['tech-id'] = techId; // Fallback to localStorage if Redux state is empty
-        }
-      }
+      } 
       return config
     },
     (error: AxiosError) => {
@@ -70,10 +65,10 @@ axiosInstancetech.interceptors.response.use(
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
           // store.dispatch(logoutuser());
-          console.log("Session expired. Please login again.");
+          toast.error("Session expired. Please login again.");
           await persistor.purge();
           localStorage.removeItem("techId");
-          window.location.href = "/";
+          window.location.href = '/';
           return Promise.reject(refreshError);
         }
       }
@@ -81,7 +76,7 @@ axiosInstancetech.interceptors.response.use(
         const data = error.response.data as { message: string; action?: string };
         console.log("403 Error:", data); // 👈 Add this
         if (data?.action === 'blocked') {
-         
+          toast.error(data.message || "You are blocked by admin!");
           localStorage.removeItem('techId')
           await persistor.purge()
           window.location.href = '/'

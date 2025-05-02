@@ -127,7 +127,7 @@ export class bookingrepositoryImpl implements BookingRepository{
                         })
                         .populate({
                           path:"technicianId",
-                          select:"categoryid",
+                          select:"phone categoryid",
                           populate:{
                             path:"categoryid",
                             select:"name"

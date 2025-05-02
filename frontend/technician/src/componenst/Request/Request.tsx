@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { fetchrequest } from '../../api/RequestFetch/requestfetch';
 import { aceptRequest } from '../../api/AcceptRequest/acceptrequest';
 import toast, { Toast } from 'react-hot-toast';
+import { Dialog,DialogPanel,DialogTitle } from '@headlessui/react';
 interface Request {
     _id:string,
     username: string;
@@ -28,6 +29,8 @@ interface Request {
 
 
 const TechnicianRequestPage: React.FC = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
     const techId=localStorage.getItem("techId")
     const[request,setrequest]=useState<Request[]|null>([])
     const navigate=useNavigate()
@@ -67,6 +70,16 @@ const TechnicianRequestPage: React.FC = () => {
 
     }
 
+    const openModal = (req: Request) => {
+        setSelectedRequest(req);
+        setIsOpen(true);
+      };
+    
+      const closeModal = () => {
+        setIsOpen(false);
+        setSelectedRequest(null);
+      };
+
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -86,7 +99,7 @@ const TechnicianRequestPage: React.FC = () => {
           </div>
           <div className="mt-4 space-y-4">
             {request && request.map((req) => (
-              <div key={req._id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3">
+              <div key={req._id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3" onClick={()=>openModal(req)}>
                 
                 <div className="col-span-1">{req.username}</div>
                 <div className="col-span-1">{req.userphone}</div>
@@ -105,6 +118,36 @@ const TechnicianRequestPage: React.FC = () => {
           </div>
         </div>
       </main>
+
+      <Dialog open={isOpen} onClose={closeModal} className="fixed z-50 inset-0 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen px-4">
+          <Dialog.Panel className="bg-white rounded-xl p-6 w-full max-w-2xl shadow-xl">
+            <Dialog.Title className="text-lg font-bold mb-4 border-b pb-2">
+              Request Details
+            </Dialog.Title>
+            {selectedRequest && (
+              <div className="space-y-2 text-gray-700">
+                <p><strong>Username:</strong> {selectedRequest.username}</p>
+                <p><strong>Phone:</strong> {selectedRequest.userphone}</p>
+                <p><strong>Category:</strong> {selectedRequest.Category}</p>
+                <p><strong>Date:</strong> {selectedRequest.date}</p>
+                <p><strong>Pincode:</strong> {selectedRequest.pincode}</p>
+                <p><strong>Work Address:</strong> {selectedRequest.workaddress}</p>
+                <p><strong>Rate/Hour:</strong> ₹{selectedRequest.rateperhour}</p>
+                <p><strong>Consultation Fee:</strong> ₹{selectedRequest.consultationFee}</p>
+                <p><strong>Consultation Payment Status:</strong> {selectedRequest.consultationpaymentStatus}</p>
+                <p><strong>Final Payment Status:</strong> {selectedRequest.finalpaymentStatus}</p>
+                <p><strong>Work Status:</strong> {selectedRequest.workStatus}</p>
+                <p><strong>Technician Phone:</strong> {selectedRequest.techphone}</p>
+                <a href={selectedRequest.locationUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Location</a>
+              </div>
+            )}
+            <div className="mt-4 text-right">
+              <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={closeModal}>Close</button>
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
 
       {/* Footer */}
       <footer className="bg-black text-white text-sm py-6 mt-12">

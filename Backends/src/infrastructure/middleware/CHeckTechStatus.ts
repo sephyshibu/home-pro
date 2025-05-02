@@ -4,10 +4,10 @@ import jwt ,{TokenExpiredError} from 'jsonwebtoken';
 import { TechRepository } from "../../domain/repository/Techrepository";
 import { TechRepositoryImpl } from "../repository/TechRepositoryImpl";
 const techrepository: TechRepository = new TechRepositoryImpl();
-const checkuserstatuss = new ChecktechStatus(techrepository);
+const checktechstatuss = new ChecktechStatus(techrepository);
 
 interface CustomRequest extends Request {
-    userId?: string;
+    techId?: string;
 }
 
 // 👉 Export properly with correct types
@@ -23,14 +23,14 @@ export const authToken = async (req: Request, res: Response, next: NextFunction)
 
   try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { techId: string };
-      (req as CustomRequest).userId = decoded.techId; 
+      (req as CustomRequest).techId = decoded.techId; 
 
       if (!techId) {
           res.status(400).json({ message: "User ID is required in headers" });
           return;
       }
 
-      await checkuserstatuss.checkstatus(techId);
+      await checktechstatuss.checkstatus(techId);
 
       next();
   } catch (error: any) {

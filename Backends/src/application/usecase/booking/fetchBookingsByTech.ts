@@ -26,8 +26,8 @@ export class FetchBookingByTechId{
                 isconfirmedByTech:bookings.isconfirmedbyTech,
                 techphone:bookings.technicianId.phone,
                 consultationFee:bookings.consultationFee,
-                consultationpaymentStatus:bookings.consultationpaymentStatus,
-                finalpaymentStatus:bookings.finalpaymentStatus,
+                consultationpaymentStatus:bookings.consultationpayStatus,
+                finalpaymentStatus:bookings.finalpayStatus,
                 workaddress:bookings.addressId.addressname,
                 totalhours:bookings.toalhours,
                 pincode:bookings.pincode
