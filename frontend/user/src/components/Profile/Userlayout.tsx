@@ -1,7 +1,21 @@
 import React from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
+import {persistor} from '../../app/store'
 const UserLayout: React.FC = () => {
+  const navigate=useNavigate()
+
+  const userId=localStorage.getItem("userId")
+
+  const handleLoginLogout=async()=>{
+          if(userId){
+              localStorage.removeItem('userId')
+              await persistor.purge()
+              navigate('/')
+          }else{
+              navigate('/login')
+          }
+      }
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
@@ -19,9 +33,22 @@ const UserLayout: React.FC = () => {
         </nav>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 p-10">
-        <Outlet /> {/* This will render the nested route */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Navbar */}
+        <div className="bg-white shadow-md p-4 flex justify-between items-center">
+          <NavLink to="/" className="text-lg font-semibold text-sky-600 hover:underline">🏠 Home</NavLink>
+          <button
+            onClick={handleLoginLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md font-medium"
+          >
+            Logout
+          </button>
+        </div>
+
+        {/* Page Content */}
+        <div className="p-10 flex-1">
+          <Outlet />
+        </div>
       </div>
     </div>
   )
