@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import User from "./User";
+import TechnicianRequestPage from "../Request/Request";
 // import Tech from'./Tech'
 // import TechList from './TechList'
 import { useNavigate } from "react-router";
@@ -61,9 +61,9 @@ const AdminDashboard: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex-grow p-8">
-        {/* {activeTab === "Dashboard" && <DashboardView />} */}
-        {/* {activeTab === "Request" && <User/>}
-        {activeTab === "Dashboard" && 
+         {/* {activeTab === "Dashboard" && <DashboardView />}  */}
+         {activeTab === "Request" && <TechnicianRequestPage/>}
+        {/* {activeTab === "Dashboard" && 
         <div>
             <div>
               <Tech/>
@@ -79,8 +79,8 @@ const AdminDashboard: React.FC = () => {
             <div>
               <Category/>
             </div>
-          </div>} */}
-        {/* {activeTab === "Transactions" && <TransactionsView />}  */}
+          </div>} 
+        /* {activeTab === "Transactions" && <TransactionsView />}   */}
       </div>
 
       {/* Footer */}
