@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BookingDetails } from "../../api/Service/fetchbooking";
 import { useNavigate } from "react-router";
+import { Dialog, DialogPanel,DialogTitle} from "@headlessui/react";
 import axiosInstanceuser from "../../axios";
+import { updatecancelreason } from "../../api/cancelrequest/Cancelreason";
 import toast from "react-hot-toast";
 interface servicepage {
   _id:string,
@@ -43,6 +45,16 @@ const getTechStatusColor = (status: string) => {
 const MyServicesPage: React.FC = () => {
     const userId=localStorage.getItem("userId")
     const[booking,setbooking]=useState<servicepage[]|null>([])
+    const[bookingid,setbookingid]=useState<string|null>(null)
+    const[isopen,setisopen]=useState(false)
+    const[form,setform]=useState({
+      userremark:""
+    })
+
+
+    const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
+      setform((prev)=>({...prev,[e.target.name]:e.target.value}))
+    }
     const navigate=useNavigate()
     useEffect(()=>{
         const fetchbookvaLUES=async()=>{
@@ -64,6 +76,17 @@ const MyServicesPage: React.FC = () => {
     const handleView=async(bookingdetails:servicepage)=>{
       navigate('/viewbookingddetails',{state:bookingdetails})
     }
+
+    const handleAdduserremark=async(bookingId:string)=>{
+      try {
+        const response=await updatecancelreason(bookingId,form.userremark)
+        setisopen(false)
+
+      } catch (err) {
+        console.error("Error fetching booking details", err);
+      }
+    }
+  
 
     const retryPayment = async (bookingId: string, amount: string) => {
       if (!userId) {
@@ -106,6 +129,11 @@ const MyServicesPage: React.FC = () => {
       }
     };
     
+
+    const cancel=(id:string)=>{
+      setbookingid(id)
+      setisopen(true)
+    }
 
 
   return (
@@ -161,14 +189,43 @@ const MyServicesPage: React.FC = () => {
                       Retry Payment
                     </button>
                   )}
+                  </td>
+                  <td>
+                  {bookingItem.techStatus.toLowerCase()=="pending" && (
+                    <button 
+                        onClick={()=>cancel(bookingItem._id)}
+                        className="mt-2 bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                    >
+                      Cancel
+                    </button>
 
-                    </td>
+                  )}
+
+                  </td>
+                 
+                    
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </main>
+
+         <Dialog open={isopen} onClose={() => setisopen(false)} className="relative z-[999]">
+                <div className="fixed inset-0 bg-black/30 z-[999]" aria-hidden="true" />
+                <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 overflow-y-auto">
+                    <DialogPanel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl  z-[1001]">
+                    <DialogTitle className="text-lg font-bold mb-4">Add Cancel reason</DialogTitle>
+                    <div className="space-y-3">
+                        <input name="addressname" value={form.userremark} onChange={handleChange} placeholder="Address name" className="w-full border px-3 py-2 rounded" />
+                        <button onClick={()=>handleAdduserremark(setbookingid.toString())} className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
+                                  Submit Cancel Reason
+                        </button>
+                    </div>
+                    </DialogPanel>
+                </div>
+              </Dialog>
+                        
       </div>
 
       
