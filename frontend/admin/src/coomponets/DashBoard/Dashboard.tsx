@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import User from "./User";
 import Tech from'./Tech'
 import TransactionPage from "./Transactions";
+import RefundRequest from "./RefundRequest.";
 import TechList from './TechList'
 import { useNavigate } from "react-router";
 import Category from './Category'
 import AddCategory from './AddCategory'
 import { persistor } from "../../app/store";
 import logo from '../../../public/images/Resized/Logo Landscape.png'
-const tabs = ["Dashboard", "User List", "Technician List","Category List", "Transactions"];
+const tabs = ["Dashboard", "User List", "Technician List","Category List", "Transactions","RefundRequest"];
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("Dashboard");
@@ -75,6 +76,7 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>}
         {activeTab === "Transactions" && <TransactionPage />} 
+        {activeTab === "RefundRequest" && <RefundRequest />} 
       </div>
 
       {/* Footer */}
