@@ -20,6 +20,7 @@ import { Gettransactions } from '../../application/usecase/Transactions/GetTrans
 import { TransactionRepositoryImpl } from '../../infrastructure/repository/TransactionRepositoryImpl'
 import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails'
 import { bookingrepositoryImpl } from '../../infrastructure/repository/BookingRepositoryImpl'
+import { FetchrefundRequest } from '../../application/usecase/booking/fetchrefundbookings'
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
@@ -44,7 +45,7 @@ const editcategory=new EditCategory(categoryrepository)
 const getcategorybyId= new GetCategoryById(categoryrepository)
 const gettransaction=new Gettransactions(transactionrepository)
 const gettransactionwithbookings=new GetTransactionWithBookings(transactionrepository, bookingrepository)
-
+const fetchrefundrequestwithremark= new FetchrefundRequest(bookingrepository)
 
 const adminController= new AdminController(
     loginadmin,
@@ -60,7 +61,8 @@ const adminController= new AdminController(
     editcategory,
     getcategorybyId,
     gettransaction,
-    gettransactionwithbookings
+    gettransactionwithbookings,
+    fetchrefundrequestwithremark
    
 )
 console.log("adminrouter")
@@ -78,4 +80,5 @@ router.patch('/editcategory/:catid',(req,res)=>adminController.editcategory(req,
 router.get('/category/:catid',(req,res)=>adminController.fetchCategoryById(req,res))
 router.get('/fetchtransactions',(req,res)=>adminController.fetchTransaction(req,res))
 router.get('/fetchtransactionwithBookings/:transId',(req,res)=>adminController.transactionwithBookings(req,res))
+router.get('/fetchrefundreqall',(req,res)=>adminController.fetchingrequestrefund(req,res))
 export {router as adminRouter}

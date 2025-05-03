@@ -57,7 +57,7 @@ export class RetryConfirmPayment{
             booking.consultationpayStatus = "failed";
           }
           
-          booking = await this.bookingrepository.update(booking.id!, { consultationpayStatus: booking.consultationpayStatus, razorpayPaymentId: paymentId });
+          booking = await this.bookingrepository.update(booking.id!, { consultationpayStatus: booking.consultationpayStatus, razorpayPaymentId: paymentId ,rateperhour:booking.rateperhour});
           
           return { success: true, booking };
 }

@@ -126,6 +126,7 @@ const MyServicesPage: React.FC = () => {
               userId,
               razorpay_payment_id: response.razorpay_payment_id,
               bookingId, // reusing the same booking
+              
             });
             toast.success("Payment retried successfully!");
             window.location.reload(); // optional: reload to reflect new status

@@ -181,6 +181,13 @@ const PaymentPage: React.FC = () => {
               email: "admin@example.com",
               contact: "9999999999",
             },
+            modal: {
+              ondismiss: function () {
+                toast("Payment window closed.");
+                // Optional: redirect or just stay on the page
+                navigate('/myaccount/services'); // Or show retry options
+              }
+            }
           };
         
           const rzp = new window.Razorpay(options);
@@ -193,15 +200,19 @@ const PaymentPage: React.FC = () => {
         addressId: selectedAddressId,
         location: selectedLocation,
         date: bookingdetails.date,
+        rateperhour: technician.rateperhour, // ✅ add this line
         amount: technician.consulationFee,
         error: response.error,
       });
 
       toast.error("Payment failed. Please try again.");
-      navigate('/myaccount/services')
+      // ✅ Wrap in setTimeout to ensure reliable navigation
+      setTimeout(() => {
+        navigate('/myaccount/services');
+      }, 0);
     });
 
-      rzp.open();
+     
     } catch (error) {
       toast.error("Error initiating payment");
       console.error(error);

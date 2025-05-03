@@ -13,6 +13,7 @@ import { EditCategory } from "../../application/usecase/Category/Editcategory";
 import { GetCategoryById } from "../../application/usecase/Category/GetCategory";
 import { Gettransactions } from "../../application/usecase/Transactions/GetTransaction";
 import { GetTransactionWithBookings } from "../../application/usecase/Transactions/TransactionBookingdetails";
+import { FetchrefundRequest } from "../../application/usecase/booking/fetchrefundbookings";
 export class AdminController{
     constructor(
         private loginadmin:Login,
@@ -28,7 +29,8 @@ export class AdminController{
         private editcat:EditCategory,
         private getCategoryById:GetCategoryById,
         private gettransactiondetails:Gettransactions,
-        private gettransactionwithBookings:GetTransactionWithBookings
+        private gettransactionwithBookings:GetTransactionWithBookings,
+        private fetchrefundrequest:FetchrefundRequest
     ){}
 
 
@@ -189,6 +191,16 @@ export class AdminController{
             res.status(200).json({result})
         } catch (error:any) {
             res.status(400).json({ message: error.message });
+        }
+    }
+    async fetchingrequestrefund(req:Request,res:Response):Promise<void>{
+        try {
+            const result=await this.fetchrefundrequest.fetchrefundreq()
+            console.log("controller", result)
+            res.status(200).json({message:"success", Bookings:result})
+        } catch (error:any) {
+            console.error("Error in fetchingrequestrefund:", error);
+            res.status(500).json({ message: "Internal Server Error", error: error.message });
         }
     }
 

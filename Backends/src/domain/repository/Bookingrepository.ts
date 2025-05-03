@@ -10,6 +10,7 @@ export interface BookingRepository {
     createFailedPaymentBooking(data: IBooking): Promise<IBooking>;
     findById(id: string): Promise<IBooking | null>;
     findByIdWithPopulates(id: string): Promise<IBooking | null>;
+    fetchBookingswithremark():Promise<IBooking[]>
     // getById(bookingId: string): Promise<IBooking | null>;
     // getByUserId(userId: string): Promise<IBooking[]>;
     // getByTechnicianId(technicianId: string): Promise<IBooking[]>;

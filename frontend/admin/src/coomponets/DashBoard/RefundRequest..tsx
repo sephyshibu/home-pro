@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Dialog } from '@headlessui/react';
 import { fetchrefunndallreq } from '../../api/Refund/fetchrefundrequest';
+import toast from 'react-hot-toast';
+import { acceptrefundrequest } from '../../api/Refund/Acceptrefund';
 interface bookingdeatils {
     _id:string,
     username: string;
     userphone:string;
     techname:string;
     Category: string;
-    techStatus: "Accepted" | "Rejected" |"Pending";
+    techStatus: "Accepted" | "Rejected" |"pending";
     date: string;
     locationUrl:string,
     rateperhour:number,
@@ -17,7 +19,6 @@ interface bookingdeatils {
     consultationpaymentStatus:string,
     workaddress:string,
     totalhours:number,
-    pincode:string,
     userremark:string,
     techremark:string
   
@@ -48,6 +49,16 @@ const RefundRequest: React.FC = () => {
         fetchrefundreq()
     },[])
 
+
+    const AcceptRefund=async(id:string)=>{
+        try {
+            const response=await acceptrefundrequest(id)
+            toast.success(response.message)
+        } catch (error) {
+            console.error("Error fetching refund request:", error);
+        }
+    }
+
     // const openModal = (req: bookingdeatils) => {
     //     setSelectedRequest(req);
     //     setIsOpen(true);
@@ -67,12 +78,13 @@ const RefundRequest: React.FC = () => {
       {/* Request Table */}
       <main className="flex-grow flex justify-center items-start mt-8">
         <div className="bg-gray-100 p-6 rounded-xl w-full max-w-4xl shadow">
-          <div className="grid grid-cols-6 font-semibold text-gray-700 text-sm border-b pb-3">
+        <div className="grid grid-cols-8 font-semibold text-gray-700 text-sm border-b pb-3">
+
             
             <div className="col-span-1">User Name</div>
             <div className="col-span-1">Contact Number</div>
             <div className="col-span-1">Tech Name</div>
-            <div className="col-span-1">Category</div>
+            <div className="col-span-1">Consultation Fee</div>
             <div className="col-span-1">Tech Status</div>
             <div className="col-span-1">Date</div>
             <div className="col-span-1">User remark</div>
@@ -80,26 +92,26 @@ const RefundRequest: React.FC = () => {
           </div>
           <div className="mt-4 space-y-4">
             {refundreq && refundreq.map((req) => (
-              <div key={req._id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3">
+              <div key={req._id} className="grid grid-cols-8 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3">
                 
                 <div className="col-span-1">{req.username}</div>
                 <div className="col-span-1">{req.userphone}</div>
                 <div className="col-span-1">{req.techname}</div>
-                <div className="col-span-1">{req.Category}</div>
+                <div className="col-span-1">{req.consultationFee}</div>
                 <div className="col-span-1">{req.techStatus}</div>
                 <div className="col-span-1">{req.date}</div>
                 <div className="col-span-1">{req.userremark}</div>
                 <div className="col-span-1">{req.consultationpaymentStatus}</div>
 
-                {/* <div className="col-span-1 text-center">
-                  <button className="bg-[#FFDF00] text-black px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>AcceptRefund(req)} >
+                <div className="col-span-1 text-center">
+                  <button className="bg-[#FFDF00] text-black px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>AcceptRefund(req._id)} >
                     Accept
                   </button>
-                  <button className="bg-[#FFDF00] text-black px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>RejectRefund(req)} >
+                  {/* <button className="bg-[#FFDF00] text-black px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>RejectRefund(req)} >
                     Reject
-                  </button>
+                  </button> */}
                  
-                </div> */}
+                </div>
               </div>
             ))}
           </div>

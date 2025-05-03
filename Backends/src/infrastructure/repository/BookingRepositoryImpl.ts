@@ -232,5 +232,32 @@ export class bookingrepositoryImpl implements BookingRepository{
           .populate('addressId', 'addressname')
           .lean<IBooking>();
       }
+
+      async fetchBookingswithremark(): Promise<IBooking[]> {
+        return await BookingModels.find({
+          $or: [
+            { userremark: { $exists: true, $ne: "" } },
+            { techremark: { $exists: true, $ne: "" } }
+          ]
+        })
+        .populate({
+          path:"userId",
+          select:"name phone"
+        })             
+        .populate({
+        path:"technicianId",
+        select:"name profileimgurl categoryid phone",
+        populate:{
+            path:"categoryid",
+            select:"name"
+        }
+    })
+    .populate({
+        path:"addressId",
+        select:"addressname"
+    })
+    .exec()
+      }
+      
     
 }

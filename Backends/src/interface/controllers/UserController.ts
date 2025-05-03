@@ -448,6 +448,7 @@ export class UserController{
               techid,
               addressId,
               location,
+              rateperhour, // ✅ add this
               date,
               amount,
       
@@ -461,6 +462,7 @@ export class UserController{
               booked_date:date,
               consultationFee:amount,
               consultationpayStatus: 'failed',
+              rateperhour: rateperhour, // ✅ add this
               
             });
         

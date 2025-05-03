@@ -20,6 +20,7 @@ export class ConfirmPayment{
         let booking = await this.bookingrepository.creates({
             userId: bookingdata.userId,
             technicianId: bookingdata.technicianId,
+            rateperhour: bookingdata.rateperhour, // ✅ ensure this line is here
             addressId: bookingdata.addressId,
             location: bookingdata.location!,
             booked_date: bookingdata.booked_date!,
