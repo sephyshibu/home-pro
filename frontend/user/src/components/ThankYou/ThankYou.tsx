@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 const ThankYouPage: React.FC = () => {
     const navigate=useNavigate()
     const handleClick=()=>{
-            navigate('/myaccount')
+            navigate('/myaccount/services')
     }
   return (
     <div className="min-h-screen flex flex-col">

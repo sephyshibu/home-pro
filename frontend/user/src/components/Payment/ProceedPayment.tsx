@@ -198,6 +198,7 @@ const PaymentPage: React.FC = () => {
       });
 
       toast.error("Payment failed. Please try again.");
+      navigate('/myaccount/services')
     });
 
       rzp.open();

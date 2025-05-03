@@ -60,7 +60,7 @@ const TechnicianRequestPage: React.FC = () => {
             setrequest((prev) =>
                 prev ? prev.filter((r) => r._id !== id) : null
               );
-          
+            closeModal()
             
             toast.success("request accepted")
 

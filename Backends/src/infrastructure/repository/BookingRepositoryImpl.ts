@@ -102,6 +102,7 @@ export class bookingrepositoryImpl implements BookingRepository{
 
       async fetchbookingByUserId(userId:string):Promise<IBooking[]>{
         const bookings=await BookingModels.find({userId})
+                        .sort({_id:-1})
                         .populate({
                             path:"technicianId",
                             select:"name profileimgurl categoryid phone",
@@ -150,6 +151,7 @@ export class bookingrepositoryImpl implements BookingRepository{
 
       async fetchupcomingevents(techId: string): Promise<IBooking[] | null> {
           const bookings=await BookingModels.find({technicianId:techId,isconfirmedbyTech:"accepted",workstatus:{$ne:"completed"}})
+                          .sort({date:1})
                           .populate({
                             path:"userId",
                             select:"name phone"
