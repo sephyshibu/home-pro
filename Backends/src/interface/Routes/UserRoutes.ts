@@ -36,6 +36,11 @@ import { FetchBookingbyUserId } from '../../application/usecase/booking/fetchBoo
 import { PasswordChange } from '../../application/usecase/User/Password/Changepassword'
 import { HandleFailedPayment } from '../../application/usecase/booking/handleFailedPayment'
 import { RetryConfirmPayment } from '../../application/usecase/booking/retryconfirmpayment'
+import { updateusercancelreason } from '../../application/usecase/booking/updateUserCancelreason'
+
+
+
+
 const router=express.Router()
 
 
@@ -77,7 +82,7 @@ const fetchbook=new FetchBookingbyUserId(bookingrepository)
 const passchange= new PasswordChange(userRepository)
 const handlefailpayment= new HandleFailedPayment(bookingrepository)
 const retrypaymet=new RetryConfirmPayment(bookingrepository,walletRepository,transactionrepository)
-
+const usercancelupdate=new updateusercancelreason(bookingrepository)
 const usercontroller= new UserController(
     signupuser,
     checkemailUser,
@@ -103,7 +108,8 @@ const usercontroller= new UserController(
     fetchbook,
     passchange,
     handlefailpayment,
-    retrypaymet
+    retrypaymet,
+    usercancelupdate
   
     
 
@@ -140,4 +146,6 @@ router.get('/fetchbookings/:userId', authToken,(req,res)=>usercontroller.fetchbo
 router.post('/password/:userId',authToken,(req,res)=>usercontroller.passwordChanges(req,res))
 router.post('/payment-failed',authToken,(req,res)=>usercontroller.Failedpayment(req,res))
 router.post('/confirm-payment-retry',authToken,(req,res)=>usercontroller.retryconfirmpayment(req,res))
+router.post('/updatecancelreason/:bookingId',authToken,(req,res)=>usercontroller.updatecancelreason(req,res))
+
 export {router as userRouter}

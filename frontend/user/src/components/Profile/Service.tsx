@@ -23,6 +23,8 @@ interface servicepage {
   workaddress:string,
   totalhours:number,
   pincode:string,
+  userremark:string,
+  techremark:string
 
 }
 
@@ -81,6 +83,20 @@ const MyServicesPage: React.FC = () => {
       try {
         const response=await updatecancelreason(bookingId,form.userremark)
         setisopen(false)
+        toast.success(response.message)
+           // Update the booking state with new remark
+    setbooking((prev) =>
+      prev
+        ? prev.map((item) =>
+            item._id === bookingId ? { ...item, userremark: form.userremark } : item
+          )
+        : []
+    );
+
+    // Reset the form
+    setform({ userremark: "" });
+
+     
 
       } catch (err) {
         console.error("Error fetching booking details", err);
@@ -171,9 +187,18 @@ const MyServicesPage: React.FC = () => {
                     <td className={`px-4 py-3 font-medium ${getTechStatusColor(bookingItem.techStatus)}`}>
                       {bookingItem.techStatus}
                     </td>
-                    <td className={`px-4 py-3 font-medium ${getWorkStatusColor(bookingItem.workStatus)}`}>
-                      {bookingItem.workStatus}
-                    </td>
+                    <td className="px-4 py-3">
+                    {(bookingItem.userremark=='' && bookingItem.workStatus.toLowerCase() === "pending") && (
+                      <span className={`block font-medium ${getWorkStatusColor(bookingItem.workStatus)}`}>
+                        {bookingItem.workStatus}
+                      </span>
+                    )}
+                    {bookingItem.userremark&& (
+                      <span className="inline-block mt-1 text-xs text-red-600 bg-red-100 px-2 py-0.5 rounded-full">
+                        {bookingItem.userremark}
+                      </span>
+                    )}
+                  </td>
                     <td className="px-4 py-3">{bookingItem.date}</td>
                     <td className="px-4 py-3 text-center">
                       <button className="bg-[#00BFFF] hover:bg-[#009FCC] text-white px-4 py-1 rounded-md" onClick={()=>handleView(bookingItem)}>
@@ -191,7 +216,7 @@ const MyServicesPage: React.FC = () => {
                   )}
                   </td>
                   <td>
-                  {bookingItem.techStatus.toLowerCase()=="pending" && (
+                  {(bookingItem.techStatus.toLowerCase()=="pending" && bookingItem.userremark=='') && (
                     <button 
                         onClick={()=>cancel(bookingItem._id)}
                         className="mt-2 bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
@@ -217,8 +242,8 @@ const MyServicesPage: React.FC = () => {
                     <DialogPanel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl  z-[1001]">
                     <DialogTitle className="text-lg font-bold mb-4">Add Cancel reason</DialogTitle>
                     <div className="space-y-3">
-                        <input name="addressname" value={form.userremark} onChange={handleChange} placeholder="Address name" className="w-full border px-3 py-2 rounded" />
-                        <button onClick={()=>handleAdduserremark(setbookingid.toString())} className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
+                        <input name="userremark" value={form.userremark} onChange={handleChange} placeholder="Address name" className="w-full border px-3 py-2 rounded" />
+                        <button onClick={()=> bookingid && handleAdduserremark(bookingid)} className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
                                   Submit Cancel Reason
                         </button>
                     </div>

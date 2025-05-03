@@ -25,7 +25,7 @@ import { FetchBookingbyUserId } from '../../application/usecase/booking/fetchBoo
 import { PasswordChange } from '../../application/usecase/User/Password/Changepassword';
 import { HandleFailedPayment } from '../../application/usecase/booking/handleFailedPayment';
 import { RetryConfirmPayment } from '../../application/usecase/booking/retryconfirmpayment';
-
+import { updateusercancelreason } from '../../application/usecase/booking/updateUserCancelreason';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -54,6 +54,7 @@ export class UserController{
         private passwordchnaging:PasswordChange,
         private failpayment:HandleFailedPayment,
         private retrypaymet:RetryConfirmPayment,
+        private updateusercancelreasons:updateusercancelreason
  
     
     ){}
@@ -468,6 +469,20 @@ export class UserController{
             console.error("Failed to log payment failure:", error);
             res.status(500).json({ success: false, message: "Internal Server Error" });
           }
+
+    }
+    async updatecancelreason(req:Request,res:Response):Promise<void>{
+        try {
+            const{bookingId}=req.params
+            const{userremark}=req.body
+          
+            console.log("userremat=rk",userremark)
+            const result=await this.updateusercancelreasons.updateusercanel(bookingId,userremark)
+            res.status(200).json({message:"Update Cancel reason",updatebooker:result.updatebooker})
+        } catch (error) {
+            console.error("Error updating cancel reason", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
 
     }
     
