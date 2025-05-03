@@ -224,5 +224,13 @@ export class bookingrepositoryImpl implements BookingRepository{
           throw error;
         }
       }
+
+      async findByIdWithPopulates(id: string): Promise<IBooking | null> {
+        return await BookingModels.findById(id)
+          .populate('userId', 'name')
+          .populate('technicianId', 'name')
+          .populate('addressId', 'addressname')
+          .lean<IBooking>();
+      }
     
 }

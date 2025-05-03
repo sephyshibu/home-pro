@@ -28,4 +28,23 @@ export class TransactionRepositoryImpl implements TransactionRepository {
 
       }));
     }
+
+    async fetchtransaction(): Promise<ITransaction[]>{
+      const result=await TransactionModel.find()
+      .populate({
+        path: "referenceId",
+        populate: {
+          path: "userId",
+          select: "name", // Only name field from user
+        },
+      });
+  
+      return result
+
+        
+    }
+
+    async findById(id: string): Promise<ITransaction | null> {
+      return await TransactionModel.findById(id);
+    }
   }

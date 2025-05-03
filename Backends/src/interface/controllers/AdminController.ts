@@ -11,6 +11,8 @@ import { fetchCategory } from "../../application/usecase/Admin/Fetchcategory";
 import { BlockUnBlockCat } from "../../application/usecase/Admin/BlockUnBlockCategory";
 import { EditCategory } from "../../application/usecase/Category/Editcategory";
 import { GetCategoryById } from "../../application/usecase/Category/GetCategory";
+import { Gettransactions } from "../../application/usecase/Transactions/GetTransaction";
+import { GetTransactionWithBookings } from "../../application/usecase/Transactions/TransactionBookingdetails";
 export class AdminController{
     constructor(
         private loginadmin:Login,
@@ -24,7 +26,9 @@ export class AdminController{
         private fetchallCategory:fetchCategory,
         private BlockUnblockCat:BlockUnBlockCat,
         private editcat:EditCategory,
-        private getCategoryById:GetCategoryById
+        private getCategoryById:GetCategoryById,
+        private gettransactiondetails:Gettransactions,
+        private gettransactionwithBookings:GetTransactionWithBookings
     ){}
 
 
@@ -68,6 +72,16 @@ export class AdminController{
         try {
             const cat=await this.fetchallCategory.fetch()
             res.status(200).json({cat})
+        } catch (error:any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    async fetchTransaction(req:Request,res:Response):Promise<void>{
+        console.log("fetch transaction")
+        try {
+            const transaction=await this.gettransactiondetails.gettransaction()
+            console.log("controller transaction",transaction)
+            res.status(200).json({transaction}) 
         } catch (error:any) {
             res.status(500).json({ message: error.message });
         }
@@ -167,7 +181,19 @@ export class AdminController{
             res.status(400).json({ message: error.message });
         }
     }
-    
+
+    async transactionwithBookings(req:Request,res:Response):Promise<void>{
+        try {
+            const {transId}=req.params
+            const result=await this.gettransactionwithBookings.execute(transId)
+            res.status(200).json({result})
+        } catch (error:any) {
+            res.status(400).json({ message: error.message });
+        }
     }
+
+ 
+    
+}
 
     

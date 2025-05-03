@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import User from "./User";
 import Tech from'./Tech'
+import TransactionPage from "./Transactions";
 import TechList from './TechList'
 import { useNavigate } from "react-router";
 import Category from './Category'
@@ -73,7 +74,7 @@ const AdminDashboard: React.FC = () => {
               <Category/>
             </div>
           </div>}
-        {/* {activeTab === "Transactions" && <TransactionsView />}  */}
+        {activeTab === "Transactions" && <TransactionPage />} 
       </div>
 
       {/* Footer */}

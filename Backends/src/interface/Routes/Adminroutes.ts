@@ -16,12 +16,18 @@ import { categoryRepositoryImpl } from '../../infrastructure/repository/Category
 import { BlockUnBlockCat } from '../../application/usecase/Admin/BlockUnBlockCategory'
 import { EditCategory } from '../../application/usecase/Category/Editcategory'
 import { GetCategoryById } from '../../application/usecase/Category/GetCategory'
+import { Gettransactions } from '../../application/usecase/Transactions/GetTransaction'
+import { TransactionRepositoryImpl } from '../../infrastructure/repository/TransactionRepositoryImpl'
+import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails'
+import { bookingrepositoryImpl } from '../../infrastructure/repository/BookingRepositoryImpl'
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
 const TechRepository = new TechRepositoryImpl()
 const adminRepository= new AdminRepositoryImpl()
 const categoryrepository=new categoryRepositoryImpl()
+const transactionrepository=new TransactionRepositoryImpl()
+const bookingrepository= new bookingrepositoryImpl()
 
 
 const loginadmin=new Login(adminRepository)
@@ -36,6 +42,9 @@ const addcat= new AddCategory(categoryrepository)
 const blockcat= new BlockUnBlockCat(categoryrepository)
 const editcategory=new EditCategory(categoryrepository)
 const getcategorybyId= new GetCategoryById(categoryrepository)
+const gettransaction=new Gettransactions(transactionrepository)
+const gettransactionwithbookings=new GetTransactionWithBookings(transactionrepository, bookingrepository)
+
 
 const adminController= new AdminController(
     loginadmin,
@@ -49,7 +58,9 @@ const adminController= new AdminController(
     fetchcat,
     blockcat,
     editcategory,
-    getcategorybyId
+    getcategorybyId,
+    gettransaction,
+    gettransactionwithbookings
    
 )
 console.log("adminrouter")
@@ -65,4 +76,6 @@ router.post('/addcategory',(req,res)=>adminController.addcategorys(req,res))
 router.patch('/category/:catid',(req,res)=>adminController.blockunblockcatagory(req,res))
 router.patch('/editcategory/:catid',(req,res)=>adminController.editcategory(req,res))
 router.get('/category/:catid',(req,res)=>adminController.fetchCategoryById(req,res))
+router.get('/fetchtransactions',(req,res)=>adminController.fetchTransaction(req,res))
+router.get('/fetchtransactionwithBookings/:transId',(req,res)=>adminController.transactionwithBookings(req,res))
 export {router as adminRouter}
