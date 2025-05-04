@@ -2,7 +2,7 @@ import axiosInstanceadmin from "../../axios";
 
 export const acceptrefundrequest=async(bookingId:string)=>{
     try {
-        const result=await axiosInstanceadmin.post(`/fetchrefundreqall/${bookingId}`)
+        const result=await axiosInstanceadmin.post(`/acceptrefund/${bookingId}`)
 
         return result.data
     } catch (error: any) {

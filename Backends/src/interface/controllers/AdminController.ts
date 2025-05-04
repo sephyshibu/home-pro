@@ -14,6 +14,7 @@ import { GetCategoryById } from "../../application/usecase/Category/GetCategory"
 import { Gettransactions } from "../../application/usecase/Transactions/GetTransaction";
 import { GetTransactionWithBookings } from "../../application/usecase/Transactions/TransactionBookingdetails";
 import { FetchrefundRequest } from "../../application/usecase/booking/fetchrefundbookings";
+import { Refudaccept } from "../../application/usecase/booking/refundaccept";
 export class AdminController{
     constructor(
         private loginadmin:Login,
@@ -30,7 +31,8 @@ export class AdminController{
         private getCategoryById:GetCategoryById,
         private gettransactiondetails:Gettransactions,
         private gettransactionwithBookings:GetTransactionWithBookings,
-        private fetchrefundrequest:FetchrefundRequest
+        private fetchrefundrequest:FetchrefundRequest,
+        private refundaccept:Refudaccept
     ){}
 
 
@@ -203,6 +205,19 @@ export class AdminController{
             res.status(500).json({ message: "Internal Server Error", error: error.message });
         }
     }
+
+    async acceptingrefund(req:Request,res:Response):Promise<void>{
+            try {
+                const{bookingId}=req.params
+                const result =await this.refundaccept.processrefund(bookingId)
+                res.status(200).json({message:"refunded accepted"})
+                
+            } catch (error:any) {
+                console.error("Error in refund accepted:", error);
+                res.status(500).json({ message: "Internal Server Error", error: error.message });
+            }
+    }
+    
 
  
     

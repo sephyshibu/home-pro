@@ -21,6 +21,8 @@ import { TransactionRepositoryImpl } from '../../infrastructure/repository/Trans
 import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails'
 import { bookingrepositoryImpl } from '../../infrastructure/repository/BookingRepositoryImpl'
 import { FetchrefundRequest } from '../../application/usecase/booking/fetchrefundbookings'
+import { Refudaccept } from '../../application/usecase/booking/refundaccept'
+import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
@@ -29,7 +31,7 @@ const adminRepository= new AdminRepositoryImpl()
 const categoryrepository=new categoryRepositoryImpl()
 const transactionrepository=new TransactionRepositoryImpl()
 const bookingrepository= new bookingrepositoryImpl()
-
+const walletrepository=new walletRepositoryimpl()
 
 const loginadmin=new Login(adminRepository)
 const refreshtoken= new RefreshToken()
@@ -46,7 +48,7 @@ const getcategorybyId= new GetCategoryById(categoryrepository)
 const gettransaction=new Gettransactions(transactionrepository)
 const gettransactionwithbookings=new GetTransactionWithBookings(transactionrepository, bookingrepository)
 const fetchrefundrequestwithremark= new FetchrefundRequest(bookingrepository)
-
+const refundaccepted= new Refudaccept(bookingrepository,walletrepository)
 const adminController= new AdminController(
     loginadmin,
     refreshtoken,
@@ -62,7 +64,8 @@ const adminController= new AdminController(
     getcategorybyId,
     gettransaction,
     gettransactionwithbookings,
-    fetchrefundrequestwithremark
+    fetchrefundrequestwithremark,
+    refundaccepted
    
 )
 console.log("adminrouter")
@@ -81,4 +84,8 @@ router.get('/category/:catid',(req,res)=>adminController.fetchCategoryById(req,r
 router.get('/fetchtransactions',(req,res)=>adminController.fetchTransaction(req,res))
 router.get('/fetchtransactionwithBookings/:transId',(req,res)=>adminController.transactionwithBookings(req,res))
 router.get('/fetchrefundreqall',(req,res)=>adminController.fetchingrequestrefund(req,res))
+router.post('/acceptrefund/:bookingId',(req,res)=>adminController.acceptingrefund(req,res))
+
+
+
 export {router as adminRouter}

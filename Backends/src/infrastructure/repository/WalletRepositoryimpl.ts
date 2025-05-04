@@ -39,4 +39,7 @@ export class walletRepositoryimpl implements walletRepository{
         throw new Error(`Error finding wallet: ${error.message}`);
         }
     }
+    async increasebalance(ownerId: string, amount: number): Promise<void> {
+        await WalletModel.updateOne({ownerId},{$inc:{balance:amount}}).exec()
+    }
 }
