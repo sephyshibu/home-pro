@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { walletdetails } from '../../api/Wallet/fetchWallet';
+import axiosInstanceuser from '../../axios';
 
 interface Wallet{
     _id:string,
@@ -11,11 +12,23 @@ interface Wallet{
     status:string,
 }
 
+interface Walletbalance{
+    amount:number
+}
+
 export default function WalletPage() {
     const userId=localStorage.getItem('userId')
     const [walletlist,setwalletdetails]=useState<Wallet[]|null>([])
+    const[balance,setbalance]=useState<Walletbalance>()
     const navigate=useNavigate()
     useEffect(()=>{
+        const balance=async()=>{
+                 const response=await axiosInstanceuser.get(`/fetchwalletbalance/${userId}`)
+                 console.log("asf",response.data.balance)
+                 setbalance(response.data.balance)
+        }
+        balance()
+       
         const fetchWallet=async()=>{
             if(!userId){
                 navigate('/login')
@@ -42,7 +55,7 @@ export default function WalletPage() {
         
 
         <section className="flex-1 p-8">
-          <h2 className="text-xl font-semibold mb-4">Wallet Balance : ₹ 2,200</h2>
+          <h2 className="text-xl font-semibold mb-4">Wallet Balance : ₹{balance}</h2>
 
           <div className="flex gap-2 mb-4">
             <input type="text" placeholder="Enter Amount" className="border px-4 py-2 rounded-md w-1/3" />

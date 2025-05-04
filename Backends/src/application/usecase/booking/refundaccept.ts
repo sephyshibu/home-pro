@@ -13,7 +13,7 @@ export class Refudaccept{
         if(!booking) throw new Error("no bookkking found")
 
         if(booking.consultationpayStatus!=="completed") throw new Error("Refund not applicable")
-
+        
         const refundamount=booking.consultationFee
 
         const userwallet=await this.walletrepository.findById(booking.userId.toString())
@@ -24,7 +24,7 @@ export class Refudaccept{
         await this.walletrepository.increasebalance(booking.userId.toString(), refundamount)
 
         await TransactionModel.create({
-            ownerId: userwallet.id,
+            ownerId: userwallet.ownerId,
             userType: 'user',
             referenceId: booking.id,
             type: 'CREDIT',
@@ -33,6 +33,7 @@ export class Refudaccept{
             purpose: 'Refund for booking cancellation',
             amount: refundamount,
           });
+          await this.bookingrepository.update(bookingId, { refundrequestAccept: true });
         
           return "Refund successfully processed to user's wallet";
         }

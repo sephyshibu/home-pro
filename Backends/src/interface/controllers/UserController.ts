@@ -27,6 +27,8 @@ import { HandleFailedPayment } from '../../application/usecase/booking/handleFai
 import { RetryConfirmPayment } from '../../application/usecase/booking/retryconfirmpayment';
 import { updateusercancelreason } from '../../application/usecase/booking/updateUserCancelreason';
 import { GetWallet } from '../../application/usecase/Wallet/fetchWallet';
+import { FetchWallet } from '../../application/usecase/User/Wallet/getwallet';
+
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -56,7 +58,8 @@ export class UserController{
         private failpayment:HandleFailedPayment,
         private retrypaymet:RetryConfirmPayment,
         private updateusercancelreasons:updateusercancelreason,
-        private fetchwalletdetails:GetWallet
+        private fetchwalletdetails:GetWallet,
+        private getwalletbalance:FetchWallet
     
     ){}
 
@@ -487,6 +490,20 @@ export class UserController{
             res.status(500).json({ message: "Internal server error" });
         }
 
+    }
+
+    async fetchbalance(req:Request,res:Response):Promise<void>{
+        try {
+            const{userId}=req.params
+          
+          
+           
+            const result=await this.getwalletbalance.fetchwalletbalance(userId)
+            res.status(200).json({message:"Balance",balance:result.balance})
+        } catch (error) {
+            console.error("Error in fetching balance", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
     }
 
     async fetchdetailswallet(req:Request,res:Response):Promise<void>{

@@ -26,7 +26,8 @@ export class FetchrefundRequest{
             workaddress: booking.addressId?.addressname || "N/A",
             totalhours: booking.workTime?.length || 0,
             userremark: booking.userremark || "",
-            techremark: booking.techremark || ""
+            techremark: booking.techremark || "",
+            refundrequestAccept:booking.refundrequestAccept
           }));
           
 
