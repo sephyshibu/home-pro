@@ -37,7 +37,7 @@ import { PasswordChange } from '../../application/usecase/User/Password/Changepa
 import { HandleFailedPayment } from '../../application/usecase/booking/handleFailedPayment'
 import { RetryConfirmPayment } from '../../application/usecase/booking/retryconfirmpayment'
 import { updateusercancelreason } from '../../application/usecase/booking/updateUserCancelreason'
-
+import { GetWallet } from '../../application/usecase/Wallet/fetchWallet'
 
 
 
@@ -83,6 +83,9 @@ const passchange= new PasswordChange(userRepository)
 const handlefailpayment= new HandleFailedPayment(bookingrepository)
 const retrypaymet=new RetryConfirmPayment(bookingrepository,walletRepository,transactionrepository)
 const usercancelupdate=new updateusercancelreason(bookingrepository)
+const walletdetails= new GetWallet(transactionrepository)
+
+
 const usercontroller= new UserController(
     signupuser,
     checkemailUser,
@@ -109,7 +112,8 @@ const usercontroller= new UserController(
     passchange,
     handlefailpayment,
     retrypaymet,
-    usercancelupdate
+    usercancelupdate,
+    walletdetails
   
     
 
@@ -147,5 +151,5 @@ router.post('/password/:userId',authToken,(req,res)=>usercontroller.passwordChan
 router.post('/payment-failed',authToken,(req,res)=>usercontroller.Failedpayment(req,res))
 router.post('/confirm-payment-retry',authToken,(req,res)=>usercontroller.retryconfirmpayment(req,res))
 router.post('/updatecancelreason/:bookingId',authToken,(req,res)=>usercontroller.updatecancelreason(req,res))
-
+router.get('/fetchwalletdetails/:userId',authToken,(req,res)=>usercontroller.fetchdetailswallet(req,res))
 export {router as userRouter}

@@ -23,6 +23,7 @@ import { bookingrepositoryImpl } from '../../infrastructure/repository/BookingRe
 import { FetchrefundRequest } from '../../application/usecase/booking/fetchrefundbookings'
 import { Refudaccept } from '../../application/usecase/booking/refundaccept'
 import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
+import { EmailService } from '../../application/service/EmailService'
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
@@ -32,6 +33,7 @@ const categoryrepository=new categoryRepositoryImpl()
 const transactionrepository=new TransactionRepositoryImpl()
 const bookingrepository= new bookingrepositoryImpl()
 const walletrepository=new walletRepositoryimpl()
+const emailservices=new EmailService()
 
 const loginadmin=new Login(adminRepository)
 const refreshtoken= new RefreshToken()
@@ -39,7 +41,7 @@ const fetchallUser= new fetchUser(UserRepository)
 const unblocblock= new BlockUnblock(UserRepository)
 const fetchalltech= new fetchtech(TechRepository)
 const unblockblocktech= new BlockUnBlock(TechRepository)
-const addtech= new Signuptech(TechRepository)
+const addtech= new Signuptech(TechRepository,emailservices)
 const fetchcat= new fetchCategory(categoryrepository)
 const addcat= new AddCategory(categoryrepository)
 const blockcat= new BlockUnBlockCat(categoryrepository)

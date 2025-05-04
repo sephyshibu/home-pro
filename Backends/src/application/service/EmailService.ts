@@ -31,4 +31,20 @@ export class EmailService{
           return false;
         }
     }
+
+    async sendEmail(email:string,password:string):Promise<Boolean>{
+        try {
+            const info=await this.transporter.sendMail({
+                from:process.env.NODEMAILER_GMAIL,
+                to:email,
+                subject:"Verify Your account- HOmePro",
+                text:  `Techncina registered email-${email} and password : ${password}`,
+                
+            })
+            return info.accepted.length > 0;
+        } catch (error) {
+          console.error("Error sending email:", error);
+          return false;
+        }
+    }
 }

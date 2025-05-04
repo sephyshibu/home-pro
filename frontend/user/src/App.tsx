@@ -19,6 +19,7 @@ import ThankYouPage from './components/ThankYou/ThankYou';
 import Services from './components/Profile/Service'
 import ViewBookingsProfile from './components/Profile/ViewBookings';
 import ChangePasswords from './components/Profile/Password';
+import WalletPage from './components/Profile/Wallet';
 function App() {
  
 
@@ -49,6 +50,7 @@ function App() {
           <Route path='addressmanagment' element={<AddressPage/>}/>
           <Route path='services' element={<Services/>}/>
           <Route path='passwordchange' element={<ChangePasswords/>}/>
+          <Route path='wallet' element={<WalletPage/>}/>
         </Route>
       
       
