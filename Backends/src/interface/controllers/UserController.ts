@@ -240,7 +240,11 @@ export class UserController{
 
             if (error.message === "technician not found") {
                 res.status(404).json({ message: "No technicians available for the selected slot." });
-              } else {
+              }
+              else if (error.message==="date is not valid date"){
+                res.status(400).json({message:"Date is not valid date"})
+              }
+               else {
                 res.status(500).json({ message: "Internal server error" });
               }
             console.error("Error fetching technicians:", error);
