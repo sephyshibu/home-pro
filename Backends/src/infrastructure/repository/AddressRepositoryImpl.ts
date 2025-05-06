@@ -1,6 +1,7 @@
 import { Addressrepository } from "../../domain/repository/Addressrepository";
 import { IAddress } from "../../domain/models/Address";
 import { AddressModel } from "../db/schemas/AddressModel";
+import mongoose from "mongoose";
 
 export class AddressRepositoryImpl implements Addressrepository {
     async fetchaddress(userId: string): Promise<IAddress[] | null> {
@@ -16,9 +17,17 @@ export class AddressRepositoryImpl implements Addressrepository {
       return  newAddress.save();
     }
   
-    async findByaddressName(addressname: string): Promise<IAddress | null> {
-      return await AddressModel.findOne({ addressname });
-    }
+    async findByAddressName(userId: string, addressname: string): Promise<IAddress | null> {
+      console.log(userId,addressname)
+      console.log("dfwefergethg")
+      return await AddressModel.findOne({
+        userId: new mongoose.Types.ObjectId(userId),
+          addressname: addressname.trim().toLowerCase()
+      });
+      
+  }
+  
+  
   
     async fetchoneaddress(addressid: string): Promise<IAddress | null> {
       return await AddressModel.findById(addressid);

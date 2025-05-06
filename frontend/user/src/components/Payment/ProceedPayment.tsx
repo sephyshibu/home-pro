@@ -44,6 +44,7 @@ interface Technician{
 const PaymentPage: React.FC = () => {
   const [selectedMethod, setSelectedMethod] = useState("RazorPay");
   const [addresses, setAddresses] = useState<Address[]>([]);
+  const [errors, setErrors] = useState<Partial<typeof form>>({});
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -109,14 +110,49 @@ const PaymentPage: React.FC = () => {
         };
         getAddresses();
       }, []);
+
+      const validateForm = () => {
+        const newErrors: Partial<typeof form> = {};
+        const onlyNumbers = /^\d+$/;
+        const onlySpecialChars = /^[^\w\s]+$/;
+      
+        const validateField = (key: keyof typeof form, label: string) => {
+          const value = form[key].trim();
+      
+          if (!value) {
+            newErrors[key] = `${label} is required`;
+          } else if (onlyNumbers.test(value)) {
+            newErrors[key] = `${label} cannot be only numbers`;
+          } else if (onlySpecialChars.test(value)) {
+            newErrors[key] = `${label} cannot be only special characters`;
+          }
+        };
+      
+        if (!form.types) newErrors.types = "Type is required";
+        validateField("addressname", "Address name");
+        validateField("street", "Street");
+        validateField("city", "City");
+        validateField("state", "State");
+        validateField("country", "Country");
+      
+        if (!form.pincode.trim()) {
+          newErrors.pincode = "PIN code is required";
+        } else if (!/^\d{6}$/.test(form.pincode)) {
+          newErrors.pincode = "PIN code must be exactly 6 digits";
+        }
+      
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+      };
+    
       
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
       };
-      
+    
     const handleAddAddress = async () => {
         if (!userId) return;
-      
+       if(!validateForm()) return
         try {
           const res = await addaddress(userId, form);
           toast.success("Address added successfully");
@@ -147,6 +183,8 @@ const PaymentPage: React.FC = () => {
         });
         return null;
       };
+
+    
     const handlePayment=async()=>{
         if (!selectedLocation || !selectedMethod || !selectedAddressId) {
             toast.error("Please select all required fields");
@@ -241,7 +279,7 @@ const PaymentPage: React.FC = () => {
           <div className="space-y-2">
             <label className="font-medium block">Pay With:</label>
             <div className="flex gap-4">
-              {[ "RazorPay", "Wallet"].map((method) => (
+              {[ "RazorPay"].map((method) => (
                 <label key={method} className="flex items-center gap-2">
                   <input
                     type="radio"
@@ -329,12 +367,25 @@ const PaymentPage: React.FC = () => {
                 <option value="Home">Home</option>
                 <option value="Work">Work</option>
                 </select>
+                {errors.types && <p className="text-red-500 text-sm">{errors.types}</p>}
+
                 <input name="addressname" value={form.addressname} onChange={handleChange} placeholder="Address name" className="w-full border px-3 py-2 rounded" />
+                {errors.addressname && <p className="text-red-500 text-sm">{errors.addressname}</p>}
                 <input name="street" value={form.street} onChange={handleChange} placeholder="Street" className="w-full border px-3 py-2 rounded" />
+                {errors.street && <p className="text-red-500 text-sm">{errors.street}</p>}
+street
                 <input name="city" value={form.city} onChange={handleChange} placeholder="City" className="w-full border px-3 py-2 rounded" />
+                
+                {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
                 <input name="state" value={form.state} onChange={handleChange} placeholder="State" className="w-full border px-3 py-2 rounded" />
+                {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
+                
                 <input name="country" value={form.country} onChange={handleChange} placeholder="Country" className="w-full border px-3 py-2 rounded" />
+                {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
+                
                 <input name="pincode" value={form.pincode} onChange={handleChange} placeholder="PIN Code" className="w-full border px-3 py-2 rounded" />
+                {errors.pincode && <p className="text-red-500 text-sm">{errors.pincode}</p>}
+                
                 <button onClick={handleAddAddress} className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
                 Save Address
                 </button>

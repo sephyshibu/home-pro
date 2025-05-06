@@ -286,9 +286,12 @@ export class UserController{
                 country,
                 pincode
             );
+            console.log("adff",result)
             res.status(201).json({message:"added Successfully"});
-        } catch (err: any) {
-            res.status(400).json({ message: err.message });
+        }catch (err: any) {
+            console.error("Error adding address:", err);
+            const errorMessage = err?.message || "An unexpected error occurred";
+            res.status(400).json({ message: errorMessage });
         }
     }
     async editUserAddress(req: Request, res: Response): Promise<void> {
@@ -307,8 +310,10 @@ export class UserController{
                 pincode
             });
             res.status(200).json(result);
-        } catch (err: any) {
-            res.status(400).json({ message: err.message });
+        }catch (err: any) {
+            console.error("Error adding address:", err);
+            const errorMessage = err?.message || "An unexpected error occurred";
+            res.status(400).json({ message: errorMessage });
         }
     }
     async deleteUserAddress(req: Request, res: Response): Promise<void> {

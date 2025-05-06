@@ -5,10 +5,8 @@ export const addaddress=async(userId:string,addressdata:any)=>{
         const response=await axiosInstanceuser.post(`/addaddress/${userId}`,addressdata)
         return response.data
     }catch (error: any) {
-            console.error("Error adding address:", error);
-            throw new Error(
-              error?.response?.data?.message || "Failed to add address"
-            );
+      const message = error?.response?.data?.message || "Something went wrong";
+      throw new Error(message); // This is important
     }
     }
 

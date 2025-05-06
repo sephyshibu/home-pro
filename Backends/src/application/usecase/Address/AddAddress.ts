@@ -8,9 +8,11 @@ export class AddAddress{
         console.log("types", types)
         const sanitizedaddressname=addressname.trim().toLowerCase()
         console.log(sanitizedaddressname)
-        const existing=await this.addressrepository.findByaddressName(sanitizedaddressname)
+        const existing=await this.addressrepository.findByAddressName(userId,sanitizedaddressname)
+        console.log('existing',existing)
         if(existing){
-            throw new Error("this address is already added")
+            console.log("existin")
+            throw new Error("This address is already added");
         } 
         console.log("dasdf")
 
