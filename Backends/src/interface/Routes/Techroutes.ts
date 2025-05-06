@@ -12,6 +12,7 @@ import { bookingrepositoryImpl } from '../../infrastructure/repository/BookingRe
 import { FetchBookingByTechId } from '../../application/usecase/booking/fetchBookingsByTech'
 import { bookingRequestAcceptByTech } from '../../application/usecase/booking/requestaccept'
 import { FetchUpcoming } from '../../application/usecase/booking/upcomingevents'
+import { PasswordChange } from '../../application/usecase/Tech/Password/ChangePassword'
 const router=express.Router()
 
 const techrepository= new TechRepositoryImpl()
@@ -27,6 +28,7 @@ const fetchCategories=new fetchCategory(categoryrepository)
 const fetchbookingbeforeacceptbytech= new FetchBookingByTechId(bookingrepository)
 const requestacceptbytech= new bookingRequestAcceptByTech(bookingrepository)
 const fetchupcmingevets= new FetchUpcoming(bookingrepository)
+const passchnage= new PasswordChange(techrepository)
 
 const TechController= new techController(
     logintechs,
@@ -36,7 +38,8 @@ const TechController= new techController(
     fetchCategories,
     fetchbookingbeforeacceptbytech,
     requestacceptbytech,
-    fetchupcmingevets
+    fetchupcmingevets,
+    passchnage
 )
 
 router.post('/login',(req,res)=>TechController.login(req,res))
@@ -49,4 +52,5 @@ router.get('/fetchcategories',authToken,(req,res)=>TechController.fetchCategory(
 router.get('/request/:techId',authToken,(req,res)=>TechController.fetchRequestByTech(req,res))
 router.post('/request/:bookingId', authToken,(req,res)=>TechController.bookingrequest(req,res))
 router.get('/upcmingevents/:techId', authToken,(req,res)=>TechController.fetchupcomingevnts(req,res))
+router.post('/password/:techId',authToken,(req,res)=>TechController.passwordChanges(req,res))
 export{router as techRouter}

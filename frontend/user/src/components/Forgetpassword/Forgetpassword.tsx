@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axiosInstanceuser from "../../axios";
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 import two from '../../../public/images/two.png'
 import one from '../../../public/images/one.png'
@@ -58,7 +59,7 @@ const ForgetPassword: React.FC = () => {
             
             } catch (error:any) {
               if(error.response.data.message=="email not found"){
-                alert("email not found")
+                toast.error("email not found")
               }
                 console.error("signup errror",error)
                 seterror(error.response?.data?.message ||"Something went wrong")   

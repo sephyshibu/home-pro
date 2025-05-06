@@ -4,6 +4,7 @@ import Dashboard from './componenst/Dashboard/Dashboard'
 import TechnicianLayout from './Layouts/TechLayout'
 import './App.css'
 import MyProfilePage from './componenst/Profile/Myacc'
+import ChangePasswords from './componenst/Profile/Passswordchange'
 import { Toaster } from 'react-hot-toast'
 function App() {
   return(
@@ -15,6 +16,7 @@ function App() {
         <Route path='/techdashboard' element={<Dashboard/>}/>
         <Route path='/myprofile' element={<TechnicianLayout/>}>
               <Route index element={<MyProfilePage/>}/>
+              <Route path='/myprofile/password' element={<ChangePasswords/>}/>
         </Route>
            
       </Routes>
