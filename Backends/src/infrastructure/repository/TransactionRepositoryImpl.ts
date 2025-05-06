@@ -31,6 +31,7 @@ export class TransactionRepositoryImpl implements TransactionRepository {
 
     async fetchtransaction(): Promise<ITransaction[]>{
       const result=await TransactionModel.find()
+      .sort({createdAt:-1})
       .populate({
         path: "referenceId",
         populate: {

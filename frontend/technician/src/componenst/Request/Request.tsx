@@ -134,14 +134,17 @@ const TechnicianRequestPage: React.FC = () => {
           </div>
           <div className="mt-4 space-y-4">
             {request && request.map((req) => (
-              <div key={req._id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3" onClick={()=>openModal(req)}>
+              <div key={req._id} className="grid grid-cols-6 items-center text-sm text-gray-800 bg-white rounded shadow px-4 py-3">
                 
                 <div className="col-span-1">{req.username}</div>
                 <div className="col-span-1">{req.userphone}</div>
                 <div className="col-span-1">{req.pincode}</div>
                 <div className="col-span-1">{req.date}</div>
-                <div className="col-span-1 text-center mt-6 flex justify-center gap-4">
+                <div className="col-span-1 flex justify-center items-center gap-2">
 
+                <button className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-yellow-500"  onClick={()=>openModal(req)}>
+                    View
+                  </button>
                   <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>handleAccept(req._id)}>
                     Accept
                   </button>

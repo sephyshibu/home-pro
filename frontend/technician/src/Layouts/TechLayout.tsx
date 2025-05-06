@@ -22,11 +22,11 @@ const TechnicianLayout = () => {
         <div className="text-xl font-bold text-blue-900">HomePro</div>
         
         {/* Center Navigation */}
-        <div className="flex space-x-6 text-black font-semibold">
+        {/* <div className="flex space-x-6 text-black font-semibold">
           <NavLink to="/events" className="hover:underline">Upcoming Events</NavLink>
           <NavLink to="/requests" className="hover:underline">Requests</NavLink>
           <NavLink to="/dashboard" className="hover:underline">Dashboard</NavLink>
-        </div>
+        </div> */}
 
         {/* Right Side Profile */}
         <div className="font-medium cursor-pointer">
