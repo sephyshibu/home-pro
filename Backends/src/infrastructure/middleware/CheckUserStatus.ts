@@ -38,6 +38,9 @@ export const authToken = async (req: Request, res: Response, next: NextFunction)
         res.status(401).json({ message: "Token expired" });  // Send 401 when token is expired
         return;
     }
+    if(error.message==="User ID is required in headers"){
+        res.status(400).json({message:"please login in"})
+    }
     if (error.message === "User is inactive") {
         res.status(403).json({ message: "User is inactive. Please logout", action: "logout" });
         return;

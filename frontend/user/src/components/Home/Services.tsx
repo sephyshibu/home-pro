@@ -27,6 +27,7 @@ const Services: React.FC = () => {
     date:"",
     time:""
   })
+  const userId=localStorage.getItem("userId")
   const[categories,setcategories]=useState<Category[]>([])
   const[selectedcat, setselectedcat]=useState<string|null>(null)
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
@@ -44,6 +45,7 @@ const Services: React.FC = () => {
   },[])
 
   const handleClicked = (categoryId:string) =>{
+   
     setselectedcat(categoryId)
     setisOpen(true);
 
@@ -157,6 +159,10 @@ const Services: React.FC = () => {
                   seterror(errs);
 
                   if (Object.keys(errs).length === 0) {
+                    if(!userId)
+                      {
+                        toast.error("please login ")
+                      }
 
                     if (selectedcat === null) {
                       toast.error("Category is not selected");

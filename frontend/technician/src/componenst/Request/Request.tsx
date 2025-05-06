@@ -4,6 +4,7 @@ import { fetchrequest } from '../../api/RequestFetch/requestfetch';
 import { aceptRequest } from '../../api/AcceptRequest/acceptrequest';
 import toast, { Toast } from 'react-hot-toast';
 import { Dialog,DialogPanel,DialogTitle } from '@headlessui/react';
+import { rejectRequest } from '../../api/RejectRequest/rejectrequest';
 interface Request {
     _id:string,
     username: string;
@@ -31,6 +32,9 @@ interface Request {
 const TechnicianRequestPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+    const [rejectReason, setRejectReason] = useState('');
+    const [rejectingId, setRejectingId] = useState<string | null>(null);
+
     const techId=localStorage.getItem("techId")
     const[request,setrequest]=useState<Request[]|null>([])
     const navigate=useNavigate()
@@ -69,6 +73,37 @@ const TechnicianRequestPage: React.FC = () => {
         }
 
     }
+    const handleReject = async () => {
+      if (!rejectingId || !rejectReason.trim()) {
+        toast.error("Please enter a reason.");
+        return;
+      }
+    
+      try {
+        // Call backend API
+        const response = await rejectRequest(rejectingId, rejectReason);
+    
+        // Update UI
+        setrequest(prev => prev ? prev.filter(r => r._id !== rejectingId) : []);
+        closeRejectModal();
+        toast.success(response.message || "Request rejected successfully");
+      } catch (error) {
+        toast.error("Failed to reject request");
+        console.error("Reject error:", error);
+      }
+    };
+
+    const openRejectModal = (id: string) => {
+      setRejectingId(id);
+      setRejectReason('');
+    };
+    
+    const closeRejectModal = () => {
+      setRejectingId(null);
+      setRejectReason('');
+    };
+    
+    
 
     const openModal = (req: Request) => {
         setSelectedRequest(req);
@@ -110,9 +145,13 @@ const TechnicianRequestPage: React.FC = () => {
                   <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-yellow-500" onClick={()=>handleAccept(req._id)}>
                     Accept
                   </button>
-                  <button className="bg-red-600 text-white px-3 py-1 rounded hover:bg-yellow-500">
-                   Reject
-                  </button>
+                  <button
+                  className="bg-red-600 text-white px-3 py-1 rounded hover:bg-yellow-500"
+                  onClick={() => openRejectModal(req._id)}
+                >
+                  Reject
+                </button>
+                 
                 </div>
               </div>
             ))}
@@ -150,6 +189,25 @@ const TechnicianRequestPage: React.FC = () => {
           </Dialog.Panel>
         </div>
       </Dialog>
+
+      <Dialog open={!!rejectingId} onClose={closeRejectModal} className="fixed z-50 inset-0 overflow-y-auto">
+  <div className="flex items-center justify-center min-h-screen px-4">
+    <Dialog.Panel className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+      <Dialog.Title className="text-lg font-bold mb-4">Reject Request</Dialog.Title>
+      <textarea
+        placeholder="Enter reason for rejection"
+        className="w-full p-2 border rounded mb-4"
+        value={rejectReason}
+        onChange={(e) => setRejectReason(e.target.value)}
+      />
+      <div className="flex justify-end gap-2">
+        <button className="bg-gray-300 px-4 py-2 rounded" onClick={closeRejectModal}>Cancel</button>
+        <button className="bg-red-600 text-white px-4 py-2 rounded" onClick={handleReject}>Submit</button>
+      </div>
+    </Dialog.Panel>
+  </div>
+</Dialog>
+
 
       {/* Footer */}
       <footer className="bg-black text-white text-sm py-6 mt-12">

@@ -244,6 +244,9 @@ export class UserController{
               else if (error.message==="date is not valid date"){
                 res.status(400).json({message:"Date is not valid date"})
               }
+              else if(error.message="User ID is required in headers"){
+                res.status(400).json({message:"please login in "})
+              }
                else {
                 res.status(500).json({ message: "Internal server error" });
               }

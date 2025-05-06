@@ -8,9 +8,7 @@ export const fetchTechnicianbasedonavailableSlot=async( pincode:string,date:stri
         );
         return response.data.technicians;
       } catch (error: any) {
-        console.error("Error fetching available technicians:", error);
-        throw new Error(
-          error?.response?.data?.message || "Failed to fetch technicians"
-        );
+        const message = error?.response?.data?.message || "Something went wrong";
+        throw new Error(message); // This is important
       }
 }

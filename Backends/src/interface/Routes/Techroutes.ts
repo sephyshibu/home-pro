@@ -13,11 +13,14 @@ import { FetchBookingByTechId } from '../../application/usecase/booking/fetchBoo
 import { bookingRequestAcceptByTech } from '../../application/usecase/booking/requestaccept'
 import { FetchUpcoming } from '../../application/usecase/booking/upcomingevents'
 import { PasswordChange } from '../../application/usecase/Tech/Password/ChangePassword'
+import { bookingRequestRejectByTech } from '../../application/usecase/booking/requestreject'
+import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 const router=express.Router()
 
 const techrepository= new TechRepositoryImpl()
 const categoryrepository= new categoryRepositoryImpl()
 const bookingrepository=new bookingrepositoryImpl()
+const walletrepository= new walletRepositoryimpl()
 
 
 const logintechs= new LoginTech(techrepository)
@@ -29,6 +32,7 @@ const fetchbookingbeforeacceptbytech= new FetchBookingByTechId(bookingrepository
 const requestacceptbytech= new bookingRequestAcceptByTech(bookingrepository)
 const fetchupcmingevets= new FetchUpcoming(bookingrepository)
 const passchnage= new PasswordChange(techrepository)
+const requestrejectbytech= new bookingRequestRejectByTech(bookingrepository,walletrepository)
 
 const TechController= new techController(
     logintechs,
@@ -39,7 +43,8 @@ const TechController= new techController(
     fetchbookingbeforeacceptbytech,
     requestacceptbytech,
     fetchupcmingevets,
-    passchnage
+    passchnage,
+    requestrejectbytech
 )
 
 router.post('/login',(req,res)=>TechController.login(req,res))
@@ -53,4 +58,5 @@ router.get('/request/:techId',authToken,(req,res)=>TechController.fetchRequestBy
 router.post('/request/:bookingId', authToken,(req,res)=>TechController.bookingrequest(req,res))
 router.get('/upcmingevents/:techId', authToken,(req,res)=>TechController.fetchupcomingevnts(req,res))
 router.post('/password/:techId',authToken,(req,res)=>TechController.passwordChanges(req,res))
+router.post('/rejectbookings/:bookingId',authToken,(req,res)=>TechController.bookingsrejectedbytech(req,res))
 export{router as techRouter}
