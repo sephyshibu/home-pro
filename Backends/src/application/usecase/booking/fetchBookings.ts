@@ -30,7 +30,8 @@ export class FetchBookingbyUserId{
             totalhours:booking.toalhours,
             pincode:booking.pincode,
             userremark:booking.userremark,
-            techremark:booking.techremark
+            techremark:booking.techremark,
+            refundrequestAccept:booking.refundrequestAccept
 
             }
 

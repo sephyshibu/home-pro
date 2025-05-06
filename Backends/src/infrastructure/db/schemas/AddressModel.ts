@@ -17,7 +17,7 @@ const AddressSchema= new mongoose.Schema<IAddress>({
     addressname:{
         type:String,
         required:true,
-        unique:true
+   
     }, 
     street:{
         type:String,

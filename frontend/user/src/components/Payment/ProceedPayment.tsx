@@ -7,7 +7,11 @@ import { addaddress } from "../../api/Address/addaddress";
 import { Dialog,DialogPanel, DialogTitle } from "@headlessui/react";
 import { toast } from "react-hot-toast";
 import { MapContainer,TileLayer,Marker,useMapEvents } from "react-leaflet";
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-geosearch/dist/geosearch.css';
+import GeoSearch from './GeoSearch'
 import L from "leaflet";
+import "leaflet-control-geocoder"
 import { NavLink } from "react-router";
 import { useNavigate } from "react-router";
 import axiosInstanceuser from "../../axios";
@@ -48,6 +52,7 @@ const PaymentPage: React.FC = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [errors, setErrors] = useState<Partial<typeof form>>({});
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
   const location=useLocation()
@@ -113,6 +118,7 @@ const PaymentPage: React.FC = () => {
         getAddresses();
       }, []);
 
+      
       const handleLoginLogout=async()=>{
                 if(userId){
                     localStorage.removeItem('userId')
@@ -356,14 +362,20 @@ const PaymentPage: React.FC = () => {
 
         </div>
       </div>
+     
       <div className="h-64 mt-4">
-      <MapContainer center={[10.8505, 76.2711]} zoom={10} className="h-full w-full rounded">
-            <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <LocationSelector setLocation={setSelectedLocation} />
-            {selectedLocation && <Marker position={selectedLocation} />}
-        </MapContainer>
+      <MapContainer center={[10.8505, 76.2711]} zoom={13} className="h-full w-full rounded">
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        
+        {/* GeoSearch input bar */}
+        <GeoSearch />
+
+        {/* Optional location selector */}
+        <LocationSelector setLocation={setSelectedLocation} />
+
+        {/* Marker for selected location */}
+        {selectedLocation && <Marker position={selectedLocation} />}
+      </MapContainer>
         {selectedLocation && (
             <p className="text-sm mt-2">Selected Location: {selectedLocation.lat.toFixed(5)}, {selectedLocation.lng.toFixed(5)}</p>
         )}
@@ -387,7 +399,6 @@ const PaymentPage: React.FC = () => {
                 {errors.addressname && <p className="text-red-500 text-sm">{errors.addressname}</p>}
                 <input name="street" value={form.street} onChange={handleChange} placeholder="Street" className="w-full border px-3 py-2 rounded" />
                 {errors.street && <p className="text-red-500 text-sm">{errors.street}</p>}
-street
                 <input name="city" value={form.city} onChange={handleChange} placeholder="City" className="w-full border px-3 py-2 rounded" />
                 
                 {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}

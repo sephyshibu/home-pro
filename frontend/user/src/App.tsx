@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes,Route,Navigate } from 'react-router'
 import './App.css'
 import "leaflet/dist/leaflet.css";
+import 'leaflet-geosearch/dist/geosearch.css';
 import Login from './components/Login/Logn'
 import Signup from './components/Signup/Signup'
 import Otp from './components/OTP/Otp'
