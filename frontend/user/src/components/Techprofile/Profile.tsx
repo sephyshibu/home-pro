@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { fetchTechById } from "../../api/fetchtechbyid";
 import { useNavigate } from "react-router";
+import { NavLink } from "react-router";
+import {persistor} from '../../app/store'
 
 interface Technician{
   _id:string
@@ -59,7 +61,16 @@ const TechnicianProfile:React.FC=()=> {
     fetchtech()
 
   },[])
-
+  const userId=localStorage.getItem('userId')
+const handleLoginLogout=async()=>{
+                if(userId){
+                    localStorage.removeItem('userId')
+                    await persistor.purge()
+                    navigate('/')
+                }else{
+                    navigate('/login')
+                }
+            }
   const handleBook=async(techid:string)=>{
         navigate('/proceedpayment',{state:{techid,bookingdetails:{
           date:location.state?.date,
@@ -73,19 +84,16 @@ const TechnicianProfile:React.FC=()=> {
   return (
     <div className="bg-white min-h-screen">
       {/* Navbar */}
-      <nav className="bg-[#0F1A3C] text-white px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <img src="/logo.png" alt="HomePro Logo" className="w-10 h-10" />
-          <span className="text-xl font-bold">HomePro</span>
+      <div className="bg-white shadow-md p-4 flex justify-between items-center">
+          <NavLink to="/" className="text-lg font-semibold text-sky-600 hover:underline">🏠 Home</NavLink>
+          <button
+            onClick={handleLoginLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md font-medium"
+          >
+            Logout
+          </button>
         </div>
-        <div className="hidden md:flex space-x-6">
-          <a href="#" className="hover:text-gray-300">Home</a>
-          <a href="#" className="hover:text-gray-300">Services</a>
-          <a href="#" className="hover:text-gray-300">Contact</a>
-        </div>
-        <div className="text-sm">My Profile</div>
-      </nav>
-
+      
       {/* Main Content */}
       <div className="max-w-6xl mx-auto py-10 px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Personal Details */}

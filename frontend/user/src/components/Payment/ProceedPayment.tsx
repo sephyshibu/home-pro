@@ -8,8 +8,10 @@ import { Dialog,DialogPanel, DialogTitle } from "@headlessui/react";
 import { toast } from "react-hot-toast";
 import { MapContainer,TileLayer,Marker,useMapEvents } from "react-leaflet";
 import L from "leaflet";
+import { NavLink } from "react-router";
 import { useNavigate } from "react-router";
 import axiosInstanceuser from "../../axios";
+import {persistor} from '../../app/store'
 
 
 interface Address {
@@ -110,6 +112,16 @@ const PaymentPage: React.FC = () => {
         };
         getAddresses();
       }, []);
+
+      const handleLoginLogout=async()=>{
+                if(userId){
+                    localStorage.removeItem('userId')
+                    await persistor.purge()
+                    navigate('/')
+                }else{
+                    navigate('/login')
+                }
+            }
 
       const validateForm = () => {
         const newErrors: Partial<typeof form> = {};
@@ -261,15 +273,17 @@ const PaymentPage: React.FC = () => {
       
   return (
     <div className="min-h-screen bg-gray-100">
-      <nav className="bg-blue-900 text-white p-4 flex justify-between items-center">
-        <div className="text-xl font-bold">HomePro</div>
-        <div className="flex space-x-4">
-          <a href="#" className="hover:underline">Home</a>
-          <a href="#" className="hover:underline">Services</a>
-          <a href="#" className="hover:underline">Contact</a>
-          <button className="bg-white text-blue-900 px-4 py-1 rounded">My Profile</button>
+    
+      <div className="bg-white shadow-md p-4 flex justify-between items-center">
+          <NavLink to="/" className="text-lg font-semibold text-sky-600 hover:underline">🏠 Home</NavLink>
+          <button
+            onClick={handleLoginLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md font-medium"
+          >
+            Logout
+          </button>
         </div>
-      </nav>
+      
 
       <div className="p-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Payment Section */}

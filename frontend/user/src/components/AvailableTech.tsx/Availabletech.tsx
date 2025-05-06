@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchcategory } from '../../api/fetchcategory';
 import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import {persistor} from '../../app/store'
 interface Technician {
   _id: string;
   name: string;
@@ -30,6 +32,16 @@ const TechnicianList: React.FC = () => {
         fetchCategory()
     }
   },[categoryId])
+  const userId=localStorage.getItem('userId')
+  const handleLoginLogout=async()=>{
+                  if(userId){
+                      localStorage.removeItem('userId')
+                      await persistor.purge()
+                      navigate('/')
+                  }else{
+                      navigate('/login')
+                  }
+              }
 
   const handleViewProfile=async(techid:string)=>{
     navigate('/viewprofile', {state:{techid,categoryId,date, time, pincode}})
@@ -38,6 +50,15 @@ const TechnicianList: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#0b1444] text-white">
+        <div className="bg-white shadow-md p-4 flex justify-between items-center">
+                <NavLink to="/" className="text-lg font-semibold text-sky-600 hover:underline">🏠 Home</NavLink>
+                <button
+                  onClick={handleLoginLogout}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md font-medium"
+                >
+                  Logout
+                </button>
+              </div>
       {/* Header */}
       <header className="bg-[#0b1444] text-center py-12">
 
@@ -102,11 +123,7 @@ const TechnicianList: React.FC = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#0b1444] text-center text-white py-6 text-sm mt-10 border-t border-gray-700">
-        <p className="font-bold text-xl mb-2">HomePro</p>
-        <p>Your Home. Our Priority</p>
-      </footer>
+      
     </div>
   );
 };
