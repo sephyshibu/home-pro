@@ -42,4 +42,9 @@ export class walletRepositoryimpl implements walletRepository{
     async increasebalance(ownerId: string, amount: number): Promise<void> {
         await WalletModel.updateOne({ownerId},{$inc:{balance:amount}}).exec()
     }
+
+    async decreasebalance(ownerId: string, amount: number): Promise<void> {
+        console.log("decreased")
+        await WalletModel.updateOne({ownerId},{$inc:{balance:-amount}})
+    }
 }

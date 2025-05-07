@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { useLocation } from "react-router";
 import { fetchTechById } from "../../api/fetchtechbyid";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router";
 import {persistor} from '../../app/store'
+import io from 'socket.io-client'
 interface viewBookings{
   _id:string
   techimage:string;
@@ -29,22 +30,63 @@ const ViewBookingsProfile:React.FC=()=> {
   const location=useLocation()
   const bookingdetails=location.state as viewBookings
   const navigate=useNavigate()
+  const userId=localStorage.getItem("userId")
+  
+  const [messages, setMessages] = useState<string[]>([]);
+  const [newMessage, setNewMessage] = useState<string>("");
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
   const[technician,settechnician]=useState<viewBookings>(bookingdetails)
+  const techId = technician._id;
 
-//   useEffect(()=>{
-//     const fetchtech=async()=>{
-//       try {
-//         const response=await fetchTechById(techid)
-//         settechnician(response)
-//       } catch (error) {
-//         console.error("Error fetching categories:", error);
-//       }
+  // Socket connection
+  const socket = useRef<any>(null);
+  useEffect(()=>{
+  
+        if(technician.techStatus==="Accepted"){
+          const roomId = [userId, techId].sort().join("_");
 
-//     }
-//     fetchtech()
+          // Initialize socket connection
+          socket.current = io("http://localhost:3000"); // Make sure to update with your backend URL
+    
+          // Join the room
+          socket.current.emit("join_room", { userId, receiverId: techId });
+    
+          // Listen for incoming messages
+          socket.current.on("receive_message", (message: string) => {
+            setMessages((prevMessages) => [...prevMessages, message]);
+          });
+    
+          // Clean up on dismount
+          return () => {
+            socket.current.disconnect();
+          };
+        }
+      },[technician, userId, techId]);
+        // Send new message via Socket
+  const sendMessage = () => {
+    if (newMessage.trim() === "") return;
+    
+    const messageData = {
+      senderId: userId,
+      receiverId: techId,
+      message: newMessage,
+    };
 
-//   },[])
-const userId=localStorage.getItem('userId')
+    // Emit the message to the server
+    socket.current.emit("send_message", messageData);
+
+    // Update the UI with the new message
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setNewMessage(""); // Clear input
+  };
+
+  // Scroll to the bottom of messages when a new message is received
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+
 const handleLoginLogout=async()=>{
                 if(userId){
                     localStorage.removeItem('userId')
@@ -99,6 +141,35 @@ const handleLoginLogout=async()=>{
             </div>
           </div>
           </div>
+          <div className="col-span-6 md:col-span-3 bg-white p-4 rounded shadow">
+          <h3 className="text-lg font-semibold mb-4">Chat with {technician.technicianname}</h3>
+
+          <div className="space-y-4 h-80 overflow-y-auto mb-4">
+            {messages.map((msg, index) => (
+              <div key={index} className={`flex ${userId === technician._id ? 'justify-end' : ''}`}>
+                <div className="bg-gray-100 p-3 rounded-lg max-w-xs">{msg}</div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+              placeholder="Type a message..."
+              className="border border-gray-300 p-2 rounded-md flex-grow"
+            />
+            <button
+              onClick={sendMessage}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Send
+            </button>
+          </div>
+        </div>
         </div>
 
         {/* Work Photos */}

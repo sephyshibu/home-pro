@@ -12,5 +12,7 @@ export interface ITransaction {
   status: PaymentStatus;
   purpose: string;
   amount: number;
+  techniciancommision?:number,
+  admincommission?:number,
   createdAt?: Date;
 }

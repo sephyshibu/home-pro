@@ -39,7 +39,7 @@ import { RetryConfirmPayment } from '../../application/usecase/booking/retryconf
 import { updateusercancelreason } from '../../application/usecase/booking/updateUserCancelreason'
 import { GetWallet } from '../../application/usecase/Wallet/fetchWallet'
 import { FetchWallet } from '../../application/usecase/User/Wallet/getwallet'
-
+import { WalletPayment } from '../../application/usecase/booking/WalletPayment'
 
 const router=express.Router()
 
@@ -85,6 +85,7 @@ const retrypaymet=new RetryConfirmPayment(bookingrepository,walletRepository,tra
 const usercancelupdate=new updateusercancelreason(bookingrepository)
 const walletdetails= new GetWallet(transactionrepository)
 const walletbalce = new FetchWallet(walletRepository)
+const walletpayconsultationFee= new WalletPayment(bookingrepository,walletRepository,transactionrepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -114,7 +115,8 @@ const usercontroller= new UserController(
     retrypaymet,
     usercancelupdate,
     walletdetails,
-    walletbalce
+    walletbalce,
+    walletpayconsultationFee
   
     
 
@@ -154,4 +156,5 @@ router.post('/confirm-payment-retry',authToken,(req,res)=>usercontroller.retryco
 router.post('/updatecancelreason/:bookingId',authToken,(req,res)=>usercontroller.updatecancelreason(req,res))
 router.get('/fetchwalletdetails/:userId',authToken,(req,res)=>usercontroller.fetchdetailswallet(req,res))
 router.get('/fetchwalletbalance/:userId',authToken,(req,res)=>usercontroller.fetchbalance(req,res))
+router.post('/walletpayment',authToken,(req,res)=>usercontroller.walletpaymentconsultationFee(req,res))
 export {router as userRouter}

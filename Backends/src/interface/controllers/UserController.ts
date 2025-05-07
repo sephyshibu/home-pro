@@ -28,7 +28,7 @@ import { RetryConfirmPayment } from '../../application/usecase/booking/retryconf
 import { updateusercancelreason } from '../../application/usecase/booking/updateUserCancelreason';
 import { GetWallet } from '../../application/usecase/Wallet/fetchWallet';
 import { FetchWallet } from '../../application/usecase/User/Wallet/getwallet';
-
+import { WalletPayment } from '../../application/usecase/booking/WalletPayment';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -59,7 +59,8 @@ export class UserController{
         private retrypaymet:RetryConfirmPayment,
         private updateusercancelreasons:updateusercancelreason,
         private fetchwalletdetails:GetWallet,
-        private getwalletbalance:FetchWallet
+        private getwalletbalance:FetchWallet,
+        private walletpayconsultationFee:WalletPayment
     
     ){}
 
@@ -529,6 +530,52 @@ export class UserController{
             console.error("Error fetching wallet", error);
             res.status(500).json({ message: "Internal server error" });
         }
+    }
+
+    async walletpaymentconsultationFee(req:Request,res:Response):Promise<void>{
+        console.log("entered")
+        try {
+            const {
+                userId,
+                techid,
+                addressId,
+                location,
+                rateperhour, // ✅ add this
+                date,
+                amount,
+        
+              } = req.body;
+              console.log("controller",req.body)
+              const result=await this.walletpayconsultationFee.WalletConsultationPayment(
+                {
+                userId,
+                technicianId: techid,
+                addressId,
+                location,
+                rateperhour,
+                booked_date: date,
+                consultationFee: amount,
+                consultationpaymethod: "Wallet",
+                pincode: "000000", // if available
+                workstatus: "pending",
+              } ,
+            
+              "completed")
+              res.status(200).json({message:"success",result});
+            } catch (error:any) {
+                if (error.message === "wallet not found") {
+                    res.status(404).json({ message: "No wallet available for the selected slot." });
+                  }
+                if(error.message==="insufficeint Balance"){
+                    res.status(400).json({message:"insufficeint Balance"})
+
+                }
+                else {
+                    res.status(500).json({ message: "Internal server error" });
+                  }
+
+             
+            }
     }
     
 

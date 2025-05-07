@@ -11,6 +11,9 @@ const transactionSchema = new mongoose.Schema<ITransaction>({
   status: { type: String, enum: ['success', 'failed'], required: true },
   purpose: { type: String, required: true },
   amount: { type: Number, required: true },
+  techniciancommision:{type:Number,required:false, default:0},
+  admincommission:{type:Number, required:false, default:0}
+
 }, { timestamps: true });
 
 export const TransactionModel = mongoose.model<ITransaction>('Transaction', transactionSchema);

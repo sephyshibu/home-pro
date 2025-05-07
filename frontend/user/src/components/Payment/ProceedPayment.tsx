@@ -208,71 +208,97 @@ const PaymentPage: React.FC = () => {
             toast.error("Please select all required fields");
             return;
         }
-      try{
-        const res= await axiosInstanceuser.post(`/create-order/${userId}`,{
-            amount:technician.consulationFee
-        })
-        const options = {
-            key: "rzp_test_qp0MD1b9oAJB0i",
-            amount: res.data.amount,
-            currency: "INR",
-            name: "HomePro",
-            order_id: res.data.id,
-            handler: async (response:any) => {
-              await axiosInstanceuser.post("/confirm-payment", {
-                userId,
-                techid,
-                addressId: selectedAddressId,
-                location: selectedLocation,
-                date: bookingdetails.date,
-                amount: technician.consulationFee,
-                razorpay_payment_id: response.razorpay_payment_id,
-              });
-              toast.success("Payment successful!");
-              navigate('/thankyou')
+        if(selectedMethod==="RazorPay"){
+            try{
               
-            },
-            prefill: {
-              name: "admin HonePro",
-              email: "admin@example.com",
-              contact: "9999999999",
-            },
-            modal: {
-              ondismiss: function () {
-                toast("Payment window closed.");
-                // Optional: redirect or just stay on the page
-                navigate('/myaccount/services'); // Or show retry options
-              }
+              const res= await axiosInstanceuser.post(`/create-order/${userId}`,{
+                  amount:technician.consulationFee
+              })
+              const options = {
+                  key: "rzp_test_qp0MD1b9oAJB0i",
+                  amount: res.data.amount,
+                  currency: "INR",
+                  name: "HomePro",
+                  order_id: res.data.id,
+                  handler: async (response:any) => {
+                    await axiosInstanceuser.post("/confirm-payment", {
+                      userId,
+                      techid,
+                      addressId: selectedAddressId,
+                      location: selectedLocation,
+                      date: bookingdetails.date,
+                      amount: technician.consulationFee,
+                      razorpay_payment_id: response.razorpay_payment_id,
+                    });
+                    toast.success("Payment successful!");
+                    navigate('/thankyou')
+                    
+                  },
+                  prefill: {
+                    name: "admin HonePro",
+                    email: "admin@example.com",
+                    contact: "9999999999",
+                  },
+                  modal: {
+                    ondismiss: function () {
+                      toast("Payment window closed.");
+                      // Optional: redirect or just stay on the page
+                      navigate('/myaccount/services'); // Or show retry options
+                    }
+                  }
+                };
+              
+                const rzp = new window.Razorpay(options);
+                rzp.open();
+                // Add payment failed handler
+          rzp.on("payment.failed", async (response: any) => {
+            await axiosInstanceuser.post("/payment-failed", {
+              userId,
+              techid,
+              addressId: selectedAddressId,
+              location: selectedLocation,
+              date: bookingdetails.date,
+              rateperhour: technician.rateperhour, // ✅ add this line
+              amount: technician.consulationFee,
+              error: response.error,
+            });
+
+            toast.error("Payment failed. Please try again.");
+            // ✅ Wrap in setTimeout to ensure reliable navigation
+            setTimeout(() => {
+              navigate('/myaccount/services');
+            }, 0);
+          });
+
+          
+          } catch (error) {
+            toast.error("Error initiating payment");
+            console.error(error);
+          }
+        }else{
+          if (selectedMethod=="Wallet"){
+            try {
+                if(!userId) return 
+                    const res= await axiosInstanceuser.post("/walletpayment",{
+                        userId,
+                        techid,
+                        addressId:selectedAddressId,
+                        location:selectedLocation,
+                        date:bookingdetails.date,
+                        rateperhour:technician.rateperhour,
+                        amount:technician.consulationFee
+                      }
+              
+                      )
+                      toast.success(res.data.message)
+                      navigate('/myaccount/services')
+                }
+              catch (error:any) {
+              toast.error(error.response.data.message);
+              console.error(error);
             }
-          };
-        
-          const rzp = new window.Razorpay(options);
-          rzp.open();
-           // Add payment failed handler
-    rzp.on("payment.failed", async (response: any) => {
-      await axiosInstanceuser.post("/payment-failed", {
-        userId,
-        techid,
-        addressId: selectedAddressId,
-        location: selectedLocation,
-        date: bookingdetails.date,
-        rateperhour: technician.rateperhour, // ✅ add this line
-        amount: technician.consulationFee,
-        error: response.error,
-      });
-
-      toast.error("Payment failed. Please try again.");
-      // ✅ Wrap in setTimeout to ensure reliable navigation
-      setTimeout(() => {
-        navigate('/myaccount/services');
-      }, 0);
-    });
-
-     
-    } catch (error) {
-      toast.error("Error initiating payment");
-      console.error(error);
-    }
+          }
+        }
           
 
     }
@@ -299,7 +325,7 @@ const PaymentPage: React.FC = () => {
           <div className="space-y-2">
             <label className="font-medium block">Pay With:</label>
             <div className="flex gap-4">
-              {[ "RazorPay"].map((method) => (
+              {[ "RazorPay","Wallet"].map((method) => (
                 <label key={method} className="flex items-center gap-2">
                   <input
                     type="radio"
