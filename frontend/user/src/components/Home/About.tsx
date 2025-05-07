@@ -16,9 +16,9 @@ const AboutSection: React.FC = () => {
             focused in the Kerala region. We provide several services that
             support home services.
           </p>
-          <button className="bg-[#00AEEF] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#0099d4] transition duration-200">
+          {/* <button className="bg-[#00AEEF] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#0099d4] transition duration-200">
             Book Now
-          </button>
+          </button> */}
         </div>
 
         {/* Right Image in House Shape */}

@@ -20,7 +20,7 @@ export class ConfirmPayment{
         let booking = await this.bookingrepository.creates({
             userId: bookingdata.userId,
             technicianId: bookingdata.technicianId,
-            rateperhour: bookingdata.rateperhour, // ✅ ensure this line is here
+            rateperhour: bookingdata.rateperhour, 
             addressId: bookingdata.addressId,
             location: bookingdata.location!,
             booked_date: bookingdata.booked_date!,
@@ -32,8 +32,8 @@ export class ConfirmPayment{
             consultationtransactionId:paymentId
         })
         if (status === "completed") {
-            // No commission calculation here for now. You can add it when the final payment is processed.
-            booking.consultationpayStatus = "completed"; // mark consultation payment as completed
+           
+            booking.consultationpayStatus = "completed"; 
             console.log("dfsfd")
 
             const wallet=await this.walletrepository.findById(booking.userId.toString())
@@ -55,9 +55,9 @@ export class ConfirmPayment{
                   purpose: "Consultation Payment",
                 });
                 console.log("res", res)
-                console.log("✅ Transaction created successfully");
+                console.log("Transaction created successfully");
               } catch (err) {
-                console.error("❌ Transaction creation failed:", err);
+                console.error("Transaction creation failed:", err);
               }
           
         

@@ -1,8 +1,12 @@
 import React from 'react';
 import doorTech from '../../../public/images/one.png';
 import toiletTech from '../../../public/images/two.png'; // Add your second image here
+import { useNavigate } from 'react-router';
 
 const Hero: React.FC = () => {
+  const navigate=useNavigate()
+
+
   return (
     <section className="bg-[#0A2342] text-white py-12">
       <div className="container mx-auto grid lg:grid-cols-3 items-center px-6 gap-10">
@@ -28,9 +32,9 @@ const Hero: React.FC = () => {
             Need professional <br /> services at your <br /> doorstep?
             <br /> <span className="text-[#00D1FF]">We can help!!</span>
           </h1>
-          <button className="bg-[#00D1FF] px-6 py-2 rounded-full font-medium">
+          {/* <button className="bg-[#00D1FF] px-6 py-2 rounded-full font-medium">
             Book Now
-          </button>
+          </button> */}
           <p className="text-sm text-gray-300">24 Hour Services</p>
 
           {/* Icons Row */}
