@@ -31,55 +31,73 @@ const ViewBookingsProfile:React.FC=()=> {
   const bookingdetails=location.state as viewBookings
   const navigate=useNavigate()
   const userId=localStorage.getItem("userId")
-  
+  const [isSocketReady, setIsSocketReady] = useState(false);
+
   const [messages, setMessages] = useState<string[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const[technician,settechnician]=useState<viewBookings>(bookingdetails)
   const techId = technician._id;
-
-  // Socket connection
-  const socket = useRef<any>(null);
-  useEffect(()=>{
   
-        if(technician.techStatus==="Accepted"){
-          const roomId = [userId, techId].sort().join("_");
+const socket = io('http://localhost:3000');
+  // Socket connection
 
-          // Initialize socket connection
-          socket.current = io("http://localhost:3000"); // Make sure to update with your backend URL
-    
-          // Join the room
-          socket.current.emit("join_room", { userId, receiverId: techId });
-    
-          // Listen for incoming messages
-          socket.current.on("receive_message", (message: string) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
-          });
-    
-          // Clean up on dismount
-          return () => {
-            socket.current.disconnect();
-          };
-        }
-      },[technician, userId, techId]);
-        // Send new message via Socket
-  const sendMessage = () => {
-    if (newMessage.trim() === "") return;
-    
-    const messageData = {
-      senderId: userId,
-      receiverId: techId,
-      message: newMessage,
+  // Socket connection setup
+useEffect(() => {
+  if (technician.techStatus === "Accepted") {
+    const roomId = [userId, techId].sort().join("_");
+
+
+
+    // Join the room
+    socket.emit("join_room", { userId, receiverId: techId });
+
+    // Listen for incoming messages
+    socket.on("receive_message", (message: string) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    // Log socket connection
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+    });
+
+    // Handle connection error
+    socket.on("connect_error", (err) => {
+      console.error("Socket connection error:", err.message);
+    });
+
+    // Clean up socket on dismount
+    return () => {
+      socket.disconnect();
+      console.log("Socket disconnected");
     };
+  }
+}, [technician, userId, techId]);
 
-    // Emit the message to the server
-    socket.current.emit("send_message", messageData);
+// Send message
+const sendMessage = () => {
+  if (newMessage.trim() === "") return;
 
-    // Update the UI with the new message
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setNewMessage(""); // Clear input
+  if (!socket) {
+    console.error("Socket not initialized, retrying...");
+    setTimeout(sendMessage, 1000); // Retry in 1 second
+    return;
+  }
+
+  const messageData = {
+    senderId: userId,
+    receiverId: techId,
+    message: newMessage,
   };
+
+  socket.emit("send_message", messageData);
+
+  setMessages((prevMessages) => [...prevMessages, newMessage]);
+  setNewMessage(""); // Clear input
+};
+
 
   // Scroll to the bottom of messages when a new message is received
   useEffect(() => {
