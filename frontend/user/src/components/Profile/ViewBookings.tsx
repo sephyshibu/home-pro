@@ -53,6 +53,8 @@ const ViewBookingsProfile:React.FC=()=> {
   const [isSocketReady, setIsSocketReady] = useState(false);
   const [sessionRequests, setSessionRequests] = useState<SessionRequest[]>([]);
   const[amount,setamount]=useState<string|null>(null)
+  const[totalminutes,settotalminutes]=useState<string|null>(null)
+  const[rateperminute,setrateperminute]=useState<string|null>(null)
   const [messages, setMessages] = useState<string[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -168,6 +170,8 @@ useEffect(() => {
   
       const result=await finalamount(bookingId)
       setamount(result.totalamount)
+      settotalminutes(result.totalminutes)
+      setrateperminute(result.rateperminute)
       setisopen(true)
       
     } catch (error) {
@@ -185,7 +189,8 @@ useEffect(() => {
     try {
       const res = await axiosInstanceuser.post(`/create-order/${userId}`, {
         amount,
-      });const options = {
+      });
+      const options = {
         key: "rzp_test_qp0MD1b9oAJB0i",
         amount: res.data.amount,
         currency: "INR",
@@ -346,8 +351,8 @@ useEffect(() => {
               <DialogTitle className="text-lg font-bold mb-4">Confirm Payment</DialogTitle>
               {amount !== null ? (
                 <>
-                  <p><strong>Total Minutes:</strong> {technician.totalhours * 60}</p>
-                  <p><strong>Total Hours:</strong> {technician.totalhours}</p>
+                  <p><strong>Total Minutes:</strong> {totalminutes}</p>
+                  <p><strong>Rate per Minute:</strong> {rateperminute}</p>
                   <p><strong>Total Amount:</strong> ₹{amount}</p>
                   <button
                     onClick={() => handleRazorpay(bookingdetails._id, amount)}

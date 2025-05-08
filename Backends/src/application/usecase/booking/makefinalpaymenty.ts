@@ -8,15 +8,16 @@ export class FinalPayment{
     constructor(private bookingrepository:BookingRepository){}
 
 
-    async finalpayment(bookingId:string):Promise<{totalamount:number}>{
+    async finalpayment(bookingId:string):Promise<{rateperminute:number,totalminutes:number,totalamount:number}>{
         try {
             const booking=await this.bookingrepository.findById(bookingId)
             if(!booking) throw new Error("no bookings")
 
             let totalMinutes=calculateTotalWorkMinutes(booking.workTime)
+            console.log("rate per  hour",booking.rateperhour)
             const ratePerMinute = booking.rateperhour! / 60;
             const workFinalAmount = Math.ceil(ratePerMinute * totalMinutes);
-            return {totalamount:workFinalAmount}
+            return {rateperminute:ratePerMinute,totalminutes:totalMinutes,totalamount:workFinalAmount}
         } catch (error) {
             throw new Error("Error calculating final payment");
         }
