@@ -258,6 +258,80 @@ export class bookingrepositoryImpl implements BookingRepository{
     })
     .exec()
       }
+
+  async addsessionRequest(bookingId: string, types: string): Promise<IBooking | null> {
+    const validTypes = ["start", "pause", "end", "resume"];
+
+    // Validate the type of session request
+    if (!validTypes.includes(types)) {
+      throw new Error("Invalid type for session request");
+    }
+
+    try {
+      // Find the booking by ID
+      const booking = await BookingModels.findById(bookingId);
+
+      if (!booking) {
+        throw new Error("Booking not found");
+      }
+
+      // Add the session request to the booking's sessionRequests array
+      booking.sessionRequests?.push({
+        types:types as "start" | "pause" | "end" | "resume",           
+        status: "pending",  
+        requestedAt: new Date(),  
+        responseAt: null, 
+        reason: null,     
+      });
+
+      // Save the updated booking document with the new session request
+      await booking.save();
+
+      return booking;  // Return the updated booking object
+    } catch (error:any) {
+      console.error("Error adding session request:", error);
+      throw new Error("Error adding session request: " + error.message);
+    }
+  
+  }
+
+  async acceptsession(bookingId: string, requestId: string): Promise<IBooking | null> {
+      const booking=await BookingModels.findById(bookingId)
+      if(!booking) return null
+
+      const sessionrequest=booking.sessionRequests?.find((req)=>req._id!.toString()===requestId)
+
+      if(!sessionrequest) return null
+
+      sessionrequest.status=='accepted'
+      sessionrequest.responseAt=new Date()
+
+      switch (sessionrequest.types){
+        case 'start':
+          booking.workTime?.push({start:new Date()})
+          break;
+
+        case 'pause':
+          if (!booking.workTime) booking.workTime = [];
+          const lastpause=booking.workTime[booking.workTime?.length-1]
+          if(lastpause && !lastpause.end) lastpause.end=new Date()
+          break;
+
+        case "resume":
+          booking.workTime?.push({ start: new Date() });
+          break;
+
+        case "end":
+          if (!booking.workTime) booking.workTime = [];
+          const lastEnd = booking.workTime[booking.workTime.length - 1];
+          if (lastEnd && !lastEnd.end) lastEnd.end = new Date();
+          break;
+
+        
+      }
+      await booking.save()
+      return booking
+  }
       
     
 }

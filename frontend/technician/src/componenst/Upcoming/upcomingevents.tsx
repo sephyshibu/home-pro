@@ -5,6 +5,8 @@ import { fetchupcomingevents } from '../../api/Upcomingevents/upcomingevents';
 // import { aceptRequest } from '../../api/AcceptRequest/acceptrequest';
 // import toast, {  } from 'react-hot-toast';
 import { Dialog } from '@headlessui/react';
+import axiosInstancetech from '../../axios';
+import { toast } from 'react-toastify';
 
 interface Events {
     _id:string,
@@ -12,7 +14,6 @@ interface Events {
     username: string;
     userphone:string;
     Category: string;
-    techStatus: "Accepted" | "Rejected" |"Pending";
     workStatus: "InProgress" | "Pending" | "Paused" | "Completed";
     date: string;
     locationUrl:string,
@@ -107,6 +108,17 @@ const TechnicianUpcoming: React.FC = () => {
         setSelectedRequest(null);
       };
 
+      const handleRequestSession=async(types:"start"|"resume"|"pause"|"end")=>{
+          try {
+            const bookingId=selectedRequest?._id
+            const result=await axiosInstancetech.post(`/requestsession/${bookingId}`,{types})
+            console.log(result.data)
+            toast.success(`${types} request is sent to the user`)
+          } catch (error) {
+            toast.error(`Failed to send ${types}request`)
+          }
+      }
+
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -197,9 +209,15 @@ const TechnicianUpcoming: React.FC = () => {
             </div>
 
            <div className="mt-6 flex justify-center gap-4">
-                <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Accept</button>
-                <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">Pause</button>
-                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">End</button>
+                <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onClick={()=>handleRequestSession('start')}>Accept</button>
+                <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700" onClick={()=>handleRequestSession('pause')}>Pause</button>
+                <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    onClick={() => handleRequestSession('resume')}
+                  >
+                    Resume
+                  </button>
+                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onClick={()=>handleRequestSession('end')}>End</button>
             </div>
             
           </Dialog.Panel>

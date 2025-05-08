@@ -4,6 +4,9 @@ import { fetchTechById } from "../../api/fetchtechbyid";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router";
 import {persistor} from '../../app/store'
+import { acceptsessionrequest } from "../../api/AcceptSession/acceptsession";
+import { rejectsessionrequest } from "../../api/RequestSession/requestsession";
+import { fetchSessionRequests } from "../../api/Fetchsession/fetchsession";
 import io from 'socket.io-client'
 interface viewBookings{
   _id:string
@@ -25,6 +28,11 @@ interface viewBookings{
   category:string,
   pincode:string
 }
+interface SessionRequest {
+  _id: string;
+  type: string;
+  status: 'pending' | 'accepted' | 'rejected';
+}
 
 const ViewBookingsProfile:React.FC=()=> {
   const location=useLocation()
@@ -32,11 +40,12 @@ const ViewBookingsProfile:React.FC=()=> {
   const navigate=useNavigate()
   const userId=localStorage.getItem("userId")
   const [isSocketReady, setIsSocketReady] = useState(false);
+  const [sessionRequests, setSessionRequests] = useState<SessionRequest[]>([]);
 
   const [messages, setMessages] = useState<string[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
+  const [error, setError] = useState<string>("");
   const[technician,settechnician]=useState<viewBookings>(bookingdetails)
   const techId = technician._id;
   
@@ -77,26 +86,26 @@ useEffect(() => {
 }, [technician, userId, techId]);
 
 // Send message
-const sendMessage = () => {
-  if (newMessage.trim() === "") return;
+  const sendMessage = () => {
+    if (newMessage.trim() === "") return;
 
-  if (!socket) {
-    console.error("Socket not initialized, retrying...");
-    setTimeout(sendMessage, 1000); // Retry in 1 second
-    return;
-  }
+    if (!socket) {
+      console.error("Socket not initialized, retrying...");
+      setTimeout(sendMessage, 1000); // Retry in 1 second
+      return;
+    }
 
-  const messageData = {
-    senderId: userId,
-    receiverId: techId,
-    message: newMessage,
+    const messageData = {
+      senderId: userId,
+      receiverId: techId,
+      message: newMessage,
+    };
+
+    socket.emit("send_message", messageData);
+
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setNewMessage(""); // Clear input
   };
-
-  socket.emit("send_message", messageData);
-
-  setMessages((prevMessages) => [...prevMessages, newMessage]);
-  setNewMessage(""); // Clear input
-};
 
 
   // Scroll to the bottom of messages when a new message is received
@@ -104,8 +113,46 @@ const sendMessage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    // Fetch session requests for this booking
+    const fetchRequests = async () => {
+      try {
+        const response = await fetchSessionRequests(bookingdetails._id);
+        setSessionRequests(response.data);
+      } catch (err) {
+        setError("Failed to fetch session requests.");
+      }
+    };
 
-const handleLoginLogout=async()=>{
+    fetchRequests();
+  }, [bookingdetails._id]);
+  const handleAccept = async (requestId: string) => {
+    try {
+      await acceptsessionrequest(bookingdetails._id, requestId, 'accepted');
+      setSessionRequests((prev) =>
+        prev.map((request) =>
+          request._id === requestId ? { ...request, status: 'accepted' } : request
+        )
+      );
+    } catch (err) {
+      setError("Failed to accept session request.");
+    }
+  };
+
+  const handleReject = async (requestId: string) => {
+    try {
+      await rejectsessionrequest(bookingdetails._id, requestId, 'rejected');
+      setSessionRequests((prev) =>
+        prev.map((request) =>
+          request._id === requestId ? { ...request, status: 'rejected' } : request
+        )
+      );
+    } catch (err) {
+      setError("Failed to reject session request.");
+    }
+  };
+
+    const handleLoginLogout=async()=>{
                 if(userId){
                     localStorage.removeItem('userId')
                     await persistor.purge()
@@ -159,6 +206,40 @@ const handleLoginLogout=async()=>{
             </div>
           </div>
           </div>
+          </div>
+
+        <div className="max-w-6xl mx-auto py-10 px-4">
+          <h2 className="text-xl font-bold mb-4">Pending Session Requests</h2>
+
+          {sessionRequests.length === 0 ? (
+            <p>No session requests available.</p>
+          ) : (
+            <div>
+              {sessionRequests.map((request) => (
+                <div key={request._id} className="border-b-2 mb-4 pb-4">
+                  <h3 className="text-lg font-semibold">Request: {request.type}</h3>
+                  <p>Status: {request.status}</p>
+                  {request.status === 'pending' && (
+                    <div>
+                      <button
+                        onClick={() => handleAccept(request._id)}
+                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mr-4"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() => handleReject(request._id)}
+                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+          </div>
+        )}
+
           <div className="col-span-6 md:col-span-3 bg-white p-4 rounded shadow">
           <h3 className="text-lg font-semibold mb-4">Chat with {technician.technicianname}</h3>
 

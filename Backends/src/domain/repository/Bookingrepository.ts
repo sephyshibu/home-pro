@@ -11,9 +11,6 @@ export interface BookingRepository {
     findById(id: string): Promise<IBooking | null>;
     findByIdWithPopulates(id: string): Promise<IBooking | null>;
     fetchBookingswithremark():Promise<IBooking[]>
-    // getById(bookingId: string): Promise<IBooking | null>;
-    // getByUserId(userId: string): Promise<IBooking[]>;
-    // getByTechnicianId(technicianId: string): Promise<IBooking[]>;
-    // getByStatus(status: string): Promise<IBooking[]>;
-    // You can add more queries based on your use case
+    addsessionRequest(bookingId:string, types:string):Promise<IBooking|null>
+    acceptsession(bookingId:string,requestId:string):Promise<IBooking|null>
 }

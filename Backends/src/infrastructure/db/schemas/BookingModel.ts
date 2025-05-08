@@ -1,6 +1,7 @@
 // models/BookingModel.ts
 import mongoose,{Schema,Document} from "mongoose";
 import { IBooking } from "../../../domain/models/Bookings";
+import { timeStamp } from "console";
 
 const BookingModel = new mongoose.Schema<IBooking>({
   userId: { type: mongoose.Schema.Types.ObjectId, ref:"User",required: true },
@@ -14,19 +15,36 @@ const BookingModel = new mongoose.Schema<IBooking>({
   rateperhour:{type:Number}, 
   workstatus: { type: String, enum: ['pending', 'progress', 'paused', 'completed'], default: 'pending' },
   totalhours:{type:Number},
-  isStartAccept:{type:Boolean ,default:false},
-  isEndAccept:{type:Boolean ,default:false},
-  isPauseAccept:{type:Boolean ,default:false},
+  isStartAccept:{type:Boolean ,default:null},
+  isEndAccept:{type:Boolean ,default:null},
+  isPauseAccept:{type:Boolean ,default:null},
   isconfirmedbyTech:{ type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
   techremark:{type:String,default:""}, 
   userremark:{type:String,default:""}, 
   pincode:{type:String}, 
   consultationFee:{type:Number}, 
+  sessionRequests: [
+    {
+      types: {
+        type: String,
+        enum: ['start', 'pause', 'resume', 'end'],
+      },
+      status: {
+        type: String,
+        enum: ['pending', 'accepted', 'rejected'],
+        default: 'pending',
+      },
+      requestedAt: { type: Date, default: Date.now },
+      responseAt: { type: Date },
+      reason: { type: String }, // Optional rejection reason
+    },
+  ],
+  
   workTime: [
     {
-      start: Date,
-      end: Date,
-    },
+      start: { type: Date },
+      end: { type: Date }
+    }
   ],
   workFinalAmount:{type:Number},
   totalFinalAmount:{type:Number},

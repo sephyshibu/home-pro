@@ -9,6 +9,7 @@ import { bookingRequestAcceptByTech } from "../../application/usecase/booking/re
 import { bookingRequestRejectByTech } from "../../application/usecase/booking/requestreject";
 import { FetchUpcoming } from "../../application/usecase/booking/upcomingevents";
 import { PasswordChange } from "../../application/usecase/Tech/Password/ChangePassword";
+import { RequestSession } from "../../application/usecase/Sessions/requestSession";
 export class techController{
     constructor(
         private logintech:LoginTech,
@@ -20,7 +21,8 @@ export class techController{
         private requestacceptbytech:bookingRequestAcceptByTech,
         private upcoming:FetchUpcoming,
         private passwordhcange:PasswordChange,
-        private requestrejectbyTech:bookingRequestRejectByTech
+        private requestrejectbyTech:bookingRequestRejectByTech,
+        private requestsessions:RequestSession
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -161,6 +163,18 @@ export class techController{
             console.log(req.body)
             const result=await this.passwordhcange.editpassword(techId, password)
             res.status(200).json({message:result.message})
+        } catch (err: any) {
+            res.status(500).json({ message: err.message });
+            
+        }
+    }
+    async requestressions(req:Request,res:Response):Promise<void>{
+        try {
+            const{bookingId}=req.params
+            const {types}=req.body
+
+            const result=await this.requestsessions.requestsession(bookingId, types)
+            res.status(200).json(result)
         } catch (err: any) {
             res.status(500).json({ message: err.message });
             
