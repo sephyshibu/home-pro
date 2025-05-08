@@ -30,7 +30,7 @@ interface viewBookings{
 }
 interface SessionRequest {
   _id: string;
-  type: string;
+  types: string;
   status: 'pending' | 'accepted' | 'rejected';
 }
 
@@ -118,7 +118,8 @@ useEffect(() => {
     const fetchRequests = async () => {
       try {
         const response = await fetchSessionRequests(bookingdetails._id);
-        setSessionRequests(response.data);
+        
+        setSessionRequests(response);
       } catch (err) {
         setError("Failed to fetch session requests.");
       }
@@ -211,13 +212,13 @@ useEffect(() => {
         <div className="max-w-6xl mx-auto py-10 px-4">
           <h2 className="text-xl font-bold mb-4">Pending Session Requests</h2>
 
-          {sessionRequests.length === 0 ? (
+          {!sessionRequests || sessionRequests.length === 0 ? (
             <p>No session requests available.</p>
           ) : (
             <div>
               {sessionRequests.map((request) => (
                 <div key={request._id} className="border-b-2 mb-4 pb-4">
-                  <h3 className="text-lg font-semibold">Request: {request.type}</h3>
+                  <h3 className="text-lg font-semibold">Request: {request.types}</h3>
                   <p>Status: {request.status}</p>
                   {request.status === 'pending' && (
                     <div>

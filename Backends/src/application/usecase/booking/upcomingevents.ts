@@ -29,6 +29,7 @@ export class FetchUpcoming{
                 consultationFee:bookings.consultationFee,
                 consultationpaymentStatus:bookings.consultationpayStatus,
                 finalpaymentStatus:bookings.finalpayStatus,
+                sessionrequest:bookings.sessionRequests,
                 workaddress:bookings.addressId.addressname,
                 totalhours:bookings.toalhours,
                 pincode:bookings.pincode

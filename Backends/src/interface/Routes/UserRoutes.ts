@@ -40,7 +40,8 @@ import { updateusercancelreason } from '../../application/usecase/booking/update
 import { GetWallet } from '../../application/usecase/Wallet/fetchWallet'
 import { FetchWallet } from '../../application/usecase/User/Wallet/getwallet'
 import { WalletPayment } from '../../application/usecase/booking/WalletPayment'
-
+import { FetchSession } from '../../application/usecase/Sessions/fetchsessions'
+import { Acceptsession } from '../../application/usecase/Sessions/acceptsession'
 const router=express.Router()
 
 
@@ -86,7 +87,8 @@ const usercancelupdate=new updateusercancelreason(bookingrepository)
 const walletdetails= new GetWallet(transactionrepository)
 const walletbalce = new FetchWallet(walletRepository)
 const walletpayconsultationFee= new WalletPayment(bookingrepository,walletRepository,transactionrepository)
-
+const fetchingpendingsession=new FetchSession(bookingrepository)
+const acceptingsession= new Acceptsession(bookingrepository)
 const usercontroller= new UserController(
     signupuser,
     checkemailUser,
@@ -116,7 +118,9 @@ const usercontroller= new UserController(
     usercancelupdate,
     walletdetails,
     walletbalce,
-    walletpayconsultationFee
+    walletpayconsultationFee,
+    fetchingpendingsession,
+    acceptingsession
   
     
 
@@ -157,4 +161,6 @@ router.post('/updatecancelreason/:bookingId',authToken,(req,res)=>usercontroller
 router.get('/fetchwalletdetails/:userId',authToken,(req,res)=>usercontroller.fetchdetailswallet(req,res))
 router.get('/fetchwalletbalance/:userId',authToken,(req,res)=>usercontroller.fetchbalance(req,res))
 router.post('/walletpayment',authToken,(req,res)=>usercontroller.walletpaymentconsultationFee(req,res))
+router.post('/acceptsessionrequest/:bookingId',authToken,(req,res)=>usercontroller.acceptsession(req,res))
+router.get('/fetchsessions/:bookingId',authToken,(req,res)=>usercontroller.fetchsessionpending(req,res))
 export {router as userRouter}

@@ -1,4 +1,4 @@
-import {Request,Response} from 'express'
+import {Request,response,Response} from 'express'
 import { Signup } from '../../application/usecase/User/Registor'
 import { CheckEmail } from '../../application/usecase/User/Checkemail';
 import { GoogleLogin } from '../../application/usecase/User/GoogleLogin';
@@ -29,6 +29,8 @@ import { updateusercancelreason } from '../../application/usecase/booking/update
 import { GetWallet } from '../../application/usecase/Wallet/fetchWallet';
 import { FetchWallet } from '../../application/usecase/User/Wallet/getwallet';
 import { WalletPayment } from '../../application/usecase/booking/WalletPayment';
+import { FetchSession } from '../../application/usecase/Sessions/fetchsessions';
+import { Acceptsession } from '../../application/usecase/Sessions/acceptsession';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -60,7 +62,9 @@ export class UserController{
         private updateusercancelreasons:updateusercancelreason,
         private fetchwalletdetails:GetWallet,
         private getwalletbalance:FetchWallet,
-        private walletpayconsultationFee:WalletPayment
+        private walletpayconsultationFee:WalletPayment,
+        private fetchsession: FetchSession,
+        private acceptsessionrequest:Acceptsession
     
     ){}
 
@@ -576,6 +580,29 @@ export class UserController{
 
              
             }
+    }
+
+    async fetchsessionpending(req:Request,res:Response):Promise<void>{
+        try {
+            const{bookingId}=req.params
+            const response=await this.fetchsession.fetchpendingsession(bookingId)
+            res.status(200).json(response)
+        }  catch (error) {
+            console.error("Error fetching pending session", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
+    async acceptsession(req:Request,res:Response):Promise<void>{
+        try {
+            const{bookingId}=req.params
+            const{requestId,status}=req.body
+            const response=await this.acceptsessionrequest.acceptsession(bookingId,requestId,status)
+            res.status(200).json(response)
+        }  catch (error) {
+            console.error("Error accepting session", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
     }
     
 

@@ -204,6 +204,7 @@ export class bookingrepositoryImpl implements BookingRepository{
             techremark: booking.techremark,
             userremark: booking.userremark,
             pincode: booking.pincode,
+            sessionRequests:booking.sessionRequests,
             workTime: booking.workTime,
             workFinalAmount: booking.workFinalAmount,
             totalFinalAmount: booking.totalFinalAmount,
@@ -298,12 +299,13 @@ export class bookingrepositoryImpl implements BookingRepository{
   async acceptsession(bookingId: string, requestId: string): Promise<IBooking | null> {
       const booking=await BookingModels.findById(bookingId)
       if(!booking) return null
+      
 
       const sessionrequest=booking.sessionRequests?.find((req)=>req._id!.toString()===requestId)
-
+      console.log("session request accept",sessionrequest)
       if(!sessionrequest) return null
 
-      sessionrequest.status=='accepted'
+      sessionrequest.status='accepted'
       sessionrequest.responseAt=new Date()
 
       switch (sessionrequest.types){

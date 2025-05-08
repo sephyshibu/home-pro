@@ -24,12 +24,14 @@ interface Events {
     consultationpaymentStatus:string,
     finalpaymentStatus:string,
     worktime:[{}],
+    sessionrequest:[{types:string, status:string}],
     workaddress:string,
     totalhours:number,
     pincode:string,
   
   }
-
+  
+  
 
 
 const TechnicianUpcoming: React.FC = () => {
@@ -99,6 +101,7 @@ const TechnicianUpcoming: React.FC = () => {
     };
 
     const openModal = (req: Events) => {
+      console.log("req",req)
         setSelectedRequest(req);
         setIsOpen(true);
       };
@@ -118,6 +121,20 @@ const TechnicianUpcoming: React.FC = () => {
             toast.error(`Failed to send ${types}request`)
           }
       }
+
+     
+      const getLatestStatusMap = (requests: Events["sessionrequest"]) => {
+        const statusMap: Record<string, string> = {};
+      
+        // Loop through and override with latest status by type
+        for (const req of requests) {
+          statusMap[req.types] = req.status;
+        }
+      
+        return statusMap;
+      };
+      
+
 
 
   return (
@@ -207,18 +224,29 @@ const TechnicianUpcoming: React.FC = () => {
                 </button>
               </div>
             </div>
+            {selectedRequest && (() => {
+            const statusMap = getLatestStatusMap(selectedRequest.sessionrequest);
 
+            const isStartAccepted = statusMap["start"] === "accepted";
+            const isPauseAccepted = statusMap["pause"] === "accepted";
+            const isResumeAccepted = statusMap["resume"] === "accepted";
+            const isEndAccepted = statusMap["end"] === "accepted";
+
+            return (
            <div className="mt-6 flex justify-center gap-4">
-                <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onClick={()=>handleRequestSession('start')}>Accept</button>
-                <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700" onClick={()=>handleRequestSession('pause')}>Pause</button>
+                <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700  disabled:opacity-50" onClick={()=>handleRequestSession('start')} disabled={isStartAccepted || isPauseAccepted || isResumeAccepted || isEndAccepted} >Accept</button>
+                <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700  disabled:opacity-50" onClick={()=>handleRequestSession('pause')} disabled={!isStartAccepted || isPauseAccepted || isEndAccepted}>Pause</button>
                 <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700  disabled:opacity-50"
                     onClick={() => handleRequestSession('resume')}
+                    disabled={!isPauseAccepted || isResumeAccepted || isEndAccepted}
                   >
                     Resume
                   </button>
-                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onClick={()=>handleRequestSession('end')}>End</button>
+                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700  disabled:opacity-50" onClick={()=>handleRequestSession('end')}   disabled={!isStartAccepted || isEndAccepted}>End</button>
             </div>
+              );
+            })()}
             
           </Dialog.Panel>
         </div>
