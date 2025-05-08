@@ -19,7 +19,7 @@ interface servicepage {
   consultationFee:string,
   consultationpayStatus:string,
   finalpaymentStatus:string,
-  
+  sessionrequest:[{types:string, status:string}],
   worktime:[{}],
   workaddress:string,
   totalhours:number,

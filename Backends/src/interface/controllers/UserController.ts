@@ -31,6 +31,7 @@ import { FetchWallet } from '../../application/usecase/User/Wallet/getwallet';
 import { WalletPayment } from '../../application/usecase/booking/WalletPayment';
 import { FetchSession } from '../../application/usecase/Sessions/fetchsessions';
 import { Acceptsession } from '../../application/usecase/Sessions/acceptsession';
+import { FinalPayment } from '../../application/usecase/booking/makefinalpaymenty';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -64,7 +65,8 @@ export class UserController{
         private getwalletbalance:FetchWallet,
         private walletpayconsultationFee:WalletPayment,
         private fetchsession: FetchSession,
-        private acceptsessionrequest:Acceptsession
+        private acceptsessionrequest:Acceptsession,
+        private finalamount:FinalPayment
     
     ){}
 
@@ -600,6 +602,17 @@ export class UserController{
             const response=await this.acceptsessionrequest.acceptsession(bookingId,requestId,status)
             res.status(200).json(response)
         }  catch (error) {
+            console.error("Error accepting session", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
+    async finalamountbeforeconfirm(req:Request,res:Response):Promise<void>{
+        try {
+            const{bookingId}=req.params
+            const result=await this.finalamount.finalpayment(bookingId)
+            res.status(200).json(result)
+        } catch (error) {
             console.error("Error accepting session", error);
             res.status(500).json({ message: "Internal server error" });
         }

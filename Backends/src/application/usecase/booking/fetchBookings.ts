@@ -27,6 +27,8 @@ export class FetchBookingbyUserId{
             consultationpayStatus:booking.consultationpayStatus,
             finalpaymentStatus:booking.finalpayStatus,
             workaddress:booking.addressId.addressname,
+            sessionrequest:booking.sessionRequests,
+            workTime:booking.workTime,
             totalhours:booking.toalhours,
             pincode:booking.pincode,
             userremark:booking.userremark,
