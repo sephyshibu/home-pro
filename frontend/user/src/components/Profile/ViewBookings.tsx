@@ -61,7 +61,7 @@ const ViewBookingsProfile:React.FC=()=> {
   const [error, setError] = useState<string>("");
   const[technician,settechnician]=useState<viewBookings>(bookingdetails)
   const techId = technician._id;
-  
+
 const socket = io('http://localhost:3000');
   // Socket connection
 
@@ -232,7 +232,7 @@ useEffect(() => {
             }
     const shouldShowPaymentButton = technician.sessionrequest.some(
               (req) => req.types === "end" && req.status === "accepted"
-            );
+            ) && technician.finalpaymentStatus!== "completed";
   
 
   return (

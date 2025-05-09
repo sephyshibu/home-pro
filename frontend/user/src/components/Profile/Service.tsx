@@ -211,9 +211,9 @@ const MyServicesPage: React.FC = () => {
                   </td>
                     <td className="px-4 py-3">{bookingItem.date}</td>
                     <td className="px-4 py-3 text-center">
-                      <button className="bg-[#00BFFF] hover:bg-[#009FCC] text-white px-4 py-1 rounded-md" onClick={()=>handleView(bookingItem)}>
+                      {bookingItem.consultationpayStatus==="completed" && <button className="bg-[#00BFFF] hover:bg-[#009FCC] text-white px-4 py-1 rounded-md" onClick={()=>handleView(bookingItem)}>
                         View
-                      </button>
+                      </button>}
                     </td>
                     <td>
                     {bookingItem.consultationpayStatus === "failed" && (
