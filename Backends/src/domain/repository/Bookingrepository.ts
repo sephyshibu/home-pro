@@ -13,6 +13,6 @@ export interface BookingRepository {
     fetchBookingswithremark():Promise<IBooking[]>
     addsessionRequest(bookingId:string, types:string):Promise<IBooking|null>
     acceptsession(bookingId:string,requestId:string):Promise<IBooking|null>
-   
+    fetchcompletedandrejected(techId:string):Promise<IBooking[]|null>
     
 }

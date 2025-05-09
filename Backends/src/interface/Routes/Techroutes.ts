@@ -16,6 +16,7 @@ import { PasswordChange } from '../../application/usecase/Tech/Password/ChangePa
 import { bookingRequestRejectByTech } from '../../application/usecase/booking/requestreject'
 import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 import { RequestSession } from '../../application/usecase/Sessions/requestSession'
+import { fetchBookingswhichcompletedrejected } from '../../application/usecase/booking/fetchcompletedrejected'
 const router=express.Router()
 
 const techrepository= new TechRepositoryImpl()
@@ -35,6 +36,7 @@ const fetchupcmingevets= new FetchUpcoming(bookingrepository)
 const passchnage= new PasswordChange(techrepository)
 const requestrejectbytech= new bookingRequestRejectByTech(bookingrepository,walletrepository)
 const requestsessionbytech= new RequestSession(bookingrepository)
+const fetchcompleterejectbookings= new fetchBookingswhichcompletedrejected(bookingrepository)
 const TechController= new techController(
     logintechs,
     refreshtoken,
@@ -46,7 +48,8 @@ const TechController= new techController(
     fetchupcmingevets,
     passchnage,
     requestrejectbytech,
-    requestsessionbytech
+    requestsessionbytech,
+    fetchcompleterejectbookings
 )
 
 router.post('/login',(req,res)=>TechController.login(req,res))
@@ -62,4 +65,5 @@ router.get('/upcmingevents/:techId', authToken,(req,res)=>TechController.fetchup
 router.post('/password/:techId',authToken,(req,res)=>TechController.passwordChanges(req,res))
 router.post('/rejectbookings/:bookingId',authToken,(req,res)=>TechController.bookingsrejectedbytech(req,res))
 router.post('/requestsession/:bookingId',authToken,(req,res)=>TechController.requestressions(req,res))
+router.get('/fetchbookings/:techId',authToken,(req,res)=>TechController.completeandrejectbookings(req,res))
 export{router as techRouter}

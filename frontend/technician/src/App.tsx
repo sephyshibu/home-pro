@@ -5,6 +5,7 @@ import TechnicianLayout from './Layouts/TechLayout'
 import './App.css'
 import MyProfilePage from './componenst/Profile/Myacc'
 import ChangePasswords from './componenst/Profile/Passswordchange'
+import MyServicesPage from './componenst/Profile/Services'
 import { Toaster } from 'react-hot-toast'
 function App() {
   return(
@@ -17,6 +18,7 @@ function App() {
         <Route path='/myprofile' element={<TechnicianLayout/>}>
               <Route index element={<MyProfilePage/>}/>
               <Route path='/myprofile/password' element={<ChangePasswords/>}/>
+              <Route path='/myprofile/services' element={<MyServicesPage/>}/>
         </Route>
            
       </Routes>

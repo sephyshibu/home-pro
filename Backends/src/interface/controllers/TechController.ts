@@ -10,6 +10,7 @@ import { bookingRequestRejectByTech } from "../../application/usecase/booking/re
 import { FetchUpcoming } from "../../application/usecase/booking/upcomingevents";
 import { PasswordChange } from "../../application/usecase/Tech/Password/ChangePassword";
 import { RequestSession } from "../../application/usecase/Sessions/requestSession";
+import { fetchBookingswhichcompletedrejected } from "../../application/usecase/booking/fetchcompletedrejected";
 export class techController{
     constructor(
         private logintech:LoginTech,
@@ -22,7 +23,8 @@ export class techController{
         private upcoming:FetchUpcoming,
         private passwordhcange:PasswordChange,
         private requestrejectbyTech:bookingRequestRejectByTech,
-        private requestsessions:RequestSession
+        private requestsessions:RequestSession,
+        private fetchbookingwithcompleteandreject:fetchBookingswhichcompletedrejected
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -175,6 +177,17 @@ export class techController{
 
             const result=await this.requestsessions.requestsession(bookingId, types)
             res.status(200).json(result)
+        } catch (err: any) {
+            res.status(500).json({ message: err.message });
+            
+        }
+    }
+
+    async completeandrejectbookings(req:Request,res:Response):Promise<void>{
+        try {
+            const{techId}=req.params
+            const result=await this.fetchbookingwithcompleteandreject.fetchBookingscommpletereject(techId)
+            res.status(200).json({booking:result})
         } catch (err: any) {
             res.status(500).json({ message: err.message });
             
