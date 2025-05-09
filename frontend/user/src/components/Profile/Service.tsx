@@ -55,7 +55,7 @@ const MyServicesPage: React.FC = () => {
       userremark:""
     })
 
-
+   
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
       setform((prev)=>({...prev,[e.target.name]:e.target.value}))
     }
@@ -76,7 +76,7 @@ const MyServicesPage: React.FC = () => {
         }
         fetchbookvaLUES()
     },[])
-
+    
     const handleView=async(bookingdetails:servicepage)=>{
       navigate('/viewbookingddetails',{state:bookingdetails})
     }
@@ -196,8 +196,9 @@ const MyServicesPage: React.FC = () => {
                     <td className={`px-4 py-3 font-medium ${getTechStatusColor(bookingItem.techStatus)}`}>
                       {bookingItem.techStatus}
                     </td>
+                  
                     <td className="px-4 py-3">
-                    {(bookingItem.userremark=='' && bookingItem.workStatus.toLowerCase() === "pending") && (
+                    {(bookingItem.userremark=='') && (
                       <span className={`block font-medium ${getWorkStatusColor(bookingItem.workStatus)}`}>
                         {bookingItem.workStatus}
                       </span>

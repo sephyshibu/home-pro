@@ -26,9 +26,10 @@ export interface WorkTime {
     location: Location;
     booked_date: string;
     rateperhour?:number,
-    workstatus?:'pending' | 'progress' | 'paused' | "completed",
+    workstatus?:'pending' | 'progress' | 'paused' | "completed" |"resume",
     totalhours?:number,
     isStartAccept?:boolean|null,
+    isResumeAccept?:boolean|null,
     isEndAccept?:boolean|null,
     isPauseAccept?:boolean|null,
     isconfirmedbyTech?:'pending' | 'accepted' | 'rejected',

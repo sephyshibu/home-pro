@@ -150,7 +150,11 @@ export class bookingrepositoryImpl implements BookingRepository{
       }
 
       async fetchupcomingevents(techId: string): Promise<IBooking[] | null> {
-          const bookings=await BookingModels.find({technicianId:techId,isconfirmedbyTech:"accepted",workstatus:{$ne:"completed"}})
+          const bookings=await BookingModels.find(
+                          {technicianId:techId,
+                            isconfirmedbyTech:"accepted",
+                            finalpayStatus:{$ne:"completed"},
+                          })
                           .sort({date:1})
                           .populate({
                             path:"userId",
@@ -306,27 +310,36 @@ export class bookingrepositoryImpl implements BookingRepository{
       if(!sessionrequest) return null
 
       sessionrequest.status='accepted'
+      
       sessionrequest.responseAt=new Date()
 
       switch (sessionrequest.types){
         case 'start':
           booking.workTime?.push({start:new Date()})
+          booking.workstatus="progress"
+          booking.isStartAccept=true
           break;
 
         case 'pause':
           if (!booking.workTime) booking.workTime = [];
           const lastpause=booking.workTime[booking.workTime?.length-1]
           if(lastpause && !lastpause.end) lastpause.end=new Date()
+            booking.workstatus="paused"
+            booking.isPauseAccept=true
           break;
 
         case "resume":
           booking.workTime?.push({ start: new Date() });
+          booking.workstatus="resume"
+          booking.isResumeAccept=true
           break;
 
         case "end":
           if (!booking.workTime) booking.workTime = [];
           const lastEnd = booking.workTime[booking.workTime.length - 1];
           if (lastEnd && !lastEnd.end) lastEnd.end = new Date();
+          booking.workstatus="completed"
+          booking.isEndAccept=true
           break;
 
         
