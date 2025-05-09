@@ -6,8 +6,7 @@ import { fetchupcomingevents } from '../../api/Upcomingevents/upcomingevents';
 // import toast, {  } from 'react-hot-toast';
 import { Dialog } from '@headlessui/react';
 import axiosInstancetech from '../../axios';
-import { toast } from 'react-toastify';
-
+import toast from 'react-hot-toast';
 interface Events {
     _id:string,
     userId:string,

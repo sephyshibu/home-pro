@@ -121,7 +121,7 @@ export class bookingrepositoryImpl implements BookingRepository{
       }
 
       async fetchbookingByTechId(techId:string):Promise<IBooking[]|null>{
-        const bookings =await BookingModels.find({technicianId:techId,isconfirmedbyTech:"pending",consultationpayStatus:"completed"})
+        const bookings =await BookingModels.find({technicianId:techId,userremark:"",isconfirmedbyTech:"pending",consultationpayStatus:"completed"})
                         .populate({
                           path:"userId",
                           select:"name phone"

@@ -10,9 +10,9 @@ export class GetWallet{
         const walletdetails=await this.transactionrepository.getByOwnerId(userId)
         
         if(!walletdetails) throw new Error("no walet details")
-        const filteredDetails = walletdetails.filter(txn =>
-                
-            txn.purpose === "Refund for booking cancellation" || txn.type === "DEBIT"
+            const filteredDetails = walletdetails.filter(txn =>
+                txn.method === "Wallet" ||
+                txn.purpose === "Refund for booking cancellation"
             );
     
             return filteredDetails;
