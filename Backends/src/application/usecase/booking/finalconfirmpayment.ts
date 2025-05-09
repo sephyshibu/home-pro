@@ -3,8 +3,9 @@ import { BookingRepository } from "../../../domain/repository/Bookingrepository"
 import { walletRepository } from "../../../domain/repository/Walletrepository";
 import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
 import { calculateTotalWorkMinutes } from "../../../utils/CalculateMinutes";
+import { TechRepository } from "../../../domain/repository/Techrepository";
 export class FinalPaymentconfirm{
-   constructor(private bookingrepository:BookingRepository, private walletrepository:walletRepository,  private transactionrepository:TransactionRepository){}
+   constructor(private bookingrepository:BookingRepository, private walletrepository:walletRepository,  private transactionrepository:TransactionRepository, private techrepository:TechRepository){}
 
 
    async makefinalpaymentconfirm(bookingId:string,paymentId:string, status:"completed"): Promise<{success:boolean; booking:IBooking}>{
@@ -18,7 +19,7 @@ export class FinalPaymentconfirm{
 
     const adminCommission = Math.ceil(totalFinalAmount * 0.05);
     const technicianCommission = totalFinalAmount - adminCommission;
-
+    await this.techrepository.increasenoofworks(booking.technicianId.toString())
     const result=await this.bookingrepository.update(bookingId,{
         workFinalAmount:workFinalAmount,
         totalFinalAmount:totalFinalAmount,
@@ -30,7 +31,7 @@ export class FinalPaymentconfirm{
         finalpaymenttransactionId:paymentId
     })
     const wallet=await this.walletrepository.findById(booking.userId.toString())
-
+    console.log("user walalet", wallet)
     if(!wallet) throw new Error("no wallet founded")
 
     try {
@@ -38,17 +39,18 @@ export class FinalPaymentconfirm{
             ownerId:booking.userId.toString(),
             userType:wallet.userType,
             type:"DEBIT",
-            amount:booking.workFinalAmount!,
+            amount:workFinalAmount,
             referenceId:booking.id!.toString(),
             method:"RazorPay",
             status:"success",
             purpose:"Final Payment",
-            admincommission:booking.admincommision,
-            techniciancommision:booking.techcommision
+            admincommission:adminCommission,
+            techniciancommision:technicianCommission
 
         })
-        console.log("res", res)
+        console.log("result transaction", res)
         console.log("Transaction created successfully");
+       
       } catch (err) {
         console.error("Transaction creation failed:", err);
       }

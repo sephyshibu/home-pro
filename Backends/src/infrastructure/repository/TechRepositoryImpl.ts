@@ -91,5 +91,8 @@ export class TechRepositoryImpl implements TechRepository{
             return null;
         }
     }
-    
+    async increasenoofworks(techId:string):Promise<void>{
+        const result=await TechModel.findByIdAndUpdate(techId,{$inc:{noofworks:1}})
+        console.log(result)
+      }
 }

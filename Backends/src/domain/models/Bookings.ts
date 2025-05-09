@@ -50,7 +50,8 @@ export interface WorkTime {
     razorpayFinalPaymentId?:string,
     consultationtransactionId?:string, 
     finalpaymenttransactionId?:string,
-    refundrequestAccept?:boolean
+    refundrequestAccept?:boolean,
+    noofworks?:number,
     createdAt?: Date;
   }
   

@@ -58,7 +58,8 @@ const BookingModel = new mongoose.Schema<IBooking>({
   razorpayFinalPaymentId:{type:String,default:""}, 
   consultationtransactionId:{type:String,default:""}, 
   finalpaymenttransactionId:{type:String,default:""}, 
-  refundrequestAccept:{type:Boolean, default:false}
+  refundrequestAccept:{type:Boolean, default:false},
+
 });
 
 export const BookingModels= mongoose.model<IBooking>("Booking", BookingModel);

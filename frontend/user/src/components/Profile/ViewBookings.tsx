@@ -198,10 +198,9 @@ useEffect(() => {
         order_id: res.data.id,
         handler: async (response: any) => {
           await axiosInstanceuser.post("/finalconfirmpayemnts", {
-            userId,
-            amount,
             razorpay_payment_id: response.razorpay_payment_id,
-            bookingId, // reusing the same booking
+            bookingId, 
+            // reusing the same booking
             
           });
           toast.success("Final Payment successfully!");

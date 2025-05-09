@@ -32,6 +32,7 @@ import { WalletPayment } from '../../application/usecase/booking/WalletPayment';
 import { FetchSession } from '../../application/usecase/Sessions/fetchsessions';
 import { Acceptsession } from '../../application/usecase/Sessions/acceptsession';
 import { FinalPayment } from '../../application/usecase/booking/makefinalpaymenty';
+import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconfirmpayment';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -66,7 +67,8 @@ export class UserController{
         private walletpayconsultationFee:WalletPayment,
         private fetchsession: FetchSession,
         private acceptsessionrequest:Acceptsession,
-        private finalamount:FinalPayment
+        private finalamount:FinalPayment,
+        private confirmfinalpayment:FinalPaymentconfirm
     
     ){}
 
@@ -617,6 +619,27 @@ export class UserController{
             res.status(500).json({ message: "Internal server error" });
         }
     }
+
+    async finalpaymentconfirm(req:Request,res:Response):Promise<void>{
+
+        try {
+            const {
+         
+                bookingId,
+                razorpay_payment_id,
+              }: { bookingId: string; razorpay_payment_id: string } = req.body;
+              console.log("req body", req.body)
+              if ( !bookingId || !razorpay_payment_id) {
+                res.status(400).json({ message: "Missing required fields" });
+                return;
+              }
+              const result=await this.confirmfinalpayment.makefinalpaymentconfirm(bookingId,razorpay_payment_id,"completed")
+              res.status(200).json({ success: true, booking: result.booking });
+            } catch (err) {
+              console.error("❌ Error confirming payment:", err);
+              res.status(500).json({ message: "Internal server error" });
+            }
+        }
     
 
      

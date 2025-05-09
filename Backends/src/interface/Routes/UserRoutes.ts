@@ -43,6 +43,7 @@ import { WalletPayment } from '../../application/usecase/booking/WalletPayment'
 import { FetchSession } from '../../application/usecase/Sessions/fetchsessions'
 import { Acceptsession } from '../../application/usecase/Sessions/acceptsession'
 import { FinalPayment } from '../../application/usecase/booking/makefinalpaymenty'
+import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconfirmpayment'
 const router=express.Router()
 
 
@@ -91,6 +92,9 @@ const walletpayconsultationFee= new WalletPayment(bookingrepository,walletReposi
 const fetchingpendingsession=new FetchSession(bookingrepository)
 const acceptingsession= new Acceptsession(bookingrepository)
 const finalamounttopay= new FinalPayment(bookingrepository)
+const confirmfinalpayment= new FinalPaymentconfirm(bookingrepository,walletRepository,transactionrepository,techrepository)
+
+
 const usercontroller= new UserController(
     signupuser,
     checkemailUser,
@@ -123,7 +127,8 @@ const usercontroller= new UserController(
     walletpayconsultationFee,
     fetchingpendingsession,
     acceptingsession,
-    finalamounttopay
+    finalamounttopay,
+    confirmfinalpayment
   
     
 
@@ -167,4 +172,5 @@ router.post('/walletpayment',authToken,(req,res)=>usercontroller.walletpaymentco
 router.post('/acceptsessionrequest/:bookingId',authToken,(req,res)=>usercontroller.acceptsession(req,res))
 router.get('/fetchsessions/:bookingId',authToken,(req,res)=>usercontroller.fetchsessionpending(req,res))
 router.post('/finalpaymentprocess/:bookingId',authToken,(req,res)=>usercontroller.finalamountbeforeconfirm(req,res))
+router.post('/finalconfirmpayemnts',authToken,(req,res)=>usercontroller.finalpaymentconfirm(req,res))
 export {router as userRouter}

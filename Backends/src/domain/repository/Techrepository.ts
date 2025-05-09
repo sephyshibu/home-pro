@@ -10,4 +10,5 @@ export interface TechRepository{
     edittech(techid:string,update:Partial<ITech>):Promise<ITech>
     fetchTechbasedonavilablity(pincode:string, date:string, categoryId:string):Promise<ITech[]|null>
     fetchTechwithcategory(techid:string):Promise<ITech|null>
+    increasenoofworks(techId:string):Promise<void>
 }
