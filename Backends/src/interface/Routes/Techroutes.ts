@@ -17,12 +17,15 @@ import { bookingRequestRejectByTech } from '../../application/usecase/booking/re
 import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 import { RequestSession } from '../../application/usecase/Sessions/requestSession'
 import { fetchBookingswhichcompletedrejected } from '../../application/usecase/booking/fetchcompletedrejected'
+import { FetchTransactionsinTechWallet } from '../../application/usecase/Wallet/fetchtransactiondetailsintech'
+import { TransactionRepositoryImpl } from '../../infrastructure/repository/TransactionRepositoryImpl'
 const router=express.Router()
 
 const techrepository= new TechRepositoryImpl()
 const categoryrepository= new categoryRepositoryImpl()
 const bookingrepository=new bookingrepositoryImpl()
 const walletrepository= new walletRepositoryimpl()
+const transactionrespository=new TransactionRepositoryImpl()
 
 
 const logintechs= new LoginTech(techrepository)
@@ -37,6 +40,8 @@ const passchnage= new PasswordChange(techrepository)
 const requestrejectbytech= new bookingRequestRejectByTech(bookingrepository,walletrepository)
 const requestsessionbytech= new RequestSession(bookingrepository)
 const fetchcompleterejectbookings= new fetchBookingswhichcompletedrejected(bookingrepository)
+const fetchtransactionintech= new FetchTransactionsinTechWallet(transactionrespository,bookingrepository)
+
 const TechController= new techController(
     logintechs,
     refreshtoken,
@@ -49,7 +54,8 @@ const TechController= new techController(
     passchnage,
     requestrejectbytech,
     requestsessionbytech,
-    fetchcompleterejectbookings
+    fetchcompleterejectbookings,
+    fetchtransactionintech
 )
 
 router.post('/login',(req,res)=>TechController.login(req,res))
@@ -66,4 +72,5 @@ router.post('/password/:techId',authToken,(req,res)=>TechController.passwordChan
 router.post('/rejectbookings/:bookingId',authToken,(req,res)=>TechController.bookingsrejectedbytech(req,res))
 router.post('/requestsession/:bookingId',authToken,(req,res)=>TechController.requestressions(req,res))
 router.get('/fetchbookings/:techId',authToken,(req,res)=>TechController.completeandrejectbookings(req,res))
+router.get('/fetchtransactiondetails/:techId',authToken,(req,res)=>TechController.fetchtransactiontechwallet(req,res))
 export{router as techRouter}

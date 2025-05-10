@@ -33,6 +33,7 @@ import { FetchSession } from '../../application/usecase/Sessions/fetchsessions';
 import { Acceptsession } from '../../application/usecase/Sessions/acceptsession';
 import { FinalPayment } from '../../application/usecase/booking/makefinalpaymenty';
 import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconfirmpayment';
+
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -68,7 +69,8 @@ export class UserController{
         private fetchsession: FetchSession,
         private acceptsessionrequest:Acceptsession,
         private finalamount:FinalPayment,
-        private confirmfinalpayment:FinalPaymentconfirm
+        private confirmfinalpayment:FinalPaymentconfirm,
+     
     
     ){}
 
@@ -640,7 +642,8 @@ export class UserController{
               res.status(500).json({ message: "Internal server error" });
             }
         }
-    
+
+        
 
      
 }

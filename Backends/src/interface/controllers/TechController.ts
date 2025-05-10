@@ -11,6 +11,8 @@ import { FetchUpcoming } from "../../application/usecase/booking/upcomingevents"
 import { PasswordChange } from "../../application/usecase/Tech/Password/ChangePassword";
 import { RequestSession } from "../../application/usecase/Sessions/requestSession";
 import { fetchBookingswhichcompletedrejected } from "../../application/usecase/booking/fetchcompletedrejected";
+import { FetchTransactionsinTechWallet } from "../../application/usecase/Wallet/fetchtransactiondetailsintech";
+
 export class techController{
     constructor(
         private logintech:LoginTech,
@@ -24,7 +26,8 @@ export class techController{
         private passwordhcange:PasswordChange,
         private requestrejectbyTech:bookingRequestRejectByTech,
         private requestsessions:RequestSession,
-        private fetchbookingwithcompleteandreject:fetchBookingswhichcompletedrejected
+        private fetchbookingwithcompleteandreject:fetchBookingswhichcompletedrejected,
+        private fetchtransactionintechwallet:FetchTransactionsinTechWallet
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -193,6 +196,19 @@ export class techController{
             
         }
     }
+
+    async fetchtransactiontechwallet(req:Request,res:Response):Promise<void>{
+        try {
+            const{techId}=req.params
+
+            const result=await this.fetchtransactionintechwallet.transactiondetails(techId)
+            res.status(200).json(result);
+        } catch (err) {
+          console.error("❌ Error confirming payment:", err);
+          res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
 
     
 

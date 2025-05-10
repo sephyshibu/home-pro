@@ -4,4 +4,5 @@ export interface TransactionRepository {
     getByOwnerId(ownerId: string): Promise<ITransaction[]>;
     fetchtransaction():Promise<ITransaction[]>
     findById(id:string):Promise<ITransaction|null>
+    getbyTechnicianId(techId:string):Promise<ITransaction[]|null>
   }

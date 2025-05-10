@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-
+import { fetchtransactiondetails } from '../../api/Fetchtransaction/fetchtransaction';
 import axiosInstancetech from '../../axios';
 
 interface Transaction{
     _id:string,
-    ownerid:{
-        name:string
-    }
+    ownerid:string,
     type:string,
     amount:number,
-    referenceid:{
-        _id:string,
-        techcommision:number,
-        totalFinalAmount:number
-
-    },
+    referenceId:string,
     purpose:string,
     status:string,
+    username?:string,
+    techniciancommision:number
 }
 
 interface Walletbalance{
@@ -30,22 +25,27 @@ export default function WalletPage() {
     const[balance,setbalance]=useState<Walletbalance>()
     const navigate=useNavigate()
     useEffect(()=>{
-        const balance=async()=>{
-                 const response=await axiosInstancetech.get(`/fetchtransaction/${techId}`)
-                 console.log("asf",response.data.balance)
-                 setbalance(response.data.balance)
-        }
-        balance()
+        // const balance=async()=>{
+        //          const response=await axiosInstancetech.get(`/fetchtransaction/${techId}`)
+        //          console.log("asf",response.data)
+        //          setbalance(response.data.balance)
+        // }
+        // balance()
        
         const fetchWallet=async()=>{
-            if(!userId){
-                navigate('/login')
+            if(!techId){
+                navigate('/')
                 return
             }
 
             try {
-                const walletdetail=await walletdetails(userId)
-                setwalletdetails(walletdetail)
+                const walletdetail=await fetchtransactiondetails(techId)
+                settransaction(walletdetail)
+
+                const total=walletdetail.filter((tx:Transaction)=>tx.type==='DEBIT')
+                                        .reduce((sum:number,tx:Transaction)=>sum+(tx.techniciancommision||0),0)
+
+                setbalance({amount:total})
 
             } catch (error) {
                 console.error("Error fetching wallet:", error);
@@ -55,6 +55,8 @@ export default function WalletPage() {
         fetchWallet()
     },[])
 
+  
+
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -63,7 +65,7 @@ export default function WalletPage() {
         
 
         <section className="flex-1 p-8">
-          <h2 className="text-xl font-semibold mb-4">Wallet Balance : ₹{balance}</h2>
+          <h2 className="text-xl font-semibold mb-4">Wallet Balance : ₹{balance?.amount}</h2>
 
           {/* <div className="flex gap-2 mb-4">
             <input type="text" placeholder="Enter Amount" className="border px-4 py-2 rounded-md w-1/3" />
@@ -71,26 +73,38 @@ export default function WalletPage() {
             <button className="bg-blue-500 text-white px-4 py-2 rounded-md">Withdraw</button>
           </div> */}
 
-          <table className="w-full bg-white shadow rounded-lg overflow-hidden">
+         
+        <table className="w-full bg-white shadow rounded-lg overflow-hidden">
             <thead className="bg-gray-200 text-gray-700">
-              <tr>
-                <th className="text-left px-4 py-2">Transaction</th>
-                <th className="text-left px-4 py-2">Transaction Status</th>
-                <th className="text-left px-4 py-2">Purpose</th>
-                <th className="text-left px-4 py-2">Amount</th>
-              </tr>
+            <tr>
+                <th className="text-left px-4 py-2">Booking ID</th>
+                <th className="text-left px-4 py-2">Status</th>
+                <th className="text-left px-4 py-2">Total Amount of work </th>
+                <th className="text-left px-4 py-2">Tech Amount</th>
+            </tr>
             </thead>
             <tbody>
-              {walletlist && walletlist.map((txn, index) => (
-                <tr key={index} className="border-t">
-                  <td className="px-4 py-2">{txn.type}</td>
-                  <td className={`px-4 py-2 ${txn.status === 'Successful' ? 'text-green-600' : 'text-red-500'}`}>{txn.status}</td>
-                  <td className="px-4 py-2">{txn.purpose}</td>
-                  <td className="px-4 py-2">₹ {txn.amount}</td>
+            {transaction && transaction.map((tx, index) => (
+                <tr
+                key={index}
+                className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
+                >
+                <td className="px-4 py-2">{tx.referenceId}</td>
+        
+                <td
+                    className={`px-4 py-2 font-medium ${
+                    tx.status === 'Successful' ? 'text-green-600' : 'text-red-500'
+                    }`}
+                >
+                    {tx.status}
+                </td>
+                <td className="px-4 py-2">₹ {tx.amount}</td>
+                <td className="px-4 py-2">₹ {tx.techniciancommision}</td>
                 </tr>
-              ))}
+                
+            ))}
             </tbody>
-          </table>
+        </table>
         </section>
       </main>
 

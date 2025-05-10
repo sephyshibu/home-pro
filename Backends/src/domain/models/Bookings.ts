@@ -1,4 +1,5 @@
 // entities/Booking.ts
+
 export interface WorkTime {
     start: Date;
     end?: Date;

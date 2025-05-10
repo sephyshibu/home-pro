@@ -3,6 +3,7 @@ import { IBooking } from "../../domain/models/Bookings";
 import {BookingModels} from '../db/schemas/BookingModel';
 import { TechModel } from "../db/schemas/techModel";
 import { AddressModel } from "../db/schemas/AddressModel";
+import { IUser } from "../../domain/models/User";
 export class bookingrepositoryImpl implements BookingRepository{
     async creates(booking: Omit<IBooking, "id">): Promise<IBooking> {
         console.log("impl", booking)
@@ -383,6 +384,20 @@ export class bookingrepositoryImpl implements BookingRepository{
       return bookings
     }
 
+  }
+  async findbookingIdreturnIUser(id: string): Promise<IUser | null> {
+     try {
+       const booking=await BookingModels.findById(id).populate('userId')
+       if (!booking || !booking.userId) {
+        return null; // If no booking found or no user associated, return null
+      }
+  
+      // Return the populated user
+      return booking.userId as IUser;
+    } catch (error) {
+      console.log("Error fetching booking:", error);
+      throw new Error('Failed to fetch booking user');
+    }
   }
 
   
