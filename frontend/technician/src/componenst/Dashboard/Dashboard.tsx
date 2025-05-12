@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 // import AddCategory from './AddCategory'
 import logo from '../../../public/images/Resized/Logo Portrait.png'
 import {persistor} from '../app/store'
-const tabs = ["Upcoming Events", "Request", "Dashboard","Transactions"];
+const tabs = ["Upcoming Events", "Request", "Dashboard"];
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("Upcoming Events");

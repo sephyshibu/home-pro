@@ -21,12 +21,10 @@ const TechnicianLayout = () => {
       <div className="bg-yellow-400 p-4 flex justify-between items-center">
         <div className="text-xl font-bold text-blue-900">HomePro</div>
         
-        {/* Center Navigation */}
-        {/* <div className="flex space-x-6 text-black font-semibold">
-          <NavLink to="/events" className="hover:underline">Upcoming Events</NavLink>
-          <NavLink to="/requests" className="hover:underline">Requests</NavLink>
-          <NavLink to="/dashboard" className="hover:underline">Dashboard</NavLink>
-        </div> */}
+      
+          <NavLink to="/techdashboard" className="text-lg font-semibold text-sky-600 hover:underline">🏠 Home</NavLink>
+        
+        
 
         {/* Right Side Profile */}
         <div className="font-medium cursor-pointer">
