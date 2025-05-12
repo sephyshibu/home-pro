@@ -7,6 +7,7 @@ import { updatecancelreason } from "../../api/cancelrequest/Cancelreason";
 import toast from "react-hot-toast";
 interface servicepage {
   _id:string,
+  techIds:string,
   techimage:string;
   technicianname: string;
   Category: string;

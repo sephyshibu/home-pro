@@ -14,6 +14,7 @@ export class FetchBookingbyUserId{
 
             return {
             _id:booking._id,
+            techIds:booking.technicianId._id,
             technicianname:booking.technicianId.name,
             techimage:booking.technicianId.profileimgurl,
             Category:booking.technicianId.categoryid.name,

@@ -1,40 +1,44 @@
-import {Server} from 'socket.io'
+import {Server,Socket} from 'socket.io'
 import http from 'http'
 import { ChatService } from '../../application/usecase/Chat/ChatService'
-import { ConversationModelImpl } from '../repository/ConversationrepositoryImpl'
 import { MessagerepositoryImpl } from '../repository/MessageImpl'
 
-export const initializeSocket = (server: http.Server) => {
-    console.log("sockettt")
-    const io = new Server(server, {
-      cors: {
-        origin: ["http://localhost:5175","http://localhost:5174"] ,// your frontend URL
-        methods: ["GET", "POST"]
+
+const messageUseCases = new ChatService(new MessagerepositoryImpl());
+export const initSocket = (io: Server) => {
+  io.on('connection', (socket: Socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    // Join booking room
+    socket.on('join-room', (bookingId: string) => {
+      socket.join(bookingId);
+    });
+
+    // Handle send message
+    socket.on('send-message', async (message) => {
+      await messageUseCases.sendMessage(message);
+      io.to(message.bookingId).emit('receive-message', message);
+      
+      
+      if (message.senderId !== message.receiverId) { // Avoid notifying the sender
+        io.to(message.receiverId).emit('notify', {
+          title: 'New Message',
+          body: message.message,
+          bookingId: message.bookingId,
+        });
       }
     });
-  
-    const chatService = new ChatService(
-      new ConversationModelImpl(),
-      new MessagerepositoryImpl()
-    );
-  
-    io.on("connection", (socket) => {
-      console.log("User connected");
-  
-      socket.on("join_room", async ({ userId, receiverId }) => {
-        const conversation = await chatService.getorcreateconverstaion(userId, receiverId);
-        socket.join(conversation._id.toString());
-      });
-  
-      socket.on("send_message", async ({ senderId, receiverId, message }) => {
-        const conversation = await chatService.getorcreateconverstaion(senderId, receiverId);
-        const newMessage = await chatService.sendMessage(conversation._id, senderId, message);
-  
-        io.to(conversation._id.toString()).emit("receive_message", newMessage);
-      });
-  
-      socket.on("disconnect", () => {
-        console.log("User disconnected");
-      });
+
+    // Fetch all messages
+    socket.on('fetch-messages', async (bookingId: string, callback) => {
+      const messages = await messageUseCases.getMessages(bookingId);
+      callback(messages);
     });
-  };
+    
+
+
+    socket.on('disconnect', () => {
+      console.log(`User disconnected: ${socket.id}`);
+    });
+  });
+};

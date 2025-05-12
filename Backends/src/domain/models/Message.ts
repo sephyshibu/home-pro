@@ -1,10 +1,10 @@
-import { Types } from "mongoose";
 
-export interface IMessage{
-    _id:string, 
-    conversationId:Types.ObjectId,
-    senderId:string,
-    message:string,
-    seen:boolean,
-    createdAt:Date
-}
+export interface IMessage {
+    senderId:Object,
+    receiverId:Object,
+    message: string;
+    timestamp: Date;
+    bookingId: Object;
+    isRead:Boolean
+  }
+  

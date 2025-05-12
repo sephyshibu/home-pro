@@ -10,7 +10,8 @@ interface Transaction {
   amount: number;
   Name: string;
   purpose: string;
-  date:string
+  date:string;
+  admincommission:number;
 }
 interface bookingdetals{
     username:string,
@@ -21,12 +22,16 @@ interface bookingdetals{
     userremark:string,
     techremark:string,
 }
+interface Balance{
+  amount:number
+}
 
 const TransactionPage: React.FC = () => {
 //   const platformEarnings = 9500;
     const adminId=localStorage.getItem("adminId")
     const navigate=useNavigate()
     const[transaction,settransaction]=useState<Transaction[]>([])
+    const[balance,setbalance]=useState<Balance>()
     const [isOpen, setIsOpen] = useState(false);
     const [bookingdetails, setbookingdetails] = useState<bookingdetals | null>(null);
     useEffect(()=>{
@@ -39,7 +44,11 @@ const TransactionPage: React.FC = () => {
 
             try {
                 const transactionsdetail=await fetchtransactions()
+                console.log("transactions", transactionsdetail)
                 settransaction(transactionsdetail)
+                const total=transactionsdetail.reduce((sum:number,tx:Transaction)=>sum+(tx.admincommission||0),0)
+                setbalance({amount:total})
+                
 
             } catch (error) {
                 console.error('Failed to fetch Transactions', error);
@@ -60,6 +69,7 @@ const TransactionPage: React.FC = () => {
       
 
     }
+    console.log("balamce", balance)
     const closeModal = () => {
         setIsOpen(false);
         setbookingdetails(null);
@@ -75,6 +85,8 @@ const TransactionPage: React.FC = () => {
         </div> */}
 
         <div className="overflow-x-auto rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-4">Platform Earnings : ₹{balance?.amount}</h2>
+
           <table className="min-w-full bg-white rounded-lg">
             <thead className="bg-green-900 text-white">
               <tr>

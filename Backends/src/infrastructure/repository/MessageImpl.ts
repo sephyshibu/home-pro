@@ -3,12 +3,13 @@ import { Messagerepository } from "../../domain/repository/Messagerepository";
 import { MessageModel } from "../db/schemas/MessageModel";
 
 export class MessagerepositoryImpl implements Messagerepository{
-    async create(message: Omit<IMessage, "_id" | "createdAt">): Promise<IMessage> {
-        const newMsg = await MessageModel.create(message);
-        return newMsg.toObject();
-      }
-    
-      async findByConversationId(conversationId: string): Promise<IMessage[]> {
-        return await MessageModel.find({ conversationId }).sort({ createdAt: 1 });
-      }
+
+
+    async findByBookingId(bookingId: string): Promise<IMessage[]> {
+      return MessageModel.find({ bookingId }).sort({ createdAt: 1 }).lean();
+    }
+
+    async save(message: IMessage): Promise<void> {
+      await MessageModel.create({ ...message, createdAt: new Date(), isRead: false });
+    }
 }

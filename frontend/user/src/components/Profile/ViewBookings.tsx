@@ -3,6 +3,7 @@ import { useLocation } from "react-router";
 import { fetchTechById } from "../../api/fetchtechbyid";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router";
+import ChatBox from "../ChatBox";
 import { finalamount } from "../../api/FinalAmount/finalamount";
 import {persistor} from '../../app/store'
 import axiosInstanceuser from "../../axios";
@@ -10,10 +11,11 @@ import { Dialog,DialogPanel,DialogTitle } from "@headlessui/react";
 import { acceptsessionrequest } from "../../api/AcceptSession/acceptsession";
 import { rejectsessionrequest } from "../../api/RequestSession/requestsession";
 import { fetchSessionRequests } from "../../api/Fetchsession/fetchsession";
-import io from 'socket.io-client'
+
 import { toast } from "react-toastify";
 interface viewBookings{
-  _id:string
+  _id:string;
+  techIds:string;
   techimage:string;
   technicianname: string;
   Category: string;
@@ -44,87 +46,24 @@ interface WorkTime{
   end:number
 }
 
+
 const ViewBookingsProfile:React.FC=()=> {
   const location=useLocation()
   const bookingdetails=location.state as viewBookings
   const navigate=useNavigate()
   const userId=localStorage.getItem("userId")
   const[isopen,setisopen]=useState(false)
-  const [isSocketReady, setIsSocketReady] = useState(false);
+
   const [sessionRequests, setSessionRequests] = useState<SessionRequest[]>([]);
   const[amount,setamount]=useState<string|null>(null)
   const[totalminutes,settotalminutes]=useState<string|null>(null)
   const[rateperminute,setrateperminute]=useState<string|null>(null)
-  const [messages, setMessages] = useState<string[]>([]);
-  const [newMessage, setNewMessage] = useState<string>("");
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  
   const [error, setError] = useState<string>("");
   const[technician,settechnician]=useState<viewBookings>(bookingdetails)
   const techId = technician._id;
 
-const socket = io('http://localhost:3000');
-  // Socket connection
 
-  // Socket connection setup
-useEffect(() => {
-  if (technician.techStatus === "Accepted") {
-    const roomId = [userId, techId].sort().join("_");
-
-
-
-    // Join the room
-    socket.emit("join_room", { userId, receiverId: techId });
-
-    // Listen for incoming messages
-    socket.on("receive_message", (message: string) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-
-    // Log socket connection
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-    });
-
-    // Handle connection error
-    socket.on("connect_error", (err) => {
-      console.error("Socket connection error:", err.message);
-    });
-
-    // Clean up socket on dismount
-    return () => {
-      socket.disconnect();
-      console.log("Socket disconnected");
-    };
-  }
-}, [technician, userId, techId]);
-
-// Send message
-  const sendMessage = () => {
-    if (newMessage.trim() === "") return;
-
-    if (!socket) {
-      console.error("Socket not initialized, retrying...");
-      setTimeout(sendMessage, 1000); // Retry in 1 second
-      return;
-    }
-
-    const messageData = {
-      senderId: userId,
-      receiverId: techId,
-      message: newMessage,
-    };
-
-    socket.emit("send_message", messageData);
-
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setNewMessage(""); // Clear input
-  };
-
-
-  // Scroll to the bottom of messages when a new message is received
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   useEffect(() => {
     // Fetch session requests for this booking
@@ -153,6 +92,7 @@ useEffect(() => {
     }
   };
 
+
   const handleReject = async (requestId: string) => {
     try {
       await rejectsessionrequest(bookingdetails._id, requestId, 'rejected');
@@ -165,6 +105,7 @@ useEffect(() => {
       setError("Failed to reject session request.");
     }
   };
+  console.log("statttt",technician.techStatus)
   const handlePayment=async(bookingId:string)=>{
     try {
   
@@ -312,36 +253,20 @@ useEffect(() => {
               ))}
           </div>
         )}
-
-          <div className="col-span-6 md:col-span-3 bg-white p-4 rounded shadow">
-          <h3 className="text-lg font-semibold mb-4">Chat with {technician.technicianname}</h3>
-
-          <div className="space-y-4 h-80 overflow-y-auto mb-4">
-            {messages.map((msg, index) => (
-              <div key={index} className={`flex ${userId === technician._id ? 'justify-end' : ''}`}>
-                <div className="bg-gray-100 p-3 rounded-lg max-w-xs">{msg}</div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-              placeholder="Type a message..."
-              className="border border-gray-300 p-2 rounded-md flex-grow"
-            />
-            <button
-              onClick={sendMessage}
-              className="bg-blue-500 text-white px-4 py-2 rounded-md"
-            >
-              Send
-            </button>
-          </div>
+        {technician.techStatus?.trim().toLowerCase() === "accepted" &&  technician.workStatus.trim().toLowerCase()!= 'completed'  && (
+        <div className="col-span-6 mt-6">
+          <h2 className="text-xl font-bold mb-4">Chat with Technician</h2>
+       
+          <ChatBox
+            bookingId={technician._id}
+            userId={userId!}
+            techId={technician.techIds} // or actual technician userId
+          />
         </div>
+      )}
+
+
+
         </div>
         <Dialog open={isopen} onClose={() => setisopen(false)} className="relative z-[999]">
           <div className="fixed inset-0 bg-black/30 z-[999]" aria-hidden="true" />

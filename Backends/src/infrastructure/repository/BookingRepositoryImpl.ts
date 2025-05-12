@@ -106,7 +106,7 @@ export class bookingrepositoryImpl implements BookingRepository{
                         .sort({_id:-1})
                         .populate({
                             path:"technicianId",
-                            select:"name profileimgurl categoryid phone",
+                            select:"_id name profileimgurl categoryid phone",
                             populate:{
                                 path:"categoryid",
                                 select:"name"

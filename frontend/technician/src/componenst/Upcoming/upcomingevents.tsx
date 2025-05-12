@@ -1,5 +1,5 @@
 import React, { useEffect, useState ,useRef} from 'react';
-import { io } from 'socket.io-client';
+import ChatBox from '../ChatBox';
 import { useNavigate } from 'react-router';
 import { fetchupcomingevents } from '../../api/Upcomingevents/upcomingevents';
 // import { aceptRequest } from '../../api/AcceptRequest/acceptrequest';
@@ -32,42 +32,17 @@ interface Events {
   
   
 
-
 const TechnicianUpcoming: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState<Events | null>(null);
     const techId=localStorage.getItem("techId")
     const[upcoming,setupcoming]=useState<Events[]|null>([])
-    const [messages, setMessages] = useState<string[]>([]);
-    const [newMessage, setNewMessage] = useState("");
-    const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    const socket = useRef<any>(null);
-    const navigate=useNavigate()
-    useEffect(() => {
-      if (selectedRequest && techId && selectedRequest.userId) {
-        const roomId = [selectedRequest.userId, techId].sort().join("_");
-    
-        socket.current = io("http://localhost:3000");
-    
-        socket.current.emit("join_room", {
-          userId: techId, // tech joining
-          receiverId: selectedRequest.userId,
-        });
-    
-        socket.current.on("receive_message", (message: string) => {
-          setMessages((prev) => [...prev, message]);
-        });
-    
-        return () => {
-          socket.current.disconnect();
-        };
-      }
-    }, [selectedRequest, techId]);
 
+   
+    const navigate=useNavigate()
+
+   
     
-    useEffect(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
 
     useEffect(()=>{
         const fetchupcomingevent=async()=>{
@@ -86,23 +61,14 @@ const TechnicianUpcoming: React.FC = () => {
         fetchupcomingevent()
     },[])
 
-    const sendMessage = () => {
-      if (!newMessage.trim()) return;
     
-      socket.current.emit("send_message", {
-        senderId: techId,
-        receiverId: selectedRequest?.userId,
-        message: newMessage,
-      });
-    
-      setMessages((prev) => [...prev, newMessage]);
-      setNewMessage("");
-    };
 
     const openModal = (req: Events) => {
       console.log("req",req)
         setSelectedRequest(req);
         setIsOpen(true);
+
+      
       };
     
       const closeModal = () => {
@@ -197,32 +163,15 @@ const TechnicianUpcoming: React.FC = () => {
                 <a href={selectedRequest.locationUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Location</a>
               </div>
             )}
-            <div className="mt-4">
-              <h4 className="text-md font-semibold mb-2">Chat with {selectedRequest && selectedRequest.username}</h4>
-              <div className="space-y-2 h-60 overflow-y-auto border rounded p-2 bg-gray-50">
-                {messages.map((msg, i) => (
-                  <div key={i} className="flex">
-                    <div className="bg-blue-100 p-2 rounded">{msg}</div>
-                  </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-              <div className="mt-2 flex gap-2">
-                <input
-                  type="text"
-                  className="border rounded px-2 py-1 flex-grow"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                />
-                <button
-                  onClick={sendMessage}
-                  className="bg-blue-600 text-white px-3 py-1 rounded"
-                >
-                  Send
-                </button>
-              </div>
-            </div>
+            {selectedRequest && (
+            <ChatBox
+              bookingId={selectedRequest._id}
+              userId={selectedRequest.userId}
+              techId={techId!}
+            />
+          )}
+
+            
             {selectedRequest && (() => {
             const statusMap = getLatestStatusMap(selectedRequest.sessionrequest);
 

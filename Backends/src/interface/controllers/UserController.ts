@@ -448,7 +448,7 @@ export class UserController{
         try {
             const{userId}=req.params
             const booking=await this.fetchbookByUserid.fetchBookingdetails(userId)
-            console.log("controller",booking)
+  
             res.status(200).json({booking})
         } catch (err: any) {
             res.status(500).json({ message: err.message });

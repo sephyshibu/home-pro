@@ -2,7 +2,8 @@ import {App} from './app'
 import { connectDB } from '../config/connectmongo'
 import dotenv from 'dotenv'
 import http from 'http'
-import { initializeSocket } from '../infrastructure/socket';
+import { Server } from 'socket.io';
+import { initSocket } from '../infrastructure/socket';
 
 dotenv.config()
 
@@ -18,8 +19,14 @@ const appInstance= new App()
 const app=appInstance.app
 const server=http.createServer(app)
 
-
-initializeSocket(server);
+// ✅ Create Socket.IO server from HTTP server
+const io = new Server(server, {
+    cors: {
+      origin: '*', // allow frontend to connect
+      methods: ['GET', 'POST']
+    }
+  });
+initSocket(io);
 
 
 connectDB().then(()=>{
