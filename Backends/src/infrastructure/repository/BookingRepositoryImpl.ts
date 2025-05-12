@@ -326,13 +326,15 @@ export class bookingrepositoryImpl implements BookingRepository{
           const lastpause=booking.workTime[booking.workTime?.length-1]
           if(lastpause && !lastpause.end) lastpause.end=new Date()
             booking.workstatus="paused"
-            booking.isPauseAccept=true
+          booking.isPauseAccept = true;
+          booking.isResumeAccept = false; // ✅ Set to false on pause
           break;
 
         case "resume":
           booking.workTime?.push({ start: new Date() });
           booking.workstatus="resume"
           booking.isResumeAccept=true
+          booking.isPauseAccept=false
           break;
 
         case "end":

@@ -16,6 +16,8 @@ export class FetchUpcoming{
             return {
                 _id:bookings._id,
                 userId:bookings.userId,
+                isPauseAccept:bookings.isPauseAccept,
+                isResumeAccept:bookings.isResumeAccept,
                 username:bookings.userId.name,
                 userphone:bookings.userId.phone,
                 Category:bookings.technicianId.categoryid.name,

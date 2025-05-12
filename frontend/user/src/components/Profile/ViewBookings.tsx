@@ -1,6 +1,7 @@
 import React, { useEffect, useState,useRef } from "react";
 import { useLocation } from "react-router";
 import { fetchTechById } from "../../api/fetchtechbyid";
+import { BookingDetails } from "../../api/Service/fetchbooking";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router";
 import ChatBox from "../ChatBox";
@@ -63,7 +64,8 @@ const ViewBookingsProfile:React.FC=()=> {
   const[technician,settechnician]=useState<viewBookings>(bookingdetails)
   const techId = technician._id;
 
-
+   
+      
 
   useEffect(() => {
     // Fetch session requests for this booking
@@ -79,6 +81,9 @@ const ViewBookingsProfile:React.FC=()=> {
 
     fetchRequests();
   }, [bookingdetails._id]);
+
+
+  
   const handleAccept = async (requestId: string) => {
     try {
       await acceptsessionrequest(bookingdetails._id, requestId, 'accepted');
@@ -87,6 +92,7 @@ const ViewBookingsProfile:React.FC=()=> {
           request._id === requestId ? { ...request, status: 'accepted' } : request
         )
       );
+     
     } catch (err) {
       setError("Failed to accept session request.");
     }
@@ -101,6 +107,7 @@ const ViewBookingsProfile:React.FC=()=> {
           request._id === requestId ? { ...request, status: 'rejected' } : request
         )
       );
+
     } catch (err) {
       setError("Failed to reject session request.");
     }
@@ -161,6 +168,7 @@ const ViewBookingsProfile:React.FC=()=> {
       console.error(error);
     }
   }
+  
 
   const handleLoginLogout=async()=>{
                 if(userId){
@@ -174,7 +182,10 @@ const ViewBookingsProfile:React.FC=()=> {
     const shouldShowPaymentButton = technician.sessionrequest.some(
               (req) => req.types === "end" && req.status === "accepted"
             ) && technician.finalpaymentStatus!== "completed";
-  
+
+
+
+  console.log("pad",shouldShowPaymentButton)
 
   return (
     <div className="bg-white min-h-screen">
@@ -252,6 +263,7 @@ const ViewBookingsProfile:React.FC=()=> {
                 </div>
               ))}
           </div>
+          
         )}
         {technician.techStatus?.trim().toLowerCase() === "accepted" &&  technician.workStatus.trim().toLowerCase()!= 'completed'  && (
         <div className="col-span-6 mt-6">

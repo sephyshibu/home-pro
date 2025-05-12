@@ -13,11 +13,13 @@ interface Events {
     username: string;
     userphone:string;
     Category: string;
-    workStatus: "InProgress" | "Pending" | "Paused" | "Completed";
+    workStatus: "InProgress" | "Pending" | "Paused" | "Completed"| "Resume";
     date: string;
     locationUrl:string,
     rateperhour:number,
     isconfirmedByTech:string;
+    isPauseAccept:boolean;
+    isResumeAccept:boolean;
     techphone:string,
     consultationFee:string,
     consultationpaymentStatus:string,
@@ -34,6 +36,7 @@ interface Events {
 
 const TechnicianUpcoming: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+   
     const [selectedRequest, setSelectedRequest] = useState<Events | null>(null);
     const techId=localStorage.getItem("techId")
     const[upcoming,setupcoming]=useState<Events[]|null>([])
@@ -54,6 +57,7 @@ const TechnicianUpcoming: React.FC = () => {
                 const upcomingeventsdetails=await fetchupcomingevents(techId)
                 console.log(upcomingeventsdetails)
                 setupcoming(upcomingeventsdetails)
+              
             }  catch (error) {
                 console.error("Error fetching upcoming events:", error);
             }
@@ -63,8 +67,11 @@ const TechnicianUpcoming: React.FC = () => {
 
     
 
+    
+
     const openModal = (req: Events) => {
       console.log("req",req)
+    
         setSelectedRequest(req);
         setIsOpen(true);
 
@@ -81,7 +88,10 @@ const TechnicianUpcoming: React.FC = () => {
             const bookingId=selectedRequest?._id
             const result=await axiosInstancetech.post(`/requestsession/${bookingId}`,{types})
             console.log(result.data)
+          
             toast.success(`${types} request is sent to the user`)
+        
+            
           } catch (error) {
             toast.error(`Failed to send ${types}request`)
           }
@@ -164,34 +174,63 @@ const TechnicianUpcoming: React.FC = () => {
               </div>
             )}
             {selectedRequest && (
-            <ChatBox
-              bookingId={selectedRequest._id}
-              userId={selectedRequest.userId}
-              techId={techId!}
-            />
-          )}
+          <ChatBox
+            bookingId={selectedRequest._id}
+            userId={selectedRequest.userId}
+            techId={techId!}
+          />
+        )}
 
             
             {selectedRequest && (() => {
             const statusMap = getLatestStatusMap(selectedRequest.sessionrequest);
 
-            const isStartAccepted = statusMap["start"] === "accepted";
-            const isPauseAccepted = statusMap["pause"] === "accepted";
-            const isResumeAccepted = statusMap["resume"] === "accepted";
-            const isEndAccepted = statusMap["end"] === "accepted";
+           
+            const isPauseAccepted = selectedRequest.isPauseAccept;
+            const isResumeAccepted = selectedRequest.isResumeAccept;
+            
+            const isStartAccepted = statusMap["start"] === "accepted" || selectedRequest.workStatus === "InProgress" || selectedRequest.workStatus === "Resume";
+            const isEndAccepted = statusMap["end"] === "accepted" || selectedRequest.workStatus === "Completed";
+
+            const canPause = isStartAccepted && !isEndAccepted && !isPauseAccepted;
+            const canResume = isPauseAccepted && !isEndAccepted && !isResumeAccepted;
+            const canEnd = (isStartAccepted || isResumeAccepted) && !isEndAccepted;
+
 
             return (
            <div className="mt-6 flex justify-center gap-4">
-                <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700  disabled:opacity-50" onClick={()=>handleRequestSession('start')} disabled={isStartAccepted || isPauseAccepted || isResumeAccepted || isEndAccepted} >Accept</button>
-                <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700  disabled:opacity-50" onClick={()=>handleRequestSession('pause')} disabled={!isStartAccepted || isPauseAccepted || isEndAccepted}>Pause</button>
-                <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700  disabled:opacity-50"
-                    onClick={() => handleRequestSession('resume')}
-                    disabled={!isPauseAccepted || isResumeAccepted || isEndAccepted}
-                  >
-                    Resume
-                  </button>
-                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700  disabled:opacity-50" onClick={()=>handleRequestSession('end')}   disabled={!isStartAccepted || isEndAccepted}>End</button>
+               <button
+                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
+                onClick={() => handleRequestSession('start')}
+                disabled={isStartAccepted || isEndAccepted}
+              >
+                Accept
+              </button>
+
+              <button
+                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 disabled:opacity-50"
+                onClick={() => handleRequestSession('pause')}
+                disabled={!canPause }
+              >
+                Pause
+              </button>
+
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                onClick={() => handleRequestSession('resume')}
+                disabled={!canResume }
+              >
+                Resume
+              </button>
+
+              <button
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:opacity-50"
+                onClick={() => handleRequestSession('end')}
+                disabled={!canEnd}
+              >
+                End
+              </button>
+
             </div>
               );
             })()}
