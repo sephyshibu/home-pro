@@ -15,4 +15,11 @@ export class ChatService{
       return this.messagerepository.findByBookingId(bookingId);
     }
 
+    async markmessagebybooking(bookingId:string){
+      return this.messagerepository.markmessageasReadByBooking(bookingId)
+    }
+    async markmessagebymessageid(messageId:string){
+      return this.messagerepository.markmessageasReadByMessageId(messageId)
+    }
+
 }

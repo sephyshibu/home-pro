@@ -18,15 +18,18 @@ export const initSocket = (io: Server) => {
     socket.on('send-message', async (message) => {
       await messageUseCases.sendMessage(message);
       io.to(message.bookingId).emit('receive-message', message);
-      
-      
-      if (message.senderId !== message.receiverId) { // Avoid notifying the sender
-        io.to(message.receiverId).emit('notify', {
-          title: 'New Message',
-          body: message.message,
-          bookingId: message.bookingId,
-        });
-      }
+    });
+
+     // Mark messages as read when the chat box is opened
+     socket.on('chat-box-opened', async (bookingId: string) => {
+      await messageUseCases.markmessagebybooking(bookingId); // Mark all messages as read
+      io.to(bookingId).emit('messages-marked-as-read', bookingId); // Emit confirmation
+    });
+
+    // Mark individual message as read
+    socket.on('mark-as-read', async (messageId: string) => {
+      await messageUseCases.markmessagebymessageid(messageId); // Mark single message as read
+      io.to(socket.id).emit('message-read', messageId); // Emit to the sender
     });
 
     // Fetch all messages

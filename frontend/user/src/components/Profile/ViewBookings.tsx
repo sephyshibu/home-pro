@@ -261,6 +261,7 @@ const ViewBookingsProfile:React.FC=()=> {
             bookingId={technician._id}
             userId={userId!}
             techId={technician.techIds} // or actual technician userId
+            
           />
         </div>
       )}

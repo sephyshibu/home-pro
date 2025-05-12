@@ -6,6 +6,7 @@ interface Message {
   senderId: string;
   receiverId: string;
   message: string;
+  isRead:boolean;
   timestamp: string;
   bookingId: string;
 }
@@ -14,6 +15,7 @@ interface ChatBoxProps {
   bookingId: string;
   userId: string;
   techId: string;
+  
 }
 
 const socket: Socket = io('http://localhost:3000'); // or your backend URL
@@ -37,12 +39,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
       };
     
       socket.on('receive-message', handleReceiveMessage);
+      socket.emit('chat-box-opened', bookingId);
     
       // Cleanup to prevent duplicate listeners
       return () => {
         socket.off('receive-message', handleReceiveMessage);
       };
-  }, [bookingId]);
+  }, [bookingId,techId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -54,6 +57,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
     const msg: Message = {
       senderId: userId,
       receiverId: techId,
+      isRead:false,
       message: newMessage,
       timestamp: new Date().toISOString(),
       bookingId,
@@ -82,6 +86,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
                 <div>{msg.message}</div>
                 <div className="text-xs text-gray-500">
                 {new Date(msg.timestamp).toLocaleTimeString()}
+                    {isUser && (
+                        <span title={msg.isRead ? "Read" : "Unread"}>
+                        {msg.isRead ? '✓✓' : '✓'}
+                        </span>
+                    )}
                 </div>
             </div>
             </div>

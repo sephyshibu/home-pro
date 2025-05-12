@@ -6,6 +6,7 @@ interface Message {
   senderId: string;
   receiverId: string;
   message: string;
+  isRead:boolean;
   timestamp: string;
   bookingId: string;
 }
@@ -37,26 +38,16 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
         setMessages((prev) => [...prev, msg]);
     };
     
-
-      // Handle notifications
-      const handleNotify = (payload: { title: string; body: string; bookingId: string }) => {
-        if (Notification.permission === 'granted') {
-          new Notification(payload.title, { body: payload.body });
-        } else if (Notification.permission !== 'denied') {
-          Notification.requestPermission().then((permission) => {
-            if (permission === 'granted') {
-              new Notification(payload.title, { body: payload.body });
-            }
-          });
-        }
-      };
     
-      socket.on('receive-message', handleReceiveMessage);
-      socket.on('notify', handleNotify);
+    socket.on('receive-message', handleReceiveMessage);
+
+
+    socket.emit('chat-box-opened', bookingId);
+
     
       return () => {
         socket.off('receive-message', handleReceiveMessage);
-        socket.off('notify', handleNotify);
+      
       };
   }, [bookingId,userId]);
 
@@ -70,6 +61,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
     const msg: Message = {
       senderId: techId,
       receiverId: userId,
+      isRead:false,
       message: newMessage,
       timestamp: new Date().toISOString(),
       bookingId,
@@ -98,6 +90,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
                 <div>{msg.message}</div>
                 <div className="text-xs text-gray-500">
                 {new Date(msg.timestamp).toLocaleTimeString()}
+                    {isTech && (
+                        <span title={msg.isRead ? "Read" : "Unread"}>
+                        {msg.isRead ? '✓✓' : '✓'}
+                        </span>
+                    )}
                 </div>
             </div>
             </div>

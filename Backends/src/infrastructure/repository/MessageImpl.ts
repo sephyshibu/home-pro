@@ -12,4 +12,18 @@ export class MessagerepositoryImpl implements Messagerepository{
     async save(message: IMessage): Promise<void> {
       await MessageModel.create({ ...message, createdAt: new Date(), isRead: false });
     }
+
+    async markmessageasReadByBooking(bookingId: string): Promise<void> {
+      await MessageModel.updateMany(
+        { bookingId, isRead: false },
+        { $set: { isRead: true } }
+      );
+    }
+
+    async markmessageasReadByMessageId(messageId: string): Promise<void> {
+      await MessageModel.updateOne(
+        { _id: messageId },
+        { $set: { isRead: true } }
+      );
+    }
 }
