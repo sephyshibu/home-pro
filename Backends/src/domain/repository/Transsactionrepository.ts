@@ -5,4 +5,5 @@ export interface TransactionRepository {
     fetchtransaction():Promise<ITransaction[]>
     findById(id:string):Promise<ITransaction|null>
     getbyTechnicianId(techId:string):Promise<ITransaction[]|null>
+    
   }

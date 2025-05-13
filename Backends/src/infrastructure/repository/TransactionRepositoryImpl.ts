@@ -1,6 +1,7 @@
 import { TransactionRepository } from "../../domain/repository/Transsactionrepository";
 import { ITransaction } from "../../domain/models/Transactions";
 import { TransactionModel } from "../db/schemas/TransactionMode";
+import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
 export class TransactionRepositoryImpl implements TransactionRepository {
     async create(transaction: Omit<ITransaction, "id">): Promise<ITransaction> {
@@ -17,7 +18,7 @@ export class TransactionRepositoryImpl implements TransactionRepository {
       console.log("ownerId",ownerId)
       const objectId = new mongoose.Types.ObjectId(ownerId); // ✅ cast to ObjectId
 
-      const transactions = await TransactionModel.find({ ownerId: objectId });
+      const transactions = await TransactionModel.find({ ownerId: objectId }).sort({createdAt:-1});
       console.log("igsdi",transactions)
       return transactions.map((tx) => ({
         id: (tx._id as mongoose.Types.ObjectId).toString(),
@@ -68,19 +69,47 @@ export class TransactionRepositoryImpl implements TransactionRepository {
                                                     }
                                                   })
                                                   
-        console.log("transactions",transactions)
-        const filteredTransactions = transactions.filter((tx) => {
-          const booking = tx.referenceId as any;
-          return (
-            booking?.technicianId?.toString() === techId &&
-            booking?.workstatus === "completed"
-          );
-        });
+       const filteredTransactions = transactions.filter((tx) => {
+    const booking = tx.referenceId as any;
+    return (
+      booking?.technicianId?.toString() === techId &&
+      booking?.workstatus === "completed" &&
+      tx.type === "DEBIT"
+    );
+  });
+
+  // ✅ Sum only DEBIT technician commissions
+  const totalCommission = filteredTransactions.reduce(
+    (sum, tx) => sum + (tx.techniciancommision || 0),
+    0
+  );
+  console.log("sdw",totalCommission)
+
+         
+
+  // ✅ Update wallet balance
+   const wallet = await WalletModel.findOne({ ownerId: techId, userType: "technician" });
+
+  if (wallet) {
+    // ✅ If the wallet exists, increment its balance
+    wallet.balance += totalCommission;
+    await wallet.save(); // Save the updated wallet balance
+    console.log("Updated Wallet:", wallet);
+  } else {
+    
+   
+    console.log("Created New Wallet");
+  }
+
+
+  console.log("Updated Wallet:", wallet);
       
         // Map to final response format, including username
         return filteredTransactions.map((tx) => {
           const booking = tx.referenceId as any;
           const username = booking?.userId?.name || "Unknown";
+
+        
       
           return {
             id: (tx._id as mongoose.Types.ObjectId).toString(),

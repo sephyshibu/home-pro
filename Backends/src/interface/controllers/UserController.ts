@@ -33,7 +33,7 @@ import { FetchSession } from '../../application/usecase/Sessions/fetchsessions';
 import { Acceptsession } from '../../application/usecase/Sessions/acceptsession';
 import { FinalPayment } from '../../application/usecase/booking/makefinalpaymenty';
 import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconfirmpayment';
-
+import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails';
 export class UserController{
     constructor(
         private signupuser:Signup,
@@ -70,6 +70,7 @@ export class UserController{
         private acceptsessionrequest:Acceptsession,
         private finalamount:FinalPayment,
         private confirmfinalpayment:FinalPaymentconfirm,
+        private getTransactionwithbookings:GetTransactionWithBookings
      
     
     ){}
@@ -446,10 +447,11 @@ export class UserController{
 
     async fetchbookingsbyuserId(req:Request,res:Response):Promise<void>{
         try {
-            const{userId}=req.params
-            const booking=await this.fetchbookByUserid.fetchBookingdetails(userId)
+            const page = parseInt(req.query.page as string) || 1;
+            const{userId}=req.query
+            const booking=await this.fetchbookByUserid.fetchBookingdetails(userId as string,page)
   
-            res.status(200).json({booking})
+            res.status(200).json(booking)
         } catch (err: any) {
             res.status(500).json({ message: err.message });
             
@@ -459,13 +461,28 @@ export class UserController{
         try {
         
             const{userId}=req.params
-            const{password}=req.body
+            const{password,oldpassword}=req.body
             console.log(req.body)
-            const result=await this.passwordchnaging.editpassword(userId, password)
+            const result=await this.passwordchnaging.editpassword(userId, oldpassword,password)
             res.status(200).json({message:result.message})
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+             if (err.message === "Old password is incorrect") {
+                res.status(404).json({ message: "Old password is incorrect" });
+              }
+              else{
+                    res.status(500).json({ message: err.message });
+              }
             
+            
+        }
+    }
+    async transactionwithBookings(req:Request,res:Response):Promise<void>{
+        try {
+            const {transId}=req.params
+            const result=await this.getTransactionwithbookings.execute(transId)
+            res.status(200).json({result})
+        } catch (error:any) {
+            res.status(400).json({ message: error.message });
         }
     }
     async Failedpayment(req:Request,res:Response){

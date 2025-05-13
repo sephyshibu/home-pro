@@ -2,14 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { walletdetails } from '../../api/Wallet/fetchWallet';
 import axiosInstanceuser from '../../axios';
-
-interface Wallet{
-    _id:string,
-    type:string,
-    amount:number,
-    referenceid:string,
-    purpose:string,
-    status:string,
+import { Dialog } from '@headlessui/react';
+import { fetchbooking } from '../../api/Transactions/Bookings';
+interface Wallet {
+  id:string,
+  type: 'Credit' | 'Debit';
+  status: 'success' | 'failure';
+  amount: number;
+  Name: string;
+  purpose: string;
+  date:string;
+  admincommission:number;
+}
+interface bookingdetals{
+    username:string,
+    techname:string,
+    addressname:string,
+    bookeddate:string,
+    consultationpaymethod:string,
+    userremark:string,
+    techremark:string,
 }
 
 interface Walletbalance{
@@ -18,8 +30,10 @@ interface Walletbalance{
 
 export default function WalletPage() {
     const userId=localStorage.getItem('userId')
-    const [walletlist,setwalletdetails]=useState<Wallet[]|null>([])
+    const [walletlist,setwalletdetails]=useState<Wallet[]>([])
     const[balance,setbalance]=useState<Walletbalance>()
+     const [isOpen, setIsOpen] = useState(false);
+    const [bookingdetails, setbookingdetails] = useState<bookingdetals | null>(null);
     const navigate=useNavigate()
     useEffect(()=>{
         const balance=async()=>{
@@ -46,6 +60,24 @@ export default function WalletPage() {
         }
         fetchWallet()
     },[])
+
+     const handleClick=async(id:string)=>{
+      console.log("transactionId",id)
+        try {
+            const res=await fetchbooking(id)
+            setIsOpen(true)
+            setbookingdetails(res)
+        } catch (err) {
+            console.error("Error fetching booking details", err);
+        }
+      
+
+    }
+    console.log("balamce", balance)
+    const closeModal = () => {
+        setIsOpen(false);
+        setbookingdetails(null);
+      };
 
 
   return (
@@ -76,15 +108,46 @@ export default function WalletPage() {
               {walletlist && walletlist.map((txn, index) => (
                 <tr key={index} className="border-t">
                   <td className="px-4 py-2">{txn.type}</td>
-                  <td className={`px-4 py-2 ${txn.status === 'Successful' ? 'text-green-600' : 'text-red-500'}`}>{txn.status}</td>
+                  <td className={`px-4 py-2 ${txn.status === 'success' ? 'text-green-600' : 'text-red-500'}`}>{txn.status}</td>
                   <td className="px-4 py-2">{txn.purpose}</td>
                   <td className="px-4 py-2">₹ {txn.amount}</td>
+                  <td className="py-3 px-4">
+                    <button className="bg-green-800 text-white px-3 py-1 rounded hover:bg-green-700" onClick={() => {
+                        console.log("Clicked transaction ID:", txn.id);
+                        handleClick(txn.id);
+                        }}>
+                      View Booking
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </section>
       </main>
+      <Dialog open={isOpen} onClose={closeModal} className="fixed z-50 inset-0 overflow-y-auto">
+              <div className="flex items-center justify-center min-h-screen px-4">
+                <Dialog.Panel className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+                  <Dialog.Title className="text-lg font-bold mb-4 border-b pb-2">Transaction Details</Dialog.Title>
+                  {bookingdetails && (
+                    <div className="space-y-2 text-gray-700">
+                      <p><strong>Username:</strong> {bookingdetails.username}</p>
+                      <p><strong>TechName:</strong> {bookingdetails.techname}</p>
+                      <p><strong>Address:</strong> {bookingdetails.addressname}</p>
+                      <p><strong>User Canecel Reason:</strong> {bookingdetails.userremark?bookingdetails.userremark:""}</p>
+                      <p><strong>Tech cancel Reason:</strong> {bookingdetails.techremark?bookingdetails.techremark:""}</p>
+                      <p><strong>Booked date:</strong> {bookingdetails.bookeddate}</p>
+                      <p><strong>Consultation Payment method:</strong> {bookingdetails.consultationpaymethod}</p>
+                    </div>
+                  )}
+                  <div className="mt-4 text-right">
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={closeModal}>
+                      Close
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </div>
+            </Dialog>
 
      
     </div>

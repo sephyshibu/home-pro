@@ -44,6 +44,7 @@ import { FetchSession } from '../../application/usecase/Sessions/fetchsessions'
 import { Acceptsession } from '../../application/usecase/Sessions/acceptsession'
 import { FinalPayment } from '../../application/usecase/booking/makefinalpaymenty'
 import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconfirmpayment'
+import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails'
 const router=express.Router()
 
 
@@ -93,7 +94,7 @@ const fetchingpendingsession=new FetchSession(bookingrepository)
 const acceptingsession= new Acceptsession(bookingrepository)
 const finalamounttopay= new FinalPayment(bookingrepository)
 const confirmfinalpayment= new FinalPaymentconfirm(bookingrepository,walletRepository,transactionrepository,techrepository)
-
+const gettransactionwithbookings=new GetTransactionWithBookings(transactionrepository, bookingrepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -128,7 +129,8 @@ const usercontroller= new UserController(
     fetchingpendingsession,
     acceptingsession,
     finalamounttopay,
-    confirmfinalpayment
+    confirmfinalpayment,
+    gettransactionwithbookings
   
     
 
@@ -161,7 +163,7 @@ router.put('/editaddress/:addressId',authToken, (req,res)=>usercontroller.editUs
 router.delete('/deleteaddress/:addressId',authToken,(Req,res)=>usercontroller.deleteUserAddress(Req,res))
 router.post('/create-order/:userId', authToken, (req, res) => usercontroller.createOrder(req, res));
 router.post('/confirm-payment',authToken,(req,res)=>usercontroller.confirmpay(req,res))
-router.get('/fetchbookings/:userId', authToken,(req,res)=>usercontroller.fetchbookingsbyuserId(req,res))
+router.get('/fetchbookings', authToken,(req,res)=>usercontroller.fetchbookingsbyuserId(req,res))
 router.post('/password/:userId',authToken,(req,res)=>usercontroller.passwordChanges(req,res))
 router.post('/payment-failed',authToken,(req,res)=>usercontroller.Failedpayment(req,res))
 router.post('/confirm-payment-retry',authToken,(req,res)=>usercontroller.retryconfirmpayment(req,res))
@@ -173,4 +175,5 @@ router.post('/acceptsessionrequest/:bookingId',authToken,(req,res)=>usercontroll
 router.get('/fetchsessions/:bookingId',authToken,(req,res)=>usercontroller.fetchsessionpending(req,res))
 router.post('/finalpaymentprocess/:bookingId',authToken,(req,res)=>usercontroller.finalamountbeforeconfirm(req,res))
 router.post('/finalconfirmpayemnts',authToken,(req,res)=>usercontroller.finalpaymentconfirm(req,res))
+router.get('/fetchtransactionwithBookings/:transId',(req,res)=>usercontroller.transactionwithBookings(req,res))
 export {router as userRouter}

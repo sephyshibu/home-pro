@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { Changepasswordapi } from "../../api/Changepassword/password";
 
 interface ChangePasswordform{
-    
+    oldpassword:string,
     password:string,
     confirmpassword:string,
     
@@ -17,7 +17,7 @@ interface ChangePasswordform{
 const ChangePasswords:React.FC=()=>{
     console.log("cdsihiwdhvi")
     const[formdata,setformdata]=useState<ChangePasswordform>({
-        
+        oldpassword:"",
         password:"",
         confirmpassword:"",
        
@@ -72,7 +72,7 @@ const ChangePasswords:React.FC=()=>{
         }
 
         try {
-            const{password}=formdata
+            const{password,oldpassword}=formdata
 
             if(!userId){
                 console.log("dwfh  no uerId")
@@ -80,13 +80,20 @@ const ChangePasswords:React.FC=()=>{
                 return
             }
             console.log(password)
-            const result=await Changepasswordapi(userId,password)
+            const result=await Changepasswordapi(userId,oldpassword,password)
       
          
             toast.success(result)
             
         } catch (error:any) {
-            console.error("password change",error)
+            // Get clean error message
+            const errorMessage =
+              error.message ||
+              error?.response?.data?.message ||
+              "Something went wrong";
+
+            toast.error(errorMessage); // show the message properly
+
             seterror(error.response?.data?.message ||"Something went wrong")   
         }
         finally {
@@ -105,13 +112,20 @@ const ChangePasswords:React.FC=()=>{
             
             <form onSubmit={handleSubmit} className="space-y-5">
 
-               
+               <input
+                type="password"
+                name="oldpassword"
+                placeholder="Enter old password"
+                value={formdata.oldpassword}
+                onChange={handleChange}
+                className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"
+                />
           
               
               <input
                 type="password"
                 name="password"
-                placeholder="Enter password"
+                placeholder="Enter new password"
                 value={formdata.password}
                 onChange={handleChange}
                 className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A9FF]"

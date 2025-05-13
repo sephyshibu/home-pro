@@ -14,6 +14,7 @@ export class GetWallet{
                 txn.method === "Wallet" ||
                 txn.purpose === "Refund for booking cancellation"
             );
+            console.log("filtered", filteredDetails)
     
             return filteredDetails;
     }

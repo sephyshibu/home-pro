@@ -5,7 +5,7 @@ import { IUser } from "../models/User";
 export interface BookingRepository {
     creates(booking: IBooking): Promise<IBooking>;
     update(bookingId: Object, updatedBooking: Partial<IBooking>): Promise<IBooking>;
-    fetchbookingByUserId(userId:string):Promise<IBooking[]>
+    fetchbookingByUserId(userId:string,limit:number, skip:number):Promise<IBooking[]>
     fetchbookingByTechId(techId:string):Promise<IBooking[]|null>
     fetchupcomingevents(techId:string):Promise<IBooking[]|null>
     createFailedPaymentBooking(data: IBooking): Promise<IBooking>;
@@ -16,5 +16,5 @@ export interface BookingRepository {
     addsessionRequest(bookingId:string, types:string):Promise<IBooking|null>
     acceptsession(bookingId:string,requestId:string):Promise<IBooking|null>
     fetchcompletedandrejected(techId:string):Promise<IBooking[]|null>
-    
+    countBookingsByUserId(userId:string):Promise<number>
 }

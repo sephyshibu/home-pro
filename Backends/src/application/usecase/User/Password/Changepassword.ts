@@ -7,14 +7,20 @@ export class PasswordChange{
     constructor(private userrepository:UserRepository){}
 
 
-    async editpassword(userId:string,password:string):Promise<{message:string,updateuser?:IUser}>{
+    async editpassword(userId:string,oldpassword:string,password:string):Promise<{message:string,updateuser?:IUser}>{
  
         const existinguser =await this.userrepository.findOneuser(userId)
         if(!existinguser){
             throw new Error("user not found")
         }
+        const isMatch=await bcrypt.compare(oldpassword,existinguser.password!)
+         if (!isMatch) {
+        throw new Error("Old password is incorrect");
+    }
+
         console.log(existinguser)
         try {
+
             const newpassword = await bcrypt.hash(password, 10);
             console.log("New hashed password:", newpassword);
     

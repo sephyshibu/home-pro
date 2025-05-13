@@ -5,11 +5,15 @@ import { BookingRepository } from "../../../domain/repository/Bookingrepository"
 export class FetchBookingbyUserId{
     constructor(private bookingrepository:BookingRepository){}
 
-    async fetchBookingdetails(userId:string){
-        const booking=await this.bookingrepository.fetchbookingByUserId(userId)
+    async fetchBookingdetails(userId:string,page:number){
+        console.log("dasd",userId)
+         const limit = 5;
+         const skip = (page - 1) * limit;
+        const totalCount = await this.bookingrepository.countBookingsByUserId(userId);
+        const booking=await this.bookingrepository.fetchbookingByUserId(userId,limit,skip)
         if(!booking) throw new Error("no booking")
 
-        return booking.map((booking:any)=>{
+        const formatted= booking.map((booking:any)=>{
             const locationUrl = `https://www.google.com/maps?q=${booking.location.lat},${booking.location.lng}`
 
             return {
@@ -40,5 +44,10 @@ export class FetchBookingbyUserId{
             }
 
         })
+        return {
+    bookings: formatted,
+    totalPages: Math.ceil(totalCount / limit),
+  };
+
     }
 }

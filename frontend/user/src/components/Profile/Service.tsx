@@ -52,6 +52,9 @@ const MyServicesPage: React.FC = () => {
     const userId=localStorage.getItem("userId")
     const[booking,setbooking]=useState<servicepage[]|null>([])
     const[bookingid,setbookingid]=useState<string|null>(null)
+    const [currentPage, setCurrentPage] = useState<number>(1);
+const [totalPages, setTotalPages] = useState<number>(1);
+
     const[isopen,setisopen]=useState(false)
     const[form,setform]=useState({
       userremark:""
@@ -70,15 +73,16 @@ const MyServicesPage: React.FC = () => {
                 return
             }
             try {
-                const bookingdetails=await BookingDetails(userId)
-                console.log(bookingdetails)
-                setbooking(bookingdetails)
+                const bookingdetails=await BookingDetails(userId,currentPage)
+                console.log(bookingdetails.bookings)
+                setbooking(bookingdetails.bookings)
+                setTotalPages(bookingdetails.totalPages);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
             }
         }
         fetchbookvaLUES()
-    },[])
+    },[currentPage])
     
     const handleView=async(bookingdetails:servicepage)=>{
       navigate('/viewbookingddetails',{state:bookingdetails})
@@ -248,6 +252,34 @@ const MyServicesPage: React.FC = () => {
                 ))}
               </tbody>
             </table>
+            <div className="flex justify-center mt-6 space-x-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Previous
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-4 py-2 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+
           </div>
         </main>
 

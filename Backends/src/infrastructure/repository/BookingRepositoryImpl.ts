@@ -101,9 +101,12 @@ export class bookingrepositoryImpl implements BookingRepository{
         };
       }
 
-      async fetchbookingByUserId(userId:string):Promise<IBooking[]>{
+      async fetchbookingByUserId(userId:string,limit:number,skip:number):Promise<IBooking[]>{
+        console.log("dfde",userId,limit,skip)
         const bookings=await BookingModels.find({userId})
                         .sort({_id:-1})
+                        .skip(skip)
+                        .limit(limit)
                         .populate({
                             path:"technicianId",
                             select:"_id name profileimgurl categoryid phone",
@@ -120,6 +123,10 @@ export class bookingrepositoryImpl implements BookingRepository{
         console.log("bookings",bookings)
         return bookings
       }
+
+      async countBookingsByUserId(userId: string): Promise<number> {
+      return await BookingModels.countDocuments({ userId });
+    }
 
       async fetchbookingByTechId(techId:string):Promise<IBooking[]|null>{
         const bookings =await BookingModels.find({technicianId:techId,userremark:"",isconfirmedbyTech:"pending",consultationpayStatus:"completed"})

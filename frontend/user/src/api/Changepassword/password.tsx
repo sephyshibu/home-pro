@@ -1,8 +1,8 @@
 import axiosInstanceuser from "../../axios";
 
-export const Changepasswordapi=async(userId:string,password:string)=>{
+export const Changepasswordapi=async(userId:string,oldpassword:string,password:string)=>{
     try {
-        const response=await axiosInstanceuser.post(`/password/${userId}`,{password})
+        const response=await axiosInstanceuser.post(`/password/${userId}`,{password,oldpassword})
         console.log("api in password", response.data.message)
         return response.data.message
     } catch (error: any) {
