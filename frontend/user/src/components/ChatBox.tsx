@@ -24,6 +24,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+ 
  console.log("details",bookingId,userId,techId)
   useEffect(() => {
     socket.emit('join-room', bookingId);
@@ -37,19 +38,26 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
     const handleReceiveMessage = (msg: Message) => {
         setMessages((prev) => [...prev, msg]);
       };
+
+
     
       socket.on('receive-message', handleReceiveMessage);
-      socket.emit('chat-box-opened', bookingId);
+       socket.emit('chat-box-opened', bookingId);
+  socket.emit('mark_as_read', { bookingId, userId });
     
+ 
       // Cleanup to prevent duplicate listeners
       return () => {
         socket.off('receive-message', handleReceiveMessage);
       };
-  }, [bookingId,techId]);
+  }, [bookingId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+  
+ 
+
 
   const sendMessage = () => {
     if (newMessage.trim() === '') return;

@@ -23,6 +23,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [unreadMap, setUnreadMap] = useState<{ [bookingId: string]: number }>({});
 
   useEffect(() => {
     socket.emit('join-room', bookingId);
@@ -40,10 +41,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
     
     
     socket.on('receive-message', handleReceiveMessage);
-
-
-    socket.emit('chat-box-opened', bookingId);
-
+     socket.emit('chat-box-opened', bookingId);
+      socket.emit('mark_as_read', { bookingId, userId });
     
       return () => {
         socket.off('receive-message', handleReceiveMessage);

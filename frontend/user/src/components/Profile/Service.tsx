@@ -3,6 +3,7 @@ import { BookingDetails } from "../../api/Service/fetchbooking";
 import { useNavigate } from "react-router";
 import { Dialog, DialogPanel,DialogTitle} from "@headlessui/react";
 import axiosInstanceuser from "../../axios";
+
 import { updatecancelreason } from "../../api/cancelrequest/Cancelreason";
 import toast from "react-hot-toast";
 interface servicepage {
@@ -55,6 +56,7 @@ const MyServicesPage: React.FC = () => {
     const[form,setform]=useState({
       userremark:""
     })
+
 
    
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -215,6 +217,7 @@ const MyServicesPage: React.FC = () => {
                     <td className="px-4 py-3 text-center">
                       {bookingItem.consultationpayStatus==="completed" && <button className="bg-[#00BFFF] hover:bg-[#009FCC] text-white px-4 py-1 rounded-md" onClick={()=>handleView(bookingItem)}>
                         View
+                        
                       </button>}
                     </td>
                     <td>
@@ -228,7 +231,7 @@ const MyServicesPage: React.FC = () => {
                   )}
                   </td>
                   <td>
-                  {(bookingItem.techStatus.toLowerCase()=="pending" && bookingItem.userremark=='') && (
+                  {(bookingItem.techStatus.toLowerCase()=="pending" && bookingItem.userremark=='' && bookingItem.consultationpayStatus==='completed') && (
                     <button 
                         onClick={()=>cancel(bookingItem._id)}
                         className="mt-2 bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
