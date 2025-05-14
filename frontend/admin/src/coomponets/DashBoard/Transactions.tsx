@@ -96,6 +96,7 @@ const TransactionPage: React.FC = () => {
                 <th className="py-3 px-4 text-left">Amount</th>
                 <th className="py-3 px-4 text-left">Name</th>
                 <th className="py-3 px-4 text-left">Purpose</th>
+                <th className="py-3 px-4 text-left">Admin commission</th>
                 <th className="py-3 px-4 text-left">View Booking</th>
               </tr>
             </thead>
@@ -110,6 +111,7 @@ const TransactionPage: React.FC = () => {
                   <td className="py-3 px-4 text-green-700 font-semibold">{tx.amount}</td>
                   <td className="py-3 px-4">{tx.Name}</td>
                   <td className="py-3 px-4">{tx.purpose}</td>
+                  <td className="py-3 px-4">{tx.admincommission}</td>
                   <td className="py-3 px-4">
                     <button className="bg-green-800 text-white px-3 py-1 rounded hover:bg-green-700" onClick={() => {
                         console.log("Clicked transaction ID:", tx._id);
