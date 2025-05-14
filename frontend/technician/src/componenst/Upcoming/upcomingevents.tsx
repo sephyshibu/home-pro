@@ -124,7 +124,7 @@ const TechnicianUpcoming: React.FC = () => {
             
             <div className="col-span-1">User Name</div>
             <div className="col-span-1">Contact Number</div>
-            <div className="col-span-1">District</div>
+
             <div className="col-span-1">Date of Work</div>
             <div className="col-span-1">Work Status</div>
             <div className="col-span-1">Action</div>
@@ -135,7 +135,7 @@ const TechnicianUpcoming: React.FC = () => {
                 
                 <div className="col-span-1">{req.username}</div>
                 <div className="col-span-1">{req.userphone}</div>
-                <div className="col-span-1">{req.pincode}</div>
+            
                 <div className="col-span-1">{req.date}</div>
                 <div className="col-span-1">{req.workStatus}</div>
                 <div className="col-span-1 text-center">
@@ -162,7 +162,7 @@ const TechnicianUpcoming: React.FC = () => {
                 <p><strong>Phone:</strong> {selectedRequest.userphone}</p>
                 <p><strong>Category:</strong> {selectedRequest.Category}</p>
                 <p><strong>Date:</strong> {selectedRequest.date}</p>
-                <p><strong>Pincode:</strong> {selectedRequest.pincode}</p>
+      
                 <p><strong>Work Address:</strong> {selectedRequest.workaddress}</p>
                 <p><strong>Rate/Hour:</strong> ₹{selectedRequest.rateperhour}</p>
                 <p><strong>Consultation Fee:</strong> ₹{selectedRequest.consultationFee}</p>

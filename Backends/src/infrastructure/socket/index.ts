@@ -30,11 +30,11 @@ export const initSocket = (io: Server) => {
         });
     });
 
-//     socket.on('get-unread-counts', async (userId: string, callback) => {
-//   const unreadCounts = await messageUseCases.getUnreadCountsByBooking(userId);
-//   console.log("sockkee",unreadCounts)
-//   callback(unreadCounts);
-// });
+    socket.on('get-unread-counts', async (userId: string, callback) => {
+    const unreadCounts = await messageUseCases.getUnreadCountsByBooking(userId);
+    console.log("unreadcounts",unreadCounts)
+    callback(unreadCounts);
+  });
 
 
 //this is needed below one chat ioepned

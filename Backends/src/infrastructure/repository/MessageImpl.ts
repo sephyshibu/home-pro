@@ -1,7 +1,8 @@
 import { IMessage } from "../../domain/models/Message";
 import { Messagerepository } from "../../domain/repository/Messagerepository";
 import { MessageModel } from "../db/schemas/MessageModel";
-
+import { BookingModels } from "../db/schemas/BookingModel";
+import mongoose from "mongoose";
 export class MessagerepositoryImpl implements Messagerepository{
 
 
@@ -50,32 +51,39 @@ export class MessagerepositoryImpl implements Messagerepository{
     );
   }
 
-  async getUnreadMessageCounts(userId: string): Promise<{ bookingId: string, count: number }[]> {
-    
-    const counts = await MessageModel.aggregate([
-      {
-        $match: {
-          receiverId: userId,
-          isRead: false
-        }
-      },
-      {
-        $group: {
-          _id: '$bookingId',
-          count: { $sum: 1 }
-        }
-      },
-      {
-        $project: {
-          bookingId: '$_id',
-          count: 1,
-          _id: 0
-        }
-      }
-    ]);
+  async getUnreadMessageCounts(userId: string): Promise<{ technicianName: string, bookingId: string, count: number }[]> {
+  const objectId = new mongoose.Types.ObjectId(userId);
 
-    return counts;
-  }
+ const groupedCounts = await MessageModel.aggregate([
+    {
+      $match: {
+        receiverId: objectId,
+        isRead: false
+      }
+    },
+    {
+      $group: {
+        _id: '$bookingId',
+        count: { $sum: 1 }
+      }
+    }
+  ]);
+
+  // Step 2: For each bookingId, get the technician name
+  const results = await Promise.all(groupedCounts.map(async (entry) => {
+ const booking = await BookingModels.findById(entry._id).populate('technicianId', 'name');
+    const technicianName = (booking?.technicianId as { name: string })?.name || 'Unknown Technician';
+
+    return {
+      bookingId: entry._id.toString(),
+      count: entry.count,
+      technicianName
+    };
+  }));
+
+  return results;
+}
+
 
   
 }

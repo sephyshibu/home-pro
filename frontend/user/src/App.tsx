@@ -20,6 +20,7 @@ import ThankYouPage from './components/ThankYou/ThankYou';
 import Services from './components/Profile/Service'
 import ViewBookingsProfile from './components/Profile/ViewBookings';
 import ChangePasswords from './components/Profile/Password';
+import ThankYouPageService from './components/Thankyouservice/ThankYouService';
 import WalletPage from './components/Profile/Wallet';
 function App() {
  
@@ -41,6 +42,7 @@ function App() {
         <Route path='/viewprofile' element={<TechnicianProfile/>}/>
         <Route path='/proceedpayment' element={<PaymentPage/>}/>
         <Route path='/thankyou' element={<ThankYouPage/>}/>
+         <Route path='/thankyouservice' element={<ThankYouPageService/>}/>
         <Route path='/viewbookingddetails' element={<ViewBookingsProfile/>}/>
         <Route path='/myaccount' element={<UserLayout />}>
           {/* When /myaccount, redirect to /myaccount/profile */}

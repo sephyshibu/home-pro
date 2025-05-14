@@ -33,6 +33,7 @@ async markMessagesAsRead(bookingId: string, receiverId: string): Promise<void> {
 
 // returns: [{ bookingId: string, count: number }]
 async getUnreadCountsByBooking(userId: string): Promise<{ bookingId: string, count: number }[]> {
+  
   return this.messagerepository.getUnreadMessageCounts(userId);
 }
 

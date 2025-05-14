@@ -99,19 +99,19 @@ const ViewBookingsProfile:React.FC=()=> {
   };
 
 
-  const handleReject = async (requestId: string) => {
-    try {
-      await rejectsessionrequest(bookingdetails._id, requestId, 'rejected');
-      setSessionRequests((prev) =>
-        prev.map((request) =>
-          request._id === requestId ? { ...request, status: 'rejected' } : request
-        )
-      );
+  // const handleReject = async (requestId: string) => {
+  //   try {
+  //     await rejectsessionrequest(bookingdetails._id, requestId, 'rejected');
+  //     setSessionRequests((prev) =>
+  //       prev.map((request) =>
+  //         request._id === requestId ? { ...request, status: 'rejected' } : request
+  //       )
+  //     );
 
-    } catch (err) {
-      setError("Failed to reject session request.");
-    }
-  };
+  //   } catch (err) {
+  //     setError("Failed to reject session request.");
+  //   }
+  // };
   console.log("statttt",technician.techStatus)
   const handlePayment=async(bookingId:string)=>{
     try {
@@ -152,7 +152,7 @@ const ViewBookingsProfile:React.FC=()=> {
             
           });
           toast.success("Final Payment successfully!");
-          window.location.reload(); // optional: reload to reflect new status
+          navigate('/thankyouservice')
         },
         prefill: {
           name: "User HomePro",
@@ -163,6 +163,7 @@ const ViewBookingsProfile:React.FC=()=> {
   
       const rzp = new window.Razorpay(options);
       rzp.open();
+      
     } catch (error) {
       toast.error("Error initiating final payment");
       console.error(error);
@@ -235,29 +236,26 @@ const ViewBookingsProfile:React.FC=()=> {
 
         <div className="max-w-6xl mx-auto py-10 px-4">
           <h2 className="text-xl font-bold mb-4">Pending Session Requests</h2>
-
+          
           {!sessionRequests || sessionRequests.length === 0 ? (
-            <p>No session requests available.</p>
+            <p className="text-gray-500 text-center mt-6">No session requests available.</p>
           ) : (
-            <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
               {sessionRequests.map((request) => (
-                <div key={request._id} className="border-b-2 mb-4 pb-4">
-                  <h3 className="text-lg font-semibold">Request: {request.types}</h3>
-                  <p>Status: {request.status}</p>
+                <div key={request._id} className="bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
+                  <h3 className="bg-white shadow-lg rounded-2xl p-6 border border-gray-200">Request: {request.types}</h3>
+                   <p className="text-gray-600 mb-4">
+                    <span className="font-semibold">Status:</span> {request.status}
+                  </p>
                   {request.status === 'pending' && (
-                    <div>
+                    <div className="flex justify-end">
                       <button
                         onClick={() => handleAccept(request._id)}
-                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mr-4"
+                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300"
                       >
                         Accept
                       </button>
-                      <button
-                        onClick={() => handleReject(request._id)}
-                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                      >
-                        Reject
-                      </button>
+                    
                     </div>
                   )}
                 </div>
