@@ -27,16 +27,22 @@ const TechList:React.FC=()=>{
         }
     }
 
-    const handleToggle=async(techid:string, isBlocked:boolean)=>{
-        try {
-            const updateStatus=!isBlocked
-            const response=await axiosInstanceadmin.patch(`/tech/${techid}`,{isBlocked:updateStatus})
-            console.log(response)
-            fetchtech()
-        } catch (error) {
-            console.error("Error toggling block status", error);
-        }
-    }
+    const handleToggle = async (techId: string, isBlocked: boolean) => {
+  try {
+    const updatedStatus = !isBlocked;
+    await axiosInstanceadmin.patch(`/tech/${techId}`, { isBlocked: updatedStatus });
+
+    // Update the specific tech in local state
+    settech((prevTechs) =>
+      prevTechs.map((tech) =>
+        tech._id === techId ? { ...tech, isBlocked: updatedStatus } : tech
+      )
+    );
+  } catch (error) {
+    console.error("Error toggling block status", error);
+  }
+};
+
 
 
     return(

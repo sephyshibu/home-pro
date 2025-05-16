@@ -116,7 +116,7 @@ export default function WalletPage() {
                         console.log("Clicked transaction ID:", txn.id);
                         handleClick(txn.id);
                         }}>
-                      View Booking
+                      View Details
                     </button>
                   </td>
                 </tr>

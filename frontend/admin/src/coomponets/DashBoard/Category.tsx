@@ -33,7 +33,12 @@ const CategoryList:React.FC=()=>{
             const updateStatus=!isBlocked
             const response=await axiosInstanceadmin.patch(`/category/${catid}`,{isBlocked:updateStatus})
             console.log(response)
-            fetchcategory()
+            setcategory((prevCategory)=>
+                prevCategory.map((cat)=>
+                    cat._id===catid ? {...cat, isBlocked:updateStatus}:cat
+                )
+            )
+           
         } catch (error) {
             console.error("Error toggling block status", error);
         }

@@ -1,6 +1,7 @@
 import axios,{AxiosError,InternalAxiosRequestConfig} from 'axios';
-import { store } from './app/store';
+import { store ,persistor} from './app/store';
 import { addtoken } from './features/tokenSlice';
+import toast from 'react-hot-toast';
 // Axios instance
 const axiosInstanceadmin = axios.create({
     baseURL: import.meta.env.VITE_ADMin_PORT,
@@ -14,9 +15,10 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     (config: CustomAxiosRequestConfig) => {
       const state = store.getState();
       const token = state.token?.token;
+      const admin=state.admin?.admin
 
   
-      
+      console.log("tech in axios", admin);
       console.log("axios token", token);
       console.log("state", state);
   
@@ -28,6 +30,11 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
         console.log("if(token)", token);
         config.headers['Authorization'] = `Bearer ${token}`;
       }
+
+       if (admin && admin._id) {
+        config.headers['admin-id'] = admin._id;
+      }  
+
       return config
     },
     (error: AxiosError) => {
@@ -46,6 +53,7 @@ axiosInstanceadmin.interceptors.response.use(
         originalRequest._retry = true;
   
         try {
+           console.log('Triggering token refresh...');
           const response = await axiosInstanceadmin.post<{ token: string }>('/refresh', {}, { withCredentials: true });
           const { token } = response.data;
   
@@ -59,7 +67,23 @@ axiosInstanceadmin.interceptors.response.use(
         } catch (refreshError) {
           console.error("Token refresh failed:", refreshError);
           // store.dispatch(logoutuser());
+          toast.error("Session expired. Please login again.");
+          await persistor.purge();
+          localStorage.removeItem("techId");
+          window.location.href = '/';
           return Promise.reject(refreshError);
+        }
+      }
+       if (error.response?.status === 403) {
+        const data = error.response.data as { message: string; action?: string };
+        console.log("403 Error:", data); // 👈 Add this
+        if (data?.action === 'blocked') {
+          toast.error(data.message || "You are blocked by admin!");
+          localStorage.removeItem('adminId')
+          await persistor.purge()
+          window.location.href = '/'
+
+          // Optionally: You can logout the user or redirect to login page if needed
         }
       }
       return Promise.reject(error);

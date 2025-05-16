@@ -29,16 +29,22 @@ const User:React.FC=()=>{
         }
     }
 
-    const handleToggle=async(userid:string,isBlocked:boolean)=>{
-        try {
-            const updatedstatus=!isBlocked
-            const response=await axiosInstanceadmin.patch(`/user/${userid}`,{isBlocked:updatedstatus})
-            console.log(response)
-            fetchuser()
-        } catch (error) {
-            console.error("Error toggling block status", error);
-        }
-    }
+  const handleToggle = async (userId: string, isBlocked: boolean) => {
+  try {
+    const updatedStatus = !isBlocked;
+    await axiosInstanceadmin.patch(`/user/${userId}`, { isBlocked: updatedStatus });
+
+    // Update the specific user in local state
+    setuser((prevUsers) =>
+      prevUsers.map((u) =>
+        u._id === userId ? { ...u, isBlocked: updatedStatus } : u
+      )
+    );
+  } catch (error) {
+    console.error("Error toggling block status", error);
+  }
+};
+
 
     return(
         <div className="flex-grow p-8">

@@ -99,19 +99,7 @@ const ViewBookingsProfile:React.FC=()=> {
   };
 
 
-  // const handleReject = async (requestId: string) => {
-  //   try {
-  //     await rejectsessionrequest(bookingdetails._id, requestId, 'rejected');
-  //     setSessionRequests((prev) =>
-  //       prev.map((request) =>
-  //         request._id === requestId ? { ...request, status: 'rejected' } : request
-  //       )
-  //     );
-
-  //   } catch (err) {
-  //     setError("Failed to reject session request.");
-  //   }
-  // };
+  
   console.log("statttt",technician.techStatus)
   const handlePayment=async(bookingId:string)=>{
     try {

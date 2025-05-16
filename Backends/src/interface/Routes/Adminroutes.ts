@@ -24,6 +24,7 @@ import { FetchrefundRequest } from '../../application/usecase/booking/fetchrefun
 import { Refudaccept } from '../../application/usecase/booking/refundaccept'
 import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 import { EmailService } from '../../application/service/EmailService'
+import { authToken } from '../../infrastructure/middleware/CheckAdminStatus'
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
@@ -72,21 +73,21 @@ const adminController= new AdminController(
 )
 console.log("adminrouter")
 router.post('/login',(req,res)=>adminController.login(req,res))
-router.get('/fetchuser',(req,res)=>adminController.fetchuser(req,res))
+router.get('/fetchuser',authToken,(req,res)=>adminController.fetchuser(req,res))
 router.post('/refresh',(req,res)=>adminController.refreshtokenController(req,res))
-router.post('/addtech',(req,res)=>adminController.signuptech(req,res))
-router.patch('/user/:userid',(req,res)=>adminController.blockUnblock(req,res))
-router.get('/fetchtech',(req,res)=>adminController.fetchtech(req,res))
-router.patch('/tech/:techid',(req,res)=>adminController.blockunblocktechs(req,res))
-router.get('/fetchcategory',(req,res)=>adminController.fetchCategory(req,res))
-router.post('/addcategory',(req,res)=>adminController.addcategorys(req,res))
-router.patch('/category/:catid',(req,res)=>adminController.blockunblockcatagory(req,res))
-router.patch('/editcategory/:catid',(req,res)=>adminController.editcategory(req,res))
-router.get('/category/:catid',(req,res)=>adminController.fetchCategoryById(req,res))
-router.get('/fetchtransactions',(req,res)=>adminController.fetchTransaction(req,res))
-router.get('/fetchtransactionwithBookings/:transId',(req,res)=>adminController.transactionwithBookings(req,res))
-router.get('/fetchrefundreqall',(req,res)=>adminController.fetchingrequestrefund(req,res))
-router.post('/acceptrefund/:bookingId',(req,res)=>adminController.acceptingrefund(req,res))
+router.post('/addtech',authToken,(req,res)=>adminController.signuptech(req,res))
+router.patch('/user/:userid',authToken,(req,res)=>adminController.blockUnblock(req,res))
+router.get('/fetchtech',authToken,(req,res)=>adminController.fetchtech(req,res))
+router.patch('/tech/:techid',authToken,(req,res)=>adminController.blockunblocktechs(req,res))
+router.get('/fetchcategory',authToken,(req,res)=>adminController.fetchCategory(req,res))
+router.post('/addcategory',authToken,(req,res)=>adminController.addcategorys(req,res))
+router.patch('/category/:catid',authToken,(req,res)=>adminController.blockunblockcatagory(req,res))
+router.patch('/editcategory/:catid',authToken,(req,res)=>adminController.editcategory(req,res))
+router.get('/category/:catid',authToken,(req,res)=>adminController.fetchCategoryById(req,res))
+router.get('/fetchtransactions',authToken,(req,res)=>adminController.fetchTransaction(req,res))
+router.get('/fetchtransactionwithBookings/:transId',authToken,(req,res)=>adminController.transactionwithBookings(req,res))
+router.get('/fetchrefundreqall',authToken,(req,res)=>adminController.fetchingrequestrefund(req,res))
+router.post('/acceptrefund/:bookingId',authToken,(req,res)=>adminController.acceptingrefund(req,res))
 
 
 

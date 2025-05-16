@@ -2,13 +2,16 @@ import { configureStore,combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
-
+import adminreducer from '../features/AdminSlice'
 import tokenReducer from '../features/tokenSlice'
 
 interface TokenState{
     token:string
 }
 
+interface AdminState{
+    admin:Record<string,any>
+}
 
 const persistConfig={
     key:"root",
@@ -17,6 +20,7 @@ const persistConfig={
 }
 
 const rootreducer=combineReducers({
+    admin:adminreducer,
     token:tokenReducer
 })
 
@@ -41,7 +45,7 @@ export const store=configureStore({
 })
 
 export type RootState = {
-
+    admin:AdminState;
     token: TokenState ;
 };
 

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
 import { io,Socket } from 'socket.io-client';
 
-const socket: Socket = io('http://localhost:3000'); // change if your backend URL is different
+const socket: Socket = io('http://localhost:3000'); 
 const Header: React.FC = () => {
    const [unreadCounts, setUnreadCounts] = useState<{ bookingId: string; count: number; technicianName: string }[]>([]);
 
@@ -31,7 +31,6 @@ const Header: React.FC = () => {
         });
       });
 
-      // Cleanup
       return () => {
         socket.off('new_unread');
       };
