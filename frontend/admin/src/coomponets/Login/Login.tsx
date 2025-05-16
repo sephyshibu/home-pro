@@ -3,6 +3,7 @@ import axiosInstanceadmin from "../../axios";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { addtoken } from "../../features/tokenSlice";
+import { loginAdmin } from "../../features/AdminSlice";
 import logo from '../../../public/images/Resized/Logo Landscape white-01-01.png'
 import one from '../../../public/images/one.png'
 import two from '../../../public/images/two.png'
@@ -63,6 +64,7 @@ const Login:React.FC=()=>{
             const{email,password}=formdata
             const response=await axiosInstanceadmin.post('/login',{email,password})
             console.log("response", response)
+            dispatch(loginAdmin(response.data.admin))
             dispatch(addtoken({token:response.data.token}))
             console.log(response)
             console.log("login data",response.data)

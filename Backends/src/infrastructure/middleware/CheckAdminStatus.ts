@@ -21,9 +21,11 @@ export const authToken=async(req:Request,res:Response, next:NextFunction):Promis
 
 
             if(!adminId){
+                console.log("sdsadafeqf")
                 res.status(400).json({message:"Admin Id is required in header"})
                 return
             }
+            
             next()
         } catch (error: any) {
                 if (error instanceof TokenExpiredError) {
