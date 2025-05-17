@@ -9,7 +9,7 @@ const initialState:tokenState={
 }
 
 const tokenSlice=createSlice({
-    name:'token',
+    name:'usertoken',
     initialState,
     reducers:{
         addtoken(state,action:PayloadAction<{token:string}>){

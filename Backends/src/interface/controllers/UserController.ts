@@ -212,6 +212,7 @@ export class UserController{
     async fetchUserById(req:Request,res:Response){
         try {
             const {userId}=req.params
+            console.log("usder Id", userId)
             const user=await this.getuserById.getuserById(userId)
             res.status(200).json({user})
         } catch (err: any) {

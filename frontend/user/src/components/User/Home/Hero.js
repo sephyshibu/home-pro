@@ -1,0 +1,9 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import doorTech from '../../../../public/images/one.png';
+import toiletTech from '../../../../public/images/two.png'; // Add your second image here
+import { useNavigate } from 'react-router';
+const Hero = () => {
+    const navigate = useNavigate();
+    return (_jsx("section", { className: "bg-[#0A2342] text-white py-12", children: _jsxs("div", { className: "container mx-auto grid lg:grid-cols-3 items-center px-6 gap-10", children: [_jsx("div", { className: "hidden lg:block w-[300px] h-[400px]", children: _jsx("img", { src: doorTech, alt: "Technician working", className: "rounded-lg shadow-lg object-cover w-full h-full" }) }), _jsxs("div", { className: "text-center space-y-4", children: [_jsxs("div", { className: "space-x-4 text-sm text-[#00D1FF]", children: [_jsx("span", { children: "Maintenances" }), _jsx("span", { children: "Repairs" }), _jsx("span", { children: "Improvements" }), _jsx("span", { children: "Services" })] }), _jsxs("h1", { className: "text-3xl font-bold", children: ["Need professional ", _jsx("br", {}), " services at your ", _jsx("br", {}), " doorstep?", _jsx("br", {}), " ", _jsx("span", { className: "text-[#00D1FF]", children: "We can help!!" })] }), _jsx("p", { className: "text-sm text-gray-300", children: "24 Hour Services" }), _jsxs("div", { className: "grid grid-cols-2 gap-4 mt-4 text-sm", children: [_jsx("div", { children: "\u2705 Satisfaction Guarantee" }), _jsx("div", { children: "\u2705 24h Availability" }), _jsx("div", { children: "\u2705 Local Professionals" }), _jsx("div", { children: "\u2705 Flexible Appointments" })] })] }), _jsx("div", { className: "hidden lg:block w-[300px] h-[400px]", children: _jsx("img", { src: toiletTech, alt: "Technician working", className: "rounded-lg shadow-lg object-cover w-full h-full" }) })] }) }));
+};
+export default Hero;
