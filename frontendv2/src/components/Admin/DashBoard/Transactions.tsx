@@ -32,6 +32,8 @@ const TransactionPage: React.FC = () => {
     const navigate=useNavigate()
     const[transaction,settransaction]=useState<Transaction[]>([])
     const[balance,setbalance]=useState<Balance>()
+    const[currentPage,setcurrentPage]=useState(1)
+ 
     const [isOpen, setIsOpen] = useState(false);
     const [bookingdetails, setbookingdetails] = useState<bookingdetals | null>(null);
     useEffect(()=>{
@@ -43,11 +45,11 @@ const TransactionPage: React.FC = () => {
             }
 
             try {
-                const transactionsdetail=await fetchtransactions()
-                console.log("transactions", transactionsdetail)
-                settransaction(transactionsdetail)
-                const total=transactionsdetail.reduce((sum:number,tx:Transaction)=>sum+(tx.admincommission||0),0)
-                setbalance({amount:total})
+                const result=await fetchtransactions(currentPage)
+
+                settransaction(result.transactions)
+                
+                setbalance({amount:result.totaladmincommision})
                 
 
             } catch (error) {
@@ -56,7 +58,7 @@ const TransactionPage: React.FC = () => {
             
         }
         fetchtrasnsaction()
-    },[])
+    },[currentPage])
 
     const handleClick=async(id:string)=>{
         try {
@@ -124,6 +126,23 @@ const TransactionPage: React.FC = () => {
               ))}
             </tbody>
           </table>
+          <div className="mt-4 flex justify-center space-x-4">
+          <button 
+            onClick={() => setcurrentPage((prev) => Math.max(prev - 1, 1))} 
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <span className="self-center">Page {currentPage}</span>
+          <button 
+            onClick={() => setcurrentPage((prev) => prev + 1)} 
+            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+          >
+            Next
+          </button>
+        </div>
+
         </div>
       </main>
       <Dialog open={isOpen} onClose={closeModal} className="fixed z-50 inset-0 overflow-y-auto">

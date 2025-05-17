@@ -89,10 +89,12 @@ export class AdminController{
     }
     async fetchTransaction(req:Request,res:Response):Promise<void>{
         console.log("fetch transaction")
+        const currentPage=parseInt(req.query.page as string)||1
+       
         try {
-            const transaction=await this.gettransactiondetails.gettransaction()
-            console.log("controller transaction",transaction)
-            res.status(200).json({transaction}) 
+            const {transactions,totaladmincommision}=await this.gettransactiondetails.gettransaction(currentPage)
+            console.log("controller transaction",transactions)
+            res.status(200).json({transactions,totaladmincommision}) 
         } catch (error:any) {
             res.status(500).json({ message: error.message });
         }

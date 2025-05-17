@@ -36,9 +36,12 @@ export class TransactionRepositoryImpl implements TransactionRepository {
       }));
     }
 
-    async fetchtransaction(): Promise<ITransaction[]>{
+    async fetchtransaction(page:number,limit:number): Promise<ITransaction[]>{
+      const skip=(page-1)*limit
       const result=await TransactionModel.find()
       .sort({createdAt:-1})
+      .skip(skip)
+      .limit(limit)
       .populate({
         path: "referenceId",
         populate: {
@@ -51,6 +54,18 @@ export class TransactionRepositoryImpl implements TransactionRepository {
 
         
     }
+    async fetchtotaladminearning(): Promise<number> {
+      const result = await TransactionModel.aggregate([
+        {
+          $group: {
+            _id: null,
+            total: { $sum: "$admincommission" }
+          }
+        }
+      ]);
+      return result[0]?.total || 0;
+    }
+
 
     async findById(id: string): Promise<ITransaction | null> {
       return await TransactionModel.findById(id);

@@ -1,9 +1,9 @@
 import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 
-export const fetchtransactions=async()=>{
+export const fetchtransactions=async(page:number)=>{
     try {
-        const transactions=await axiosInstanceadmin.get(`/fetchtransactions`)
-        return transactions.data.transaction
+        const transactions=await axiosInstanceadmin.get(`/fetchtransactions?page=${page}`)
+        return transactions.data
     } catch (error: any) {
         console.error("Error fetching transactions:", error);
         throw new Error(

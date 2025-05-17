@@ -1,14 +1,17 @@
 import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
 
 export class Gettransactions{
-    constructor(private transactionrepository:TransactionRepository){}
+    constructor(private _transactionrepository:TransactionRepository){}
 
 
-    async gettransaction(){
-        const transaction=await this.transactionrepository.fetchtransaction()
+    async gettransaction(currentpage:number){
+        const limit=5
+        const transaction=await this._transactionrepository.fetchtransaction(currentpage, limit)
+        const totaladmincommision=await this._transactionrepository.fetchtotaladminearning()
+
         console.log("transaction",transaction)
         if(!transaction) throw new Error("transaction not found")
-            return transaction.map((tx) => {
+            const formatted= transaction.map((tx) => {
                 const booking = tx.referenceId as any;
                 const user = booking?.userId as any;
               
@@ -23,5 +26,9 @@ export class Gettransactions{
                   admincommission:tx.admincommission
                 };
               });
+               return {
+                transactions: formatted,
+                totaladmincommision
+              };
         }
     }
