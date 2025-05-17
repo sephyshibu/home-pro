@@ -8,4 +8,5 @@ export interface Categoryrepository{
     blockunblockcat(catid:string, isBlocked:boolean):Promise<ICategory>
     editcategory(catid:string,update:Partial<ICategory>):Promise<ICategory>
     fetchconecategory(catid:string):Promise<ICategory|null>
+    fetchCategoryBySearch(name:string):Promise<ICategory[]|null>
 }

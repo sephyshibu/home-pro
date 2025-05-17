@@ -47,5 +47,20 @@ export class categoryRepositoryImpl implements Categoryrepository{
         if (!updated) throw new Error("Category update failed. Category not found.");
         return updated;
     }
+    async fetchCategoryBySearch(name: string): Promise<ICategory[] | null> {
+        try {
+                console.log("Categorymame",name)
+                const usernames=name.trim().split(/\s+/)
+                const regex=usernames.map((word=>`(?=.*\\b${word}\\w*)`))
+                                              .join('')
+            
+                const users=await CategoryModel.find({name:{$regex:regex,$options:'i'}})
+                return users
+                        
+            }   catch (error) {
+                    console.error("Error finding user:", error);
+                    return null;
+                }
+        }
+    }
     
-}

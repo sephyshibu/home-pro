@@ -27,6 +27,7 @@ import { EmailService } from '../../application/service/EmailService'
 import { authToken } from '../../infrastructure/middleware/CheckAdminStatus'
 import { Searchinguser } from '../../application/usecase/Admin/SearchUser/searchUser'
 import { Searchingtech } from '../../application/usecase/Admin/SearchTech/searchtech'
+import { Searchingcategory } from '../../application/usecase/Admin/SearchCategory/searchcategory'
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
@@ -56,6 +57,7 @@ const fetchrefundrequestwithremark= new FetchrefundRequest(bookingrepository)
 const refundaccepted= new Refudaccept(bookingrepository,walletrepository)
 const seachuserinadmin= new Searchinguser(UserRepository)
 const seachtechinadmin= new Searchingtech(TechRepository)
+const searchcategorybyadmin= new Searchingcategory(categoryrepository)
 
 const adminController= new AdminController(
     loginadmin,
@@ -75,7 +77,8 @@ const adminController= new AdminController(
     fetchrefundrequestwithremark,
     refundaccepted,
     seachuserinadmin,
-    seachtechinadmin
+    seachtechinadmin,
+    searchcategorybyadmin
    
 )
 console.log("adminrouter")
@@ -97,5 +100,5 @@ router.get('/fetchrefundreqall',authToken,(req,res)=>adminController.fetchingreq
 router.post('/acceptrefund/:bookingId',authToken,(req,res)=>adminController.acceptingrefund(req,res))
 router.get('/searchuser/:searchterm',authToken,(req,res)=>adminController.searchingUsers(req,res))
 router.get('/searchtech/:searchterm',authToken,(req,res)=>adminController.searchingTech(req,res))
-
+router.get('/searchcategory/:searchterm',authToken,(req,res)=>adminController.searchingCategory(req,res))
 export {router as adminRouter}

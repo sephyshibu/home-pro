@@ -17,6 +17,8 @@ import { FetchrefundRequest } from "../../application/usecase/booking/fetchrefun
 import { Refudaccept } from "../../application/usecase/booking/refundaccept";
 import { Searchinguser } from "../../application/usecase/Admin/SearchUser/searchUser";
 import { Searchingtech } from "../../application/usecase/Admin/SearchTech/searchtech";
+import { Searchingcategory } from "../../application/usecase/Admin/SearchCategory/searchcategory";
+
 export class AdminController{
     constructor(
         private loginadmin:Login,
@@ -36,7 +38,8 @@ export class AdminController{
         private fetchrefundrequest:FetchrefundRequest,
         private refundaccept:Refudaccept,
         private searchuser:Searchinguser,
-        private searchtech:Searchingtech
+        private searchtech:Searchingtech,
+        private searchcategory:Searchingcategory
     ){}
 
 
@@ -237,6 +240,16 @@ export class AdminController{
             const{searchterm}=req.params
             const tech=await this.searchtech.searchingtech(searchterm)
             res.status(200).json({tech})
+        } catch (error:any) {
+                console.error("Error in fetch tech by search:", error);
+                res.status(500).json({ message: "Internal Server Error", error: error.message });
+            }
+    }
+    async searchingCategory(req:Request,res:Response):Promise<void>{
+        try {
+            const{searchterm}=req.params
+            const cat=await this.searchcategory.searchingcategory(searchterm)
+            res.status(200).json({cat})
         } catch (error:any) {
                 console.error("Error in fetch tech by search:", error);
                 res.status(500).json({ message: "Internal Server Error", error: error.message });
