@@ -27,6 +27,22 @@ export class TechRepositoryImpl implements TechRepository{
         return tech
     }
 
+    async fetchTechsBySearch(techname: string): Promise<ITech[]|null> {
+            try {
+                console.log("techmame",techname)
+                const usernames=techname.trim().split(/\s+/)
+                const regex=usernames.map((word=>`(?=.*\\b${word}\\w*)`))
+                                      .join('')
+    
+                const users=await TechModel.find({name:{$regex:regex,$options:'i'}})
+                return users
+                
+            } catch (error) {
+                console.error("Error finding user:", error);
+                return null;
+              }
+        }
+
     async blockunblock(techid: string, isBlocked: boolean): Promise<ITech> {
         const tech=await TechModel.findByIdAndUpdate(
             techid,
