@@ -71,7 +71,7 @@ axiosInstanceadmin.interceptors.response.use(
           // store.dispatch(logoutuser());
           toast.error("Session expired. Please login again.");
           await persistor.purge();
-          localStorage.removeItem("techId");
+          localStorage.removeItem("adminId");
           window.location.href = '/';
           return Promise.reject(refreshError);
         }

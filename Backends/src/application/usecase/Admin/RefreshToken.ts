@@ -8,7 +8,7 @@ export class RefreshToken{
         }
 
         const decoded:any=jwt.verify(refreshtoken, process.env.JWT_REFRESH_SECRET!);
-        const newaccesstoken=jwt.sign({email:decoded.email}, process.env.JWT_REFRESH_SECRET!,{expiresIn:"15m"});
+        const newaccesstoken=jwt.sign({email:decoded.email}, process.env.JWT_SECRET!,{expiresIn:"15m"});
 
         return newaccesstoken
     }

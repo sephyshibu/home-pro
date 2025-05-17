@@ -9,7 +9,7 @@ export const authToken=async(req:Request,res:Response, next:NextFunction):Promis
         const authHeader=req.headers['authorization']
         const adminId=req.headers['admin-id'] as string;
         const token=authHeader && authHeader.split(' ')[1]
-
+        console.log("adminId",adminId)
         if(!token){
             res.status(401).json({message:"Access Token required"})
             return
