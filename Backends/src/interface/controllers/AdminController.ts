@@ -15,6 +15,7 @@ import { Gettransactions } from "../../application/usecase/Transactions/GetTrans
 import { GetTransactionWithBookings } from "../../application/usecase/Transactions/TransactionBookingdetails";
 import { FetchrefundRequest } from "../../application/usecase/booking/fetchrefundbookings";
 import { Refudaccept } from "../../application/usecase/booking/refundaccept";
+import { Searchinguser } from "../../application/usecase/Admin/SearchUser/searchUser";
 export class AdminController{
     constructor(
         private loginadmin:Login,
@@ -32,7 +33,8 @@ export class AdminController{
         private gettransactiondetails:Gettransactions,
         private gettransactionwithBookings:GetTransactionWithBookings,
         private fetchrefundrequest:FetchrefundRequest,
-        private refundaccept:Refudaccept
+        private refundaccept:Refudaccept,
+        private searchuser:Searchinguser
     ){}
 
 
@@ -214,6 +216,17 @@ export class AdminController{
                 
             } catch (error:any) {
                 console.error("Error in refund accepted:", error);
+                res.status(500).json({ message: "Internal Server Error", error: error.message });
+            }
+    }
+
+    async searchingUsers(req:Request,res:Response):Promise<void>{
+        try {
+            const{searchterm}=req.params
+            const user=await this.searchuser.searchinguser(searchterm)
+            res.status(200).json({user})
+        } catch (error:any) {
+                console.error("Error in fetch user by search:", error);
                 res.status(500).json({ message: "Internal Server Error", error: error.message });
             }
     }

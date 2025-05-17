@@ -10,4 +10,5 @@ export interface UserRepository{
     findById(userid:string):Promise<{ isBlocked: boolean; email: string }|null>
     findOneuser(userId:string):Promise<IUser|null>
     edituser(userId:string, update:Partial<IUser>):Promise<IUser>
+    fetchUsersBySearch(username:string):Promise<IUser[]|null>
 }

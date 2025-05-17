@@ -25,6 +25,7 @@ import { Refudaccept } from '../../application/usecase/booking/refundaccept'
 import { walletRepositoryimpl } from '../../infrastructure/repository/WalletRepositoryimpl'
 import { EmailService } from '../../application/service/EmailService'
 import { authToken } from '../../infrastructure/middleware/CheckAdminStatus'
+import { Searchinguser } from '../../application/usecase/Admin/SearchUser/searchUser'
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
@@ -52,6 +53,8 @@ const gettransaction=new Gettransactions(transactionrepository)
 const gettransactionwithbookings=new GetTransactionWithBookings(transactionrepository, bookingrepository)
 const fetchrefundrequestwithremark= new FetchrefundRequest(bookingrepository)
 const refundaccepted= new Refudaccept(bookingrepository,walletrepository)
+const seachuserinadmin= new Searchinguser(UserRepository)
+
 const adminController= new AdminController(
     loginadmin,
     refreshtoken,
@@ -68,7 +71,8 @@ const adminController= new AdminController(
     gettransaction,
     gettransactionwithbookings,
     fetchrefundrequestwithremark,
-    refundaccepted
+    refundaccepted,
+    seachuserinadmin
    
 )
 console.log("adminrouter")
@@ -88,7 +92,7 @@ router.get('/fetchtransactions',authToken,(req,res)=>adminController.fetchTransa
 router.get('/fetchtransactionwithBookings/:transId',authToken,(req,res)=>adminController.transactionwithBookings(req,res))
 router.get('/fetchrefundreqall',authToken,(req,res)=>adminController.fetchingrequestrefund(req,res))
 router.post('/acceptrefund/:bookingId',authToken,(req,res)=>adminController.acceptingrefund(req,res))
-
+router.get('/searchuser/:searchterm',authToken,(req,res)=>adminController.searchingUsers(req,res))
 
 
 export {router as adminRouter}

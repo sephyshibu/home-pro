@@ -40,6 +40,22 @@ export class UserRepositoryImpl implements UserRepository{
         return users
     }
 
+    async fetchUsersBySearch(username: string): Promise<IUser[]|null> {
+        try {
+            console.log("usermame",username)
+            const usernames=username.trim().split(/\s+/)
+            const regex=usernames.map((word=>`(?=.*\\b${word}\\w*)`))
+                                  .join('')
+
+            const users=await userModel.find({name:{$regex:regex,$options:'i'}})
+            return users
+            
+        } catch (error) {
+            console.error("Error finding user:", error);
+            return null;
+          }
+    }
+
     async blockunblock(userid: string, isBlocked: boolean): Promise<IUser> {
         const user=await userModel.findByIdAndUpdate(
             userid,
@@ -77,4 +93,6 @@ export class UserRepositoryImpl implements UserRepository{
         if(!updated) throw new Error("User Updated failedd")
         return updated
     }
+
+   
 }
