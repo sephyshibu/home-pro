@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Dialog,DialogPanel,DialogTitle } from "@headlessui/react";
 import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 import toast from "react-hot-toast";
-import { uploadImageToCloudinary } from "../../../../../admin/src/lib/cloudinaryUpload";
+import { uploadImageToCloudinary } from "../../../utils/cloudinaryUpload";
 
 
 interface addCategoryForm{

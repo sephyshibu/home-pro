@@ -16,11 +16,13 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
       const state = store.getState();
       const token = state.admintoken?.token;
       const admin=state.admin?.admin
+      console.log("Token being sent in asdmin:", token);
+
 
   
-      console.log("tech in axios", admin);
-      console.log("axios token", token);
-      console.log("state", state);
+      console.log("admin in axios", admin);
+      console.log("admin axios token", token);
+      console.log("admin state", state);
   
       if (typeof token !== 'string') {
         console.error("Token is not a string:", token);

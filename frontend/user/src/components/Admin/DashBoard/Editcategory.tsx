@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 import toast from "react-hot-toast";
-import { uploadImageToCloudinary } from "../../../../../admin/src/lib/cloudinaryUpload"; // <-- Make sure this exists
+import { uploadImageToCloudinary } from "../../../utils/cloudinaryUpload"; // <-- Make sure this exists
 
 interface Category {
   name: string;

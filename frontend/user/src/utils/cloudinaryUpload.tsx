@@ -1,5 +1,5 @@
 // src/lib/cloudinaryUpload.ts
-export const uploadImageToCloudinary = async (file) => {
+export const uploadImageToCloudinary = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "Home procategory"); // from cloudinary

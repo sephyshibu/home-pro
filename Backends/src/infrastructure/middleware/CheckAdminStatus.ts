@@ -18,7 +18,7 @@ export const authToken=async(req:Request,res:Response, next:NextFunction):Promis
         try {
             const decoded=jwt.verify(token, process.env.JWT_SECRET as string) as {adminId:string};
             (req as CustomRequest).adminId=decoded.adminId
-
+            console.log("decoded",decoded)
 
             if(!adminId){
                 console.log("sdsadafeqf")
