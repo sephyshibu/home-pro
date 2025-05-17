@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
-
+import { searchuser } from "../../../api/AdminApi/SearchUser/searchuser";
 
 interface User{
     _id:string,
@@ -46,9 +46,30 @@ const User:React.FC=()=>{
   }
 };
 
-const handleSearch=async()=>{
-  
+const handleSearch=async(e:React.ChangeEvent<HTMLInputElement>)=>{
+  setsearchterm(e.target.value)
 }
+
+useEffect(()=>{
+  const delaydebounce=setTimeout(async()=>{
+    try {
+      if(searchterm.trim()===""){
+        fetchuser()
+      }
+      else{
+        const response=await searchuser(searchterm)
+        setuser(response.data.user)
+      }
+    } catch (error) {
+        console.error('Search failed', error);
+      } finally {
+        setloading(false);
+      }
+  },500)
+ 
+    return () => clearTimeout(delaydebounce); // cleanup the timer
+  }, [searchterm]);
+
 
 
     return(
