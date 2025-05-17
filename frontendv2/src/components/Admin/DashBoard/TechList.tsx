@@ -43,7 +43,7 @@ const TechList:React.FC=()=>{
     console.error("Error toggling block status", error);
   }
 };
-  const handleSearch=async(e:React.ChangeEvent<HTMLInputElement>)=>{
+  const handleSearchTech=async(e:React.ChangeEvent<HTMLInputElement>)=>{
     setsearchterm(e.target.value)
   
   }
@@ -81,7 +81,7 @@ const TechList:React.FC=()=>{
               <input
                   type="text"
                   value={searchterm}
-                  onChange={handleSearch}
+                  onChange={handleSearchTech}
                   placeholder="enter the tech name"
                   className="search-input"
                   />
