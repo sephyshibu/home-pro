@@ -62,9 +62,9 @@ useEffect(()=>{
       }
     } catch (error) {
         console.error('Search failed', error);
-      } finally {
+    } finally {
         setloading(false);
-      }
+    }
   },500)
  
     return () => clearTimeout(delaydebounce); // cleanup the timer

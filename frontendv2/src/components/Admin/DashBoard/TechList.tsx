@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
-
+import { searchtech } from "../../../api/AdminApi/Searchtech/searchTech";
 interface Tech{
     _id:string,
     email:string,
@@ -11,6 +11,7 @@ interface Tech{
 const TechList:React.FC=()=>{
     const[techs, settech]=useState<Tech[]>([])
     const[loading,setloading]=useState(false)
+    const[searchterm,setsearchterm]=useState('')
     
 
     useEffect(()=>{
@@ -42,7 +43,30 @@ const TechList:React.FC=()=>{
     console.error("Error toggling block status", error);
   }
 };
+  const handleSearch=async(e:React.ChangeEvent<HTMLInputElement>)=>{
+    setsearchterm(e.target.value)
+  
+  }
 
+  useEffect(()=>{
+    const debouncedelay=setTimeout(async()=>{
+      try {
+        if(searchterm.trim()==""){
+          fetchtech()
+        }
+        else{
+          const response=await searchtech(searchterm)
+          settech(response.data.tech)
+        }
+      } catch (error) {
+        console.error('Search failed', error);
+      } finally {
+          setloading(false);
+      }
+    },500)
+
+    return()=>clearInterval(debouncedelay)
+  },[searchtech])
 
 
     return(
@@ -52,6 +76,17 @@ const TechList:React.FC=()=>{
           {loading ? (
             <div className="text-center text-lg text-gray-500">Loading...</div>
           ) : (
+            <>
+            <div className="search-options">
+              <input
+                  type="text"
+                  value={searchterm}
+                  onChange={handleSearch}
+                  placeholder="enter the tech name"
+                  className="search-input"
+                  />
+            </div>
+           
             <table className="min-w-full table-auto text-left">
               <thead>
                 <tr className="text-gray-600 uppercase text-sm leading-normal">
@@ -90,6 +125,7 @@ const TechList:React.FC=()=>{
                 )}
               </tbody>
             </table>
+             </>
           )}
         </div>
       </div>
