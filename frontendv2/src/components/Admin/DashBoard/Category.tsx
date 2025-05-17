@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 import { useNavigate } from "react-router";
+import { searchcategory } from "../../../api/AdminApi/SearchCategory/searchcategory";
 interface Category{
     _id:string,
     name:string,
@@ -12,6 +13,7 @@ interface Category{
 const CategoryList:React.FC=()=>{
     const[category, setcategory]=useState<Category[]>([])
     const[loading,setloading]=useState(false)
+    const[searchterm,setsearchterm]=useState('')
     const navigate=useNavigate()
 
     useEffect(()=>{
@@ -43,6 +45,31 @@ const CategoryList:React.FC=()=>{
             console.error("Error toggling block status", error);
         }
     }
+     const handleSearchCategory=async(e:React.ChangeEvent<HTMLInputElement>)=>{
+        setsearchterm(e.target.value)
+      
+      }
+    
+      useEffect(()=>{
+        const debouncedelay=setTimeout(async()=>{
+          try {
+            if(searchterm.trim()==""){
+              fetchcategory()
+            }
+            else{
+              const response=await searchcategory(searchterm)
+              setcategory(response.data.cat)
+            }
+          } catch (error) {
+            console.error('Search failed', error);
+          } finally {
+              setloading(false);
+          }
+        },500)
+    
+        return()=>clearInterval(debouncedelay)
+      },[searchterm])
+    
 
     const handleEdit=async(catid:string)=>{
         
@@ -58,6 +85,16 @@ const CategoryList:React.FC=()=>{
           {loading ? (
             <div className="text-center text-lg text-gray-500">Loading...</div>
           ) : (
+            <>
+            <div className="search-options">
+              <input
+                  type="text"
+                  value={searchterm}
+                  onChange={handleSearchCategory}
+                  placeholder="enter the tech name"
+                  className="search-input"
+                  />
+            </div>
             <table className="min-w-full table-auto text-left">
               <thead>
                 <tr className="text-gray-600 uppercase text-sm leading-normal">
@@ -108,6 +145,7 @@ const CategoryList:React.FC=()=>{
                 )}
               </tbody>
             </table>
+            </>
           )}
         </div>
       </div>

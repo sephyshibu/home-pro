@@ -66,7 +66,7 @@ const TechList:React.FC=()=>{
     },500)
 
     return()=>clearInterval(debouncedelay)
-  },[searchtech])
+  },[searchterm])
 
 
     return(
