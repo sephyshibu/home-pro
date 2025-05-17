@@ -1,0 +1,6 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import pic from '../../../../public/images/Resized/Therapist.png';
+const CallAction = () => {
+    return (_jsx("section", { className: "bg-[#0A2342] text-white py-16 px-6", children: _jsxs("div", { className: "container mx-auto flex flex-col md:flex-row items-center justify-between gap-12", children: [_jsxs("div", { className: "max-w-lg text-left", children: [_jsxs("h2", { className: "text-2xl md:text-3xl font-semibold mb-4 px-20", children: ["Already to improve ", _jsx("br", {}), " or repair your home"] }), _jsx("h2", { className: "text-2xl md:text-3xl font-semibold mb-4 px-20", children: "Let's talk!" }), _jsx("div", { className: 'px-20', children: _jsx("button", { className: "bg-[#00AEEF] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#0099d4] transition duration-200", children: "Book Now" }) })] }), _jsx("div", { className: "w-full md:w-1/2 flex justify-center", children: _jsx("div", { className: "w-[300px] h-[320px] bg-blue-100 rounded-t-[80px] rounded-b-lg overflow-hidden relative", children: _jsx("img", { src: pic, alt: "Roof Workers", className: "absolute top-0 left-0 w-full h-full object-cover" }) }) })] }) }));
+};
+export default CallAction;

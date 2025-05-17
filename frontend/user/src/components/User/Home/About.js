@@ -1,0 +1,6 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import workersImage from '../../../../public/images/Homepro/rityyimg.jpg'; // replace with your image path
+const AboutSection = () => {
+    return (_jsx("section", { className: "bg-white py-16 px-6", children: _jsxs("div", { className: "container mx-auto flex flex-col md:flex-row items-center justify-between gap-12", children: [_jsxs("div", { className: "max-w-lg text-left", children: [_jsxs("h2", { className: "text-2xl md:text-3xl font-semibold text-gray-900 mb-4", children: ["Professional for your ", _jsx("br", {}), " home services"] }), _jsx("p", { className: "text-gray-600 mb-6 text-sm md:text-base", children: "You need help for home care? We are home care professionals focused in the Kerala region. We provide several services that support home services." })] }), _jsx("div", { className: "w-full md:w-1/2 flex justify-center", children: _jsx("div", { className: "w-[300px] h-[320px] bg-blue-100 rounded-t-[80px] rounded-b-lg overflow-hidden relative", children: _jsx("img", { src: workersImage, alt: "Roof Workers", className: "absolute top-0 left-0 w-full h-full object-cover" }) }) })] }) }));
+};
+export default AboutSection;
