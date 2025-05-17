@@ -13,16 +13,22 @@ interface User{
 const User:React.FC=()=>{
     const[user,setuser]=useState<User[]>([])
     const[searchterm,setsearchterm]=useState('')
+    const[sortOrder,setsortOrder]=useState<'asc'|'desc'>('asc')
     const[loading,setloading]=useState<boolean>(false)
 
 
     useEffect(()=>{
         fetchuser()
-    },[])
+    },[sortOrder])
+
+    const toggleSortOrder=()=>{
+      setsortOrder((prev)=>prev==='asc'?'desc':'asc')
+    }
+
 
     const fetchuser=async()=>{
         try {
-            const response=await axiosInstanceadmin.get('/fetchuser')
+            const response=await axiosInstanceadmin.get(`/fetchuser?sortBy=name&order=${sortOrder}`)
             setuser(response.data.user)
         } catch (error) {
             console.error('Failed to fetch users', error);
@@ -94,7 +100,9 @@ useEffect(()=>{
             <table className="min-w-full table-auto text-left">
               <thead>
                 <tr className="text-gray-600 uppercase text-sm leading-normal">
-                  <th className="px-6 py-3">Name</th>
+                 <th className="px-6 py-3 cursor-pointer" onClick={toggleSortOrder}>
+                    Name {sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
                   <th className="px-6 py-3">Email</th>
                  
                   <th className="px-6 py-3">Status</th>

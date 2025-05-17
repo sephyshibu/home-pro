@@ -35,8 +35,9 @@ export class UserRepositoryImpl implements UserRepository{
         const user=await userModel.findOne({googleId})
         return user?user.toObject():null
     }
-    async fetchUser():Promise<IUser[]>{
-        const users=await userModel.find()
+    async fetchUser(sortBy: string = 'name', order: 'asc' | 'desc' = 'asc'):Promise<IUser[]>{
+        const sortOrder = order === 'asc' ? 1 : -1;
+        const users=await userModel.find().collation({ locale: 'en', strength: 2 }).sort({ [sortBy]: sortOrder });
         return users
     }
 

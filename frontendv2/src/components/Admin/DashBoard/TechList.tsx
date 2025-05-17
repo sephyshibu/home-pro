@@ -11,16 +11,21 @@ interface Tech{
 const TechList:React.FC=()=>{
     const[techs, settech]=useState<Tech[]>([])
     const[loading,setloading]=useState(false)
+    const[sortOrder,setsortOrder]=useState<'asc'|'desc'>('asc')
     const[searchterm,setsearchterm]=useState('')
     
 
     useEffect(()=>{
         fetchtech()
-    },[])
+    },[sortOrder])
+
+    const toggleSortOrder=()=>{
+      setsortOrder((prev)=>prev==='asc'?'desc':'asc')
+    }
 
     const fetchtech=async()=>{
         try {
-            const response=await axiosInstanceadmin.get('/fetchtech')
+            const response=await axiosInstanceadmin.get(`/fetchtech?sortBy=name&order=${sortOrder}`)
             settech(response.data?.tech)
         }catch (error) {
             console.error('Failed to fetch tech', error);
@@ -29,20 +34,21 @@ const TechList:React.FC=()=>{
     }
 
     const handleToggle = async (techId: string, isBlocked: boolean) => {
-  try {
-    const updatedStatus = !isBlocked;
-    await axiosInstanceadmin.patch(`/tech/${techId}`, { isBlocked: updatedStatus });
+      try {
+        const updatedStatus = !isBlocked;
+        await axiosInstanceadmin.patch(`/tech/${techId}`, { isBlocked: updatedStatus });
 
-    // Update the specific tech in local state
-    settech((prevTechs) =>
-      prevTechs.map((tech) =>
-        tech._id === techId ? { ...tech, isBlocked: updatedStatus } : tech
-      )
-    );
-  } catch (error) {
-    console.error("Error toggling block status", error);
-  }
-};
+        // Update the specific tech in local state
+        settech((prevTechs) =>
+          prevTechs.map((tech) =>
+            tech._id === techId ? { ...tech, isBlocked: updatedStatus } : tech
+          )
+        );
+      } catch (error) {
+        console.error("Error toggling block status", error);
+      }
+    };
+
   const handleSearchTech=async(e:React.ChangeEvent<HTMLInputElement>)=>{
     setsearchterm(e.target.value)
   
@@ -90,7 +96,9 @@ const TechList:React.FC=()=>{
             <table className="min-w-full table-auto text-left">
               <thead>
                 <tr className="text-gray-600 uppercase text-sm leading-normal">
-                  <th className="px-6 py-3">Email</th>
+                  <th className="px-6 py-3 cursor-pointer" onClick={toggleSortOrder}>
+                    Email {sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
                   <th className="px-6 py-3">Phone Number</th>
                  
                   <th className="px-6 py-3">Status</th>

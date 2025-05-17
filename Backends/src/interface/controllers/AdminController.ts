@@ -63,7 +63,9 @@ export class AdminController{
 
     async fetchuser(req:Request,res:Response):Promise<void>{
         try {
-            const user=await this.fetchalluser.fetch()
+             const sortBy=req.query.sortBy as string|'name'
+            const order=req.query.order as 'asc'|'desc'||'asc'
+            const user=await this.fetchalluser.fetch(sortBy,order)
             res.status(200).json({user})
         }catch (error: any) {
             res.status(500).json({ message: error.message });
@@ -72,7 +74,9 @@ export class AdminController{
 
     async fetchtech(req:Request,res:Response):Promise<void>{
         try {
-            const tech=await this.fetchalltech.fetch()
+            const sortBy=req.query.sortBy as string|'name'
+            const order=req.query.order as 'asc'|'desc'||'asc'
+            const tech=await this.fetchalltech.fetch(sortBy,order)
             res.status(200).json({tech})
         } catch (error:any) {
             res.status(500).json({ message: error.message });
@@ -81,7 +85,9 @@ export class AdminController{
 
     async fetchCategory(req:Request,res:Response):Promise<void>{
         try {
-            const cat=await this.fetchallCategory.fetch()
+            const sortBy=req.query.sortBy as string|'name'
+            const order=req.query.order as 'asc'|'desc'||'asc'
+            const cat=await this.fetchallCategory.fetch(sortBy,order)
             res.status(200).json({cat})
         } catch (error:any) {
             res.status(500).json({ message: error.message });

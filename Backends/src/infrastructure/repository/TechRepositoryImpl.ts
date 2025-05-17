@@ -22,8 +22,9 @@ export class TechRepositoryImpl implements TechRepository{
         return tech?tech.toObject():null
     }
 
-    async fetchTech(): Promise<ITech[]> {
-        const tech=await TechModel.find()
+    async fetchTech(sortBy='name', order:'asc'|'desc'='asc'): Promise<ITech[]> {
+         const sortOrder = order === 'asc' ? 1 : -1;
+        const tech=await TechModel.find().sort({[sortBy]:sortOrder})
         return tech
     }
 

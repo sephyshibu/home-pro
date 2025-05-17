@@ -19,8 +19,9 @@ export class categoryRepositoryImpl implements Categoryrepository{
         return cat
     }
 
-    async fetchcategory(): Promise<ICategory[]> {
-        const cat=await CategoryModel.find()
+    async fetchcategory(sortBy: string = 'name', order: 'asc' | 'desc' = 'asc'): Promise<ICategory[]> {
+        const sortOrder = order === 'asc' ? 1 : -1;
+        const cat= await CategoryModel.find().sort({ [sortBy]: sortOrder });
         return cat
     }
 

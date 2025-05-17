@@ -13,6 +13,7 @@ interface AddTechForm{
 const Tech:React.FC=()=>{
     const [isOpen, setIsOpen] = useState(false);
     const[error,seterror]=useState<Partial<AddTechForm>>({})
+    
     const[techData,settechdata]=useState<AddTechForm>({
         email:"",
         password:"",

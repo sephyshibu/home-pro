@@ -13,16 +13,21 @@ interface Category{
 const CategoryList:React.FC=()=>{
     const[category, setcategory]=useState<Category[]>([])
     const[loading,setloading]=useState(false)
+    const[sortOrder,setsortOrder]=useState<'asc'|'desc'>('asc')
     const[searchterm,setsearchterm]=useState('')
     const navigate=useNavigate()
 
     useEffect(()=>{
         fetchcategory()
-    },[])
+    },[sortOrder])
+
+    const toggleSortOrder=()=>{
+      setsortOrder((prev)=>prev==='asc'?'desc':'asc')
+    }
 
     const fetchcategory=async()=>{
         try {
-            const response=await axiosInstanceadmin.get('/fetchcategory')
+            const response=await axiosInstanceadmin.get(`/fetchcategory?sortBy=name&order=${sortOrder}`)
             setcategory(response.data.cat)
         }catch (error) {
             console.error('Failed to fetch Category', error);
@@ -101,7 +106,10 @@ const CategoryList:React.FC=()=>{
                  
                  
                   <th className="px-6 py-3">Image</th>
-                  <th className="px-6 py-3">Name</th>
+                 <th className="px-6 py-3 cursor-pointer" onClick={toggleSortOrder}>
+                    Name {sortOrder === 'asc' ? '↑' : '↓'}
+                  </th>
+
                   <th className="px-6 py-3">Description</th>
                   <th className="px-6 py-3">Action</th>
                 

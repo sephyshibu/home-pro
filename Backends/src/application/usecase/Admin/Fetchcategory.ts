@@ -3,8 +3,8 @@ import { Categoryrepository } from "../../../domain/repository/categoryrepositor
 export class fetchCategory{
     constructor(private categoryrepository:Categoryrepository){}
 
-    async fetch(){
-        const category=await this.categoryrepository.fetchcategory()
+    async fetch(sortBy = 'name', order: 'asc' | 'desc' = 'asc'){
+        const category=await this.categoryrepository.fetchcategory(sortBy,order)
         return category
     }
 }
