@@ -193,6 +193,7 @@ export class UserController{
             const token=req.cookies?.refreshtokenuser;
             console.log("refreshtokencontroller",token)
             const newaccesstoken=await this.refreshtoken.refresh(token);
+            console.log("in refresh token controller with new access tokern ",newaccesstoken)
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
           res.status(400).json({ message: err.message });

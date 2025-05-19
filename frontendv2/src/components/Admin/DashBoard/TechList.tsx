@@ -13,11 +13,13 @@ const TechList:React.FC=()=>{
     const[loading,setloading]=useState(false)
     const[sortOrder,setsortOrder]=useState<'asc'|'desc'>('asc')
     const[searchterm,setsearchterm]=useState('')
-    
+    const[currentPage,setcurrentPage]=useState(1)
+    const [total, setTotal] = useState(0);
+    const limit=5
 
     useEffect(()=>{
         fetchtech()
-    },[sortOrder])
+    },[sortOrder,currentPage])
 
     const toggleSortOrder=()=>{
       setsortOrder((prev)=>prev==='asc'?'desc':'asc')
@@ -25,8 +27,9 @@ const TechList:React.FC=()=>{
 
     const fetchtech=async()=>{
         try {
-            const response=await axiosInstanceadmin.get(`/fetchtech?sortBy=name&order=${sortOrder}`)
+            const response=await axiosInstanceadmin.get(`/fetchtech?sortBy=name&order=${sortOrder}&page=${currentPage}`)
             settech(response.data?.tech)
+            setTotal(response.data.total)
         }catch (error) {
             console.error('Failed to fetch tech', error);
             
@@ -133,6 +136,26 @@ const TechList:React.FC=()=>{
                 )}
               </tbody>
             </table>
+             <div className="flex justify-center mt-4 gap-2">
+            <button
+              onClick={() => setcurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span className="px-3 py-1">{currentPage}</span>
+            <button
+              onClick={() => {
+                const totalPages = Math.ceil(total / limit);
+                setcurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+              }}
+              disabled={currentPage >= Math.ceil(total / limit)}
+              className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
              </>
           )}
         </div>

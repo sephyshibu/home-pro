@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {Pencil, Trash2 } from "lucide-react";
-import { useLocation } from "react-router";
+import { useLocation, useSearchParams } from "react-router";
 import { fetchTechById } from "../../../api/UserApi/fetchtechbyid";
 import { fetchaddress } from "../../../api/UserApi/Address/fetchaddress";
 import { addaddress } from "../../../api/UserApi/Address/addaddress";
@@ -84,7 +84,15 @@ const PaymentPage: React.FC = () => {
         country: "",
         pincode: "",
       });
-    const{techid,bookingdetails}=location.state||{}
+    const [searchParams] = useSearchParams();
+
+    const techid = searchParams.get('techid');
+    const date = searchParams.get('date');
+    const time = searchParams.get('time');
+    const categoryId = searchParams.get('categoryId');
+    const pincode = searchParams.get('pincode');
+    const bookingdetails = { date, time, categoryId, pincode };
+
     console.log("booking details",bookingdetails)
     if(!techid|| !bookingdetails){
         return <div className="text-center py-20">Missing details</div>

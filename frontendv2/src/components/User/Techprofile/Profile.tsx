@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation,useSearchParams } from "react-router";
 import { fetchTechById } from "../../../api/UserApi/fetchtechbyid";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router";
@@ -29,7 +29,17 @@ interface Category{
 
 const TechnicianProfile:React.FC=()=> {
   const location=useLocation()
-  const {techid,categoryId, time,date,pincode}=location.state||null
+  const [searchParams] = useSearchParams();
+
+  const state = location.state || {
+    techid: searchParams.get('techid'),
+    categoryId: searchParams.get('categoryId'),
+    time: searchParams.get('time'),
+    date: searchParams.get('date'),
+    pincode: searchParams.get('pincode'),
+  };
+
+  const { techid, categoryId, time, date, pincode } = state;
   const navigate=useNavigate()
   const[technician,settechnician]=useState<Technician>({
     _id:'',
@@ -72,12 +82,16 @@ const handleLoginLogout=async()=>{
                 }
             }
   const handleBook=async(techid:string)=>{
-        navigate('/proceedpayment',{state:{techid,bookingdetails:{
-          date:location.state?.date,
-          time:location.state?.time,
-          categoryId:location.state?.categoryId,
-          pinocde:location.state?.pincode
-        }}})
+    
+         const params = new URLSearchParams({
+        techid,
+        date,
+        time,
+        categoryId,
+        pincode
+      });
+
+      navigate(`/proceedpayment?${params.toString()}`);
   }
 
 

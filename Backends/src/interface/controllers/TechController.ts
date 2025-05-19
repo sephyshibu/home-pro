@@ -51,7 +51,9 @@ export class techController{
     async refreshtokenController(req:Request, res:Response):Promise<void>{
         try {
             const token=req.cookies?.refreshtokentech;
+            console.log("refreshtokencontrollertech",token)
             const newaccesstoken=await this.refreshtoken.refresh(token);
+             console.log("in refresh token controller tech with new access tokern ",newaccesstoken)
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
           res.status(400).json({ message: err.message });

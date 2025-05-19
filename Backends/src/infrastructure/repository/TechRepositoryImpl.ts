@@ -22,10 +22,18 @@ export class TechRepositoryImpl implements TechRepository{
         return tech?tech.toObject():null
     }
 
-    async fetchTech(sortBy='name', order:'asc'|'desc'='asc'): Promise<ITech[]> {
-         const sortOrder = order === 'asc' ? 1 : -1;
-        const tech=await TechModel.find().sort({[sortBy]:sortOrder})
-        return tech
+    async fetchTech(sortBy='name', order:'asc'|'desc'='asc',skip:number, limit:number): Promise<{tech:ITech[],total:number}> {
+        const sortOrder = order === 'asc' ? 1 : -1;
+        const [tech,total]=await Promise.all([
+            TechModel
+            .find()
+            .sort({[sortBy]:sortOrder})
+            .skip(skip)
+            .limit(limit),
+            TechModel.countDocuments()
+        ])
+        return{tech,total}
+        
     }
 
     async fetchTechsBySearch(techname: string): Promise<ITech[]|null> {

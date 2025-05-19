@@ -1,11 +1,13 @@
 import { TechRepository } from "../../../domain/repository/Techrepository";
 
 export class fetchtech{
-    constructor(private techrepository:TechRepository){}
+    constructor(private _techrepository:TechRepository){}
 
-    async fetch(sortBy = 'name', order: 'asc' | 'desc' = 'asc'){
-        const tech=await this.techrepository.fetchTech(sortBy,order)
-        return tech
+    async fetch(sortBy = 'name', order: 'asc' | 'desc' = 'asc',page:number){
+        const limit=5
+        const skip=(page-1)*limit
+        return await this._techrepository.fetchTech(sortBy,order,skip, limit)
+      
     }
 
 }

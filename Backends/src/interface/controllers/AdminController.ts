@@ -63,10 +63,11 @@ export class AdminController{
 
     async fetchuser(req:Request,res:Response):Promise<void>{
         try {
-             const sortBy=req.query.sortBy as string|'name'
+            const sortBy=req.query.sortBy as string|'name'
             const order=req.query.order as 'asc'|'desc'||'asc'
-            const user=await this.fetchalluser.fetch(sortBy,order)
-            res.status(200).json({user})
+            const page = parseInt(req.query.page as string) || 1;
+            const { users, total } =await this.fetchalluser.fetch(sortBy,order,page)
+            res.status(200).json({users,total})
         }catch (error: any) {
             res.status(500).json({ message: error.message });
           }
@@ -76,8 +77,9 @@ export class AdminController{
         try {
             const sortBy=req.query.sortBy as string|'name'
             const order=req.query.order as 'asc'|'desc'||'asc'
-            const tech=await this.fetchalltech.fetch(sortBy,order)
-            res.status(200).json({tech})
+            const page=parseInt(req.query.page as string)|| 1;
+            const {tech,total}=await this.fetchalltech.fetch(sortBy,order,page)
+            res.status(200).json({tech,total})
         } catch (error:any) {
             res.status(500).json({ message: error.message });
         }
@@ -87,6 +89,7 @@ export class AdminController{
         try {
             const sortBy=req.query.sortBy as string|'name'
             const order=req.query.order as 'asc'|'desc'||'asc'
+       
             const cat=await this.fetchallCategory.fetch(sortBy,order)
             res.status(200).json({cat})
         } catch (error:any) {
@@ -111,7 +114,9 @@ export class AdminController{
     async refreshtokenController(req:Request, res:Response):Promise<void>{
         try {
             const token=req.cookies?.refreshtokenadmin;
+             console.log("refreshtokencontrolleradmin",token)
             const newaccesstoken=await this.refreshtoken.refresh(token);
+             console.log("in refresh token controller admin with new access tokern ",newaccesstoken)
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
           res.status(400).json({ message: err.message });

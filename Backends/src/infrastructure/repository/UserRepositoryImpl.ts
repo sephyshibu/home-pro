@@ -35,10 +35,19 @@ export class UserRepositoryImpl implements UserRepository{
         const user=await userModel.findOne({googleId})
         return user?user.toObject():null
     }
-    async fetchUser(sortBy: string = 'name', order: 'asc' | 'desc' = 'asc'):Promise<IUser[]>{
+    async fetchUser(sortBy: string = 'name', order: 'asc' | 'desc' = 'asc', skip:number, limit:number):Promise<{users:IUser[]|null,total: number}>{
         const sortOrder = order === 'asc' ? 1 : -1;
-        const users=await userModel.find().collation({ locale: 'en', strength: 2 }).sort({ [sortBy]: sortOrder });
-        return users
+        const [users, total] = await Promise.all([
+            userModel
+            .find()
+            .collation({ locale: 'en', strength: 2 })
+            .sort({ [sortBy]: sortOrder })
+            .skip(skip)
+            .limit(limit),
+            userModel.countDocuments()
+        ]);
+
+        return { users, total };
     }
 
     async fetchUsersBySearch(username: string): Promise<IUser[]|null> {

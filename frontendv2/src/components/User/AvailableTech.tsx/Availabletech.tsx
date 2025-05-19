@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchcategory } from '../../../api/UserApi/fetchcategory';
 import { useNavigate } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
+import { NavLink ,useSearchParams} from 'react-router-dom';
+import { fetchTechnicianbasedonavailableSlot } from '../../../api/UserApi/fetchtechnician';
 import {persistor} from '../../../app/store'
 interface Technician {
   _id: string;
@@ -19,19 +20,39 @@ interface category{
 }
 
 const TechnicianList: React.FC = () => {
-  const location = useLocation();
-  const{technicians, categoryId,date, time,pincode}=location.state||{}
-  const[category, setcategory]=useState<category|null>(null)
+  // const location = useLocation();
+  const [searchParams] = useSearchParams();
+  // const{technicians, categoryId,date, time,pincode}=location.state||{}
+  const pincode = searchParams.get('pincode');
+  const date = searchParams.get('date');
+  const time = searchParams.get('time');
+  const categoryId = searchParams.get('categoryId');
+  const [technicians, setTechnicians] = useState<Technician[]>([]);
+  const [category, setcategory] = useState<category | null>(null);
+
   const navigate= useNavigate()
-  useEffect(()=>{
-    const fetchCategory=async()=>{
-    const result=await fetchcategory(categoryId) 
-    setcategory(result)  
-    }
-    if(categoryId){
-        fetchCategory()
-    }
-  },[categoryId])
+
+   useEffect(() => {
+    const load = async () => {
+      if (pincode && date && categoryId) {
+        const techs = await fetchTechnicianbasedonavailableSlot(pincode, date, categoryId);
+        setTechnicians(techs);
+      }
+    };
+    load();
+  }, [pincode, date, categoryId]);
+
+ useEffect(() => {
+    const fetchCategory = async () => {
+      if (categoryId) {
+        const result = await fetchcategory(categoryId);
+        setcategory(result);
+      }
+    };
+    fetchCategory();
+  }, [categoryId]);
+
+
   const userId=localStorage.getItem('userId')
   const handleLoginLogout=async()=>{
                   if(userId){
@@ -44,7 +65,13 @@ const TechnicianList: React.FC = () => {
               }
 
   const handleViewProfile=async(techid:string)=>{
-    navigate('/viewprofile', {state:{techid,categoryId,date, time, pincode}})
+    navigate('/viewprofile?'+ new URLSearchParams({
+    techid,
+    categoryId: categoryId || '',
+    date: date || '',
+    time: time || '',
+    pincode: pincode || '',
+  }).toString());
   }
 
 

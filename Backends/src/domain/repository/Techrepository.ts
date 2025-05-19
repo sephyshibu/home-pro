@@ -4,7 +4,7 @@ export interface TechRepository{
     createtech(tech:ITech):Promise<ITech>
     findById(techid:string):Promise<{ isBlocked: boolean; email: string }|null>
     findByEmail(email:string):Promise<ITech|null>
-    fetchTech(sortBy:string,order:'asc'|'desc'):Promise<ITech[]>
+    fetchTech(sortBy:string,order:'asc'|'desc',skip:number,limit:number):Promise<{tech:ITech[],total:number}>
     blockunblock(techid:string, isBlocked:boolean):Promise<ITech>
     findOneTech(techid:string):Promise<ITech|null>
     edittech(techid:string,update:Partial<ITech>):Promise<ITech>

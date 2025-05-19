@@ -180,15 +180,12 @@ const Services: React.FC = () => {
                         setisOpen(false);
                         setisbpookslot({ pincode: "", date: "", time: "" });
                         seterror({});
-                        navigate('/available-technicians', {
-                          state: {
-                            technicians,
-                            date: bokkslot.date,
-                            time: bokkslot.time,
-                            categoryId: selectedcat,
-                            pincode: bokkslot.pincode
-                          }
-                        });
+                       navigate('/available-technicians?' + new URLSearchParams({
+                        pincode: bokkslot.pincode,
+                        date: bokkslot.date,
+                        time: bokkslot.time,
+                        categoryId: selectedcat
+                      }).toString());
                       } else {
                         toast.error("No technicians available for the selected date and pincode.");
                       }
