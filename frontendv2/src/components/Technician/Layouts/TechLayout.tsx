@@ -1,17 +1,22 @@
 import { Outlet, NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { persistor } from '../../../app/store'
-
-
+import { cleartoken } from '../../../features/TokenTechSlice'
+import { logouttech } from '../../../features/TechSlice'
+import { useDispatch } from 'react-redux'
 const TechnicianLayout = () => {
 
   const navigate=useNavigate()
+  const dispatch=useDispatch()
   const techId=localStorage.getItem('techId')
   const handleLogOut=async()=>{
       if(techId){
           console.log(techId)
-        localStorage.removeItem('techId')
-        await persistor.purge()
+       localStorage.removeItem('techId')
+       localStorage.removeItem('persist:tech');
+      localStorage.removeItem('techtoken');
+      dispatch(logouttech());
+      dispatch(cleartoken());
         navigate('/tech')
       }else{
         navigate('/tech/techdashboard')

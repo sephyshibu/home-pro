@@ -3,7 +3,9 @@ import {persistor} from '../../../app/store'
 import { useNavigate } from 'react-router';
 import logo from '../../../../public/images/Resized/Logo Landscape white-01-01.png'
 import { io,Socket } from 'socket.io-client';
-
+import { logoutuser } from '../../../features/UserSlice';
+import { cleartoken } from '../../../features/tokenSlice';
+import { useDispatch } from 'react-redux';
 const socket: Socket = io('http://localhost:3000'); 
 const Header: React.FC = () => {
    const [unreadCounts, setUnreadCounts] = useState<{ bookingId: string; count: number; technicianName: string }[]>([]);
@@ -11,7 +13,7 @@ const Header: React.FC = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const userId=localStorage.getItem('userId')
     const navigate=useNavigate()
-
+    const dispatch=useDispatch()
     useEffect(() => {
     if (userId) {
       socket.emit('get-unread-counts', userId, (data: any[]) => {
@@ -40,7 +42,12 @@ const Header: React.FC = () => {
     const handleLoginLogout=async()=>{
         if(userId){
             localStorage.removeItem('userId')
-            await persistor.purge()
+            localStorage.removeItem('persist:user');
+                localStorage.removeItem('usertoken');
+            
+                dispatch(logoutuser());
+                dispatch(cleartoken());
+            // await persistor.purge()
             navigate('/')
         }else{
             navigate('/login')

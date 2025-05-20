@@ -6,8 +6,11 @@ import RefundRequest from "./RefundRequest.";
 import TechList from './TechList'
 import { useNavigate } from "react-router";
 import Category from './Category'
+import { useDispatch } from "react-redux";
 import AddCategory from './AddCategory'
 import { persistor } from "../../../app/store";
+import { cleartoken } from "../../../features/AdmintokenSlice";
+import { logoutadmin } from "../../../features/AdminSlice";
 import logo from '../../../../public/images/Resized/Logo Landscape.png'
 const tabs = ["Dashboard", "User List", "Technician List","Category List", "Transactions","RefundRequest"];
 
@@ -15,12 +18,18 @@ const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("Dashboard");
   const adminId=localStorage.getItem('adminId')
   const navigate=useNavigate()
-
+  const dispatch=useDispatch()
 
   const handleLogOut=async()=>{
     if(adminId){
       localStorage.removeItem('adminId')
-      await persistor.purge()
+      
+    localStorage.removeItem('persist:admin');
+    localStorage.removeItem('admintoken');
+
+    dispatch(logoutadmin());
+    dispatch(cleartoken());
+      // await persistor.purge()
       navigate('/admin')
     }else{
       navigate('/admin/admindashboard')

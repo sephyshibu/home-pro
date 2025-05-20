@@ -5,7 +5,7 @@ interface TechtokenState{
 }
 
 const initialState:TechtokenState={
-    token:""
+    token:''
 }
 
 const TechtokenSlice=createSlice({
@@ -14,10 +14,13 @@ const TechtokenSlice=createSlice({
     reducers:{
         addtechtoken(state,action:PayloadAction<{token:string}>){
                 state.token=action.payload.token
-        }
+        },
+        cleartoken: (state) => {
+            state.token = '';
+        },
     }
 
 })
 
-export const { addtechtoken } = TechtokenSlice.actions;
+export const { addtechtoken,cleartoken } = TechtokenSlice.actions;
 export default TechtokenSlice.reducer;

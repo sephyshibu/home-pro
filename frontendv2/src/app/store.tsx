@@ -40,15 +40,32 @@ const persistConfig={
     blackList:['usertoken','techtoken','admintoken']
 }
 
-const rootreducer=combineReducers({
-    admin:adminReducer,
-    tech:techReducer,
-    user:userReducer,
-    usertoken:tokenreducer,
-    admintoken:admintokenreducer,
-    techtoken:techtokenreducer
+const userPersistConfig = {
+  key: 'user',
+  storage,
+  blacklist: ['usertoken']
+};
 
-})
+const techPersistConfig = {
+  key: 'tech',
+  storage,
+  blacklist: ['techtoken']
+};
+
+const adminPersistConfig = {
+  key: 'admin',
+  storage,
+  blacklist: ['admintoken']
+};
+
+const rootreducer = combineReducers({
+  user: persistReducer(userPersistConfig, userReducer),
+  tech: persistReducer(techPersistConfig, techReducer),
+  admin: persistReducer(adminPersistConfig, adminReducer),
+  usertoken: tokenreducer,
+  techtoken: techtokenreducer,
+  admintoken: admintokenreducer,
+});
 
 const persistreducer=persistReducer(persistConfig,rootreducer)
 

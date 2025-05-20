@@ -23,7 +23,10 @@ const techSlice=createSlice({
         logouttech(state){
             state.tech = {};
           },
+          cleanTech(state) {
+            state.tech = {};
+        },
     }
 })
-export const { logintech, logouttech, updatetech } = techSlice.actions;
+export const { logintech, logouttech, updatetech,cleanTech } = techSlice.actions;
 export default techSlice.reducer;

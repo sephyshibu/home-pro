@@ -5,18 +5,21 @@ interface AdmintokenState{
 }
 
 const initialState:AdmintokenState={
-    token:""
+    token:''
 }
 
 const AdmintokenSlice=createSlice({
-    name:"admintoken",
+    name:'admintoken',
     initialState,
     reducers:{
         addadmintoken(state,action:PayloadAction<{token:string}>){
             state.token=action.payload.token
-        }
+        },
+        cleartoken: (state) => {
+            state.token = '';
+        },
     }
 })
 
-export const {addadmintoken}=AdmintokenSlice.actions
+export const {addadmintoken,cleartoken}=AdmintokenSlice.actions;
 export default AdmintokenSlice.reducer;

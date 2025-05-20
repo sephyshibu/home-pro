@@ -23,7 +23,11 @@ const userSlice=createSlice({
         logoutuser(state){
             state.user = {};
           },
+          cleanUser(state) {
+            state.user = {};
+        },
+    
     }
 })
-export const { loginuser, logoutuser, updateuser } = userSlice.actions;
+export const { loginuser, logoutuser, updateuser,cleanUser } = userSlice.actions;
 export default userSlice.reducer;

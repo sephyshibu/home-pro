@@ -1,6 +1,7 @@
 import axios,{AxiosError,type InternalAxiosRequestConfig} from 'axios';
 import { persistor, store } from '../../app/store';
-import { addtechtoken } from '../../features/TokenTechSlice';
+import { cleanTech } from '../../features/TechSlice';
+import { addtechtoken,cleartoken } from '../../features/TokenTechSlice';
 import{toast} from 'react-toastify'
 // Axios instance
 const axiosInstancetech = axios.create({
@@ -66,7 +67,9 @@ axiosInstancetech.interceptors.response.use(
           console.error("Token refresh failed:", refreshError);
           // store.dispatch(logoutuser());
           toast.error("Session expired. Please login again.");
-          await persistor.purge();
+         store.dispatch(cleanTech()); 
+        store.dispatch(cleartoken()); 
+        
           localStorage.removeItem("techId");
           window.location.href = '/';
           return Promise.reject(refreshError);
@@ -77,8 +80,10 @@ axiosInstancetech.interceptors.response.use(
         console.log("403 Error:", data); // 👈 Add this
         if (data?.action === 'blocked') {
           toast.error(data.message || "You are blocked by admin!");
+           store.dispatch(cleanTech()); 
+        store.dispatch(cleartoken()); 
           localStorage.removeItem('techId')
-          await persistor.purge()
+          
           window.location.href = '/'
 
           // Optionally: You can logout the user or redirect to login page if needed

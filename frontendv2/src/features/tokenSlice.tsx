@@ -5,7 +5,7 @@ interface tokenState{
 }
 
 const initialState:tokenState={
-    token:""
+    token:''
 }
 
 const tokenSlice=createSlice({
@@ -14,10 +14,13 @@ const tokenSlice=createSlice({
     reducers:{
         addtoken(state,action:PayloadAction<{token:string}>){
                 state.token=action.payload.token
-        }
+        },
+         cleartoken: (state) => {
+            state.token = '';
+        },
     }
 
 })
 
-export const { addtoken } = tokenSlice.actions;
+export const { addtoken,cleartoken } = tokenSlice.actions;
 export default tokenSlice.reducer;

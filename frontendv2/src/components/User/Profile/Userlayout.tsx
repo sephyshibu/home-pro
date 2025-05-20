@@ -1,16 +1,23 @@
 import React from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { logoutuser } from '../../../features/UserSlice'
+import { cleartoken } from '../../../features/tokenSlice'
+import { useDispatch } from 'react-redux'
 import {persistor} from '../../../app/store'
 const UserLayout: React.FC = () => {
   const navigate=useNavigate()
-
+  const dispatch=useDispatch()
   const userId=localStorage.getItem("userId")
 
   const handleLoginLogout=async()=>{
           if(userId){
               localStorage.removeItem('userId')
-              await persistor.purge()
+               localStorage.removeItem('persist:user');
+                              localStorage.removeItem('usertoken');
+                          
+                              dispatch(logoutuser());
+                              dispatch(cleartoken());
               navigate('/')
           }else{
               navigate('/login')

@@ -3,8 +3,11 @@ import TechnicianRequestPage from "../../../components/Technician/Request/Reques
 import TechnicianUpcoming from "../../../components/Technician/Upcoming/upcomingevents";
 // import TechList from './TechList'
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
 // import Category from './Category'
 // import AddCategory from './AddCategory'
+import { cleartoken } from "../../../features/TokenTechSlice";
+import { logouttech } from "../../../features/TechSlice";
 import logo from '../../../../public/images/Resized/Logo Portrait.png'
 import { persistor } from "../../../app/store";
 const tabs = ["Upcoming Events", "Request", "Dashboard"];
@@ -13,13 +16,19 @@ const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("Upcoming Events");
   const techId=localStorage.getItem('techId')
   const navigate=useNavigate()
+  const dispatch=useDispatch()
   
 
   const handleLogOut=async()=>{
     if(techId){
         console.log(techId)
+
       localStorage.removeItem('techId')
-      await persistor.purge()
+      localStorage.removeItem('persist:tech');
+      localStorage.removeItem('techtoken');
+      dispatch(logouttech());
+      dispatch(cleartoken());
+      // await persistor.purge()
       navigate('/tech')
     }else{
       navigate('/tech/techdashboard')

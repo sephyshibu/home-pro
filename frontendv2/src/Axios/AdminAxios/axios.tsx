@@ -1,6 +1,7 @@
 import axios,{AxiosError,type InternalAxiosRequestConfig} from 'axios';
 import { persistor, store } from '../../app/store';
-import { addadmintoken } from '../../features/AdmintokenSlice';
+import { cleanAdmin } from '../../features/AdminSlice';
+import { addadmintoken,cleartoken } from '../../features/AdmintokenSlice';
 import toast from 'react-hot-toast';
 // Axios instance
 const axiosInstanceadmin = axios.create({
@@ -70,7 +71,8 @@ axiosInstanceadmin.interceptors.response.use(
           console.error("Token refresh failed:", refreshError);
           // store.dispatch(logoutuser());
           toast.error("Session expired. Please login again.");
-          await persistor.purge();
+          store.dispatch(cleanAdmin()); // custom action to clear user
+          store.dispatch(cleartoken()); 
           localStorage.removeItem("adminId");
           window.location.href = '/';
           return Promise.reject(refreshError);
@@ -81,8 +83,10 @@ axiosInstanceadmin.interceptors.response.use(
         console.log("403 Error:", data); // 👈 Add this
         if (data?.action === 'blocked') {
           toast.error(data.message || "You are blocked by admin!");
+          store.dispatch(cleanAdmin()); // custom action to clear user
+          store.dispatch(cleartoken()); 
           localStorage.removeItem('adminId')
-          await persistor.purge()
+         
           window.location.href = '/'
 
           // Optionally: You can logout the user or redirect to login page if needed
