@@ -117,8 +117,8 @@ const TransactionPage: React.FC = () => {
                     type="text"
                     value={searchterm}
                     onChange={handleSearch}
-                    placeholder="Enter the search user"
-                    className="search-input"
+                    placeholder="Enter the last 5 numbers of bookingId"
+                    className="search-input w-64"
                 />
                
             </div>

@@ -93,7 +93,7 @@ export class TransactionRepositoryImpl implements TransactionRepository {
     );
   });
 
-  // ✅ Sum only DEBIT technician commissions
+  //  Sum only DEBIT technician commissions
   const totalCommission = filteredTransactions.reduce(
     (sum, tx) => sum + (tx.techniciancommision || 0),
     0
@@ -102,11 +102,11 @@ export class TransactionRepositoryImpl implements TransactionRepository {
 
          
 
-  // ✅ Update wallet balance
+  //  Update wallet balance
    const wallet = await WalletModel.findOne({ ownerId: techId, userType: "technician" });
 
   if (wallet) {
-    // ✅ If the wallet exists, increment its balance
+    //  If the wallet exists, increment its balance
     wallet.balance += totalCommission;
     await wallet.save(); // Save the updated wallet balance
     console.log("Updated Wallet:", wallet);
@@ -145,4 +145,28 @@ export class TransactionRepositoryImpl implements TransactionRepository {
           };
         });
     }
+
+    async getByBookingIdbySeatch(bookingId: string): Promise<ITransaction[] | null> {
+      try {
+        const transactions = await TransactionModel.find({
+          $expr: {
+            $eq: [
+              {
+                $substrBytes: [
+                  { $toString: "$referenceId" },
+                  { $subtract: [ { $strLenBytes: { $toString: "$referenceId" } }, 5 ] },
+                  5
+                ]
+              },
+              bookingId
+            ]
+          }
+        });
+        return transactions;
+      } catch (error) {
+        console.error("Error finding transactions:", error);
+        return null;
+      }
+    }
+
   }
