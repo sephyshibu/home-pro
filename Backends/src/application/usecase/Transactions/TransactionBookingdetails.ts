@@ -2,11 +2,11 @@ import { TransactionRepository } from "../../../domain/repository/Transsactionre
 import { BookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class GetTransactionWithBookings{
-    constructor(private transactionrepository:TransactionRepository, private bookingrepository:BookingRepository){}
+    constructor(private _transactionrepository:TransactionRepository, private bookingrepository:BookingRepository){}
 
 
     async execute(transactionid:string){
-        const transaction =await this.transactionrepository.findById(transactionid)
+        const transaction =await this._transactionrepository.findById(transactionid)
 
         if(!transaction) throw new Error("no transaction found")
 

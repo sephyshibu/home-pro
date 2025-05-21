@@ -2,10 +2,10 @@ import { IBooking } from "../../../domain/models/Bookings";
 import { BookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class FetchrefundRequest{
-    constructor(private bookrepository:BookingRepository){}
+    constructor(private _bookrepository:BookingRepository){}
 
     async fetchrefundreq(){
-        const bookings=await this.bookrepository.fetchBookingswithremark()
+        const bookings=await this._bookrepository.fetchBookingswithremark()
 
         if(!bookings) throw new Error("no ookings")
 

@@ -1,12 +1,12 @@
 import { BookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class Acceptsession{
-    constructor(private bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:BookingRepository){}
 
 
     async acceptsession(bookingId:string, requestId:string, status:string){
         try {
-            const updatedbooking=await this.bookingrepository.acceptsession(bookingId,requestId)
+            const updatedbooking=await this._bookingrepository.acceptsession(bookingId,requestId)
             if(!updatedbooking){
                 throw new Error('no bookings founded')
             }

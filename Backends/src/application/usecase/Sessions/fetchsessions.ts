@@ -2,12 +2,12 @@ import { BookingRepository } from "../../../domain/repository/Bookingrepository"
 
 
 export class FetchSession{
-    constructor(private bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:BookingRepository){}
 
 
     async fetchpendingsession(bookingId:string){
         try {
-            const booking=await this.bookingrepository.findById(bookingId)
+            const booking=await this._bookingrepository.findById(bookingId)
             if(!booking)  throw new Error("no bokings found")
             console.log("booking", booking)
             const pendingsession=booking.sessionRequests?.filter((req)=>req.status==="pending")

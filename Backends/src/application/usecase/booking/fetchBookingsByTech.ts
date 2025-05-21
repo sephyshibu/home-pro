@@ -2,10 +2,10 @@ import { IBooking } from "../../../domain/models/Bookings";
 import { BookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class FetchBookingByTechId{
-    constructor(private bookrepository:BookingRepository){}
+    constructor(private _bookrepository:BookingRepository){}
 
     async fetchBookingDetailsRequest(techId:string){
-        const bookings=await this.bookrepository.fetchbookingByTechId(techId)
+        const bookings=await this._bookrepository.fetchbookingByTechId(techId)
         if(!bookings){
             throw new Error('no bookings')
         }

@@ -4,12 +4,12 @@ import bcrypt from "bcryptjs"
 
 
 export class PasswordChange{
-    constructor(private techrepository:TechRepository){}
+    constructor(private _techrepository:TechRepository){}
 
 
     async editpassword(techId:string,password:string):Promise<{message:string,updatetech?:ITech}>{
  
-        const existingtech =await this.techrepository.findOneTech(techId)
+        const existingtech =await this._techrepository.findOneTech(techId)
         if(!existingtech){
             throw new Error("tech not found")
         }
@@ -18,7 +18,7 @@ export class PasswordChange{
             const newpassword = await bcrypt.hash(password, 10);
             console.log("New hashed password:", newpassword);
     
-            const updatetech = await this.techrepository.edittech(techId, { password: newpassword });
+            const updatetech = await this._techrepository.edittech(techId, { password: newpassword });
             console.log("Update complete:", updatetech);
     
             return {

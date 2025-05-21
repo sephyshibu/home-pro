@@ -8,16 +8,16 @@ import { EmailService } from "../../service/EmailService";
 require('dotenv').config()
 
 export class Signup{
-    constructor(private userRepository:UserRepository, private emailservice:EmailService){}
+    constructor(private _userRepository:UserRepository, private _emailservice:EmailService){}
 
     async adduser(name:string,email:string,password:string,phone:string):Promise<{message:string}>{
         console.log(name,email,password,phone)
-        const existinguser=await this.userRepository.findByEmail(email);
+        const existinguser=await this._userRepository.findByEmail(email);
         if(existinguser){
             throw new Error("email already exists")
         }
         const otp=generateOTP()
-        const emailsent=await this.emailservice.sendVerificationEmail(email,otp)
+        const emailsent=await this._emailservice.sendVerificationEmail(email,otp)
 
         if(!emailsent){
             throw new Error("Failed to send email")

@@ -4,11 +4,11 @@ import { WalletModel } from '../../../infrastructure/db/schemas/Walletmodel'
 import { IUser } from '../../../domain/models/User'
 
 export class GoogleLogin{
-    constructor(private userRepository:UserRepository){}
+    constructor(private _userRepository:UserRepository){}
 
     async GoogleLogin(email:string, sub:string,name:string):Promise<{user:any,token:string}>{
         console.log(email,sub,name)
-        let user= await this.userRepository.findByEmail(email)
+        let user= await this._userRepository.findByEmail(email)
         console.log("google login", user)
         if(user){
             if(user.isBlocked){
@@ -25,7 +25,7 @@ export class GoogleLogin{
                     isBlocked:false,
                     googleIds:sub
                 }
-                user=await this.userRepository.createUser(newuser)
+                user=await this._userRepository.createUser(newuser)
                 console.log("google user created",user)
                 await WalletModel.create({
                     ownerId:user._id,

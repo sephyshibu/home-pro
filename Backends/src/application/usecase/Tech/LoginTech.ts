@@ -4,11 +4,11 @@ import bcrypt from 'bcryptjs'
 
 
 export class LoginTech{
-    constructor(private techrepository:TechRepository){}
+    constructor(private _techrepository:TechRepository){}
 
 
     async logintech(email:string, password:string):Promise<{tech:any, accesstoken:string,refreshtoken:string}>{
-        const tech=await this.techrepository.findByEmail(email)
+        const tech=await this._techrepository.findByEmail(email)
 
         if(!tech){
             throw new Error("tech Not FOund")

@@ -2,13 +2,13 @@ import { Addressrepository } from "../../../domain/repository/Addressrepository"
 import { IAddress } from "../../../domain/models/Address";
 
 export class AddAddress{
-    constructor(private addressrepository:Addressrepository){}
+    constructor(private _addressrepository:Addressrepository){}
 
     async addaddress(userId:string,types: string,addressname:string,street:string,city: string,state: string,country: string, pincode:string,):Promise<{message:string}>{
         console.log("types", types)
         const sanitizedaddressname=addressname.trim().toLowerCase()
         console.log(sanitizedaddressname)
-        const existing=await this.addressrepository.findByAddressName(userId,sanitizedaddressname)
+        const existing=await this._addressrepository.findByAddressName(userId,sanitizedaddressname)
         console.log('existing',existing)
         if(existing){
             console.log("existin")
@@ -28,7 +28,7 @@ export class AddAddress{
         }
         console.log("badcda",address)
 
-        await this.addressrepository.addaddress(address)
+        await this._addressrepository.addaddress(address)
         return {message:"add address successfully"}
     }
 }

@@ -4,9 +4,9 @@ import { walletRepository } from "../../../domain/repository/Walletrepository";
 import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
 import { ITransaction } from "../../../domain/models/Transactions";
 export class RetryConfirmPayment{
-    constructor(private bookingrepository:BookingRepository,
-                private walletrepository:walletRepository,
-                private transactionrepository: TransactionRepository
+    constructor(private _bookingrepository:BookingRepository,
+                private _walletrepository:walletRepository,
+                private _transactionrepository: TransactionRepository
 
     ){}
 
@@ -17,7 +17,7 @@ export class RetryConfirmPayment{
           console.log("usecase")
           console.log(bookingdata)
           
-          let booking = await this.bookingrepository.findById(bookingdata.id?.toString()!); // Add bookingId in body
+          let booking = await this._bookingrepository.findById(bookingdata.id?.toString()!); // Add bookingId in body
 
           if (!booking) {
             throw new Error("Booking not found for retry");
@@ -29,14 +29,14 @@ export class RetryConfirmPayment{
             booking.razorpayPaymentId = paymentId;
             booking.consultationtransactionId = paymentId;
 
-            const wallet=await this.walletrepository.findById(booking.userId.toString())
+            const wallet=await this._walletrepository.findById(booking.userId.toString())
             
             if (!wallet) {
                 throw new Error("Wallet not found");
             }
             console.log("wallet",wallet)
         try {
-              const res=await this.transactionrepository.create({
+              const res=await this._transactionrepository.create({
               ownerId: booking.userId.toString(),
               userType:wallet.userType,
               type: "DEBIT",
@@ -57,7 +57,7 @@ export class RetryConfirmPayment{
             booking.consultationpayStatus = "failed";
           }
           
-          booking = await this.bookingrepository.update(booking.id!, { consultationpayStatus: booking.consultationpayStatus, razorpayPaymentId: paymentId ,rateperhour:booking.rateperhour});
+          booking = await this._bookingrepository.update(booking.id!, { consultationpayStatus: booking.consultationpayStatus, razorpayPaymentId: paymentId ,rateperhour:booking.rateperhour});
           
           return { success: true, booking };
 }

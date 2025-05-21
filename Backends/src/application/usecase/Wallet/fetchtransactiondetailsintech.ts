@@ -5,12 +5,12 @@ import { IUser } from "../../../domain/models/User";
 
 
 export class FetchTransactionsinTechWallet {
-    constructor(private transactionrepository: TransactionRepository, private bookingrepository:BookingRepository) {}
+    constructor(private _transactionrepository: TransactionRepository, private bookingrepository:BookingRepository) {}
 
     async transactiondetails(techId: string) {
         console.log("techId",techId)
         try {
-            const transactions=await this.transactionrepository.getbyTechnicianId(techId)
+            const transactions=await this._transactionrepository.getbyTechnicianId(techId)
             console.log("transactions",transactions)
             return transactions
             } catch (error: any) {

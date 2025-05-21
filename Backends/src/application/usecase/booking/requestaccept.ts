@@ -1,10 +1,10 @@
 import { BookingRepository } from "../../../domain/repository/Bookingrepository";
 import { TechModel } from "../../../infrastructure/db/schemas/techModel";
 export class bookingRequestAcceptByTech{
-    constructor(private bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:BookingRepository){}
 
     async bookingreacceptbytech(bookingId:string):Promise<{success:boolean}>{
-        const booking=await this.bookingrepository.findById(bookingId)
+        const booking=await this._bookingrepository.findById(bookingId)
         console.log("bookingsss",booking)
         if(!booking|| !booking.technicianId||!booking.booked_date){
             throw new Error("booking details is missing")
@@ -12,7 +12,7 @@ export class bookingRequestAcceptByTech{
         }
 
         
-        const acceptbookings=  await this.bookingrepository.update(bookingId, { isconfirmedbyTech: "accepted" });
+        const acceptbookings=  await this._bookingrepository.update(bookingId, { isconfirmedbyTech: "accepted" });
         if(!acceptbookings) throw new Error("error in accepting")
 
        await TechModel.findByIdAndUpdate(booking.technicianId, {

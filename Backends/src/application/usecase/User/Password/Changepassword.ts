@@ -4,12 +4,12 @@ import bcrypt from "bcryptjs"
 
 
 export class PasswordChange{
-    constructor(private userrepository:UserRepository){}
+    constructor(private _userrepository:UserRepository){}
 
 
     async editpassword(userId:string,oldpassword:string,password:string):Promise<{message:string,updateuser?:IUser}>{
  
-        const existinguser =await this.userrepository.findOneuser(userId)
+        const existinguser =await this._userrepository.findOneuser(userId)
         if(!existinguser){
             throw new Error("user not found")
         }
@@ -24,7 +24,7 @@ export class PasswordChange{
             const newpassword = await bcrypt.hash(password, 10);
             console.log("New hashed password:", newpassword);
     
-            const updateuser = await this.userrepository.edituser(userId, { password: newpassword });
+            const updateuser = await this._userrepository.edituser(userId, { password: newpassword });
             console.log("Update complete:", updateuser);
     
             return {

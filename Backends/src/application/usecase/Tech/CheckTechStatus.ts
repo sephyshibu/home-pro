@@ -1,10 +1,10 @@
 import { TechRepository } from "../../../domain/repository/Techrepository"
 export class ChecktechStatus{
-    constructor(private techrepository:TechRepository){}
+    constructor(private _techrepository:TechRepository){}
 
 
     async checkstatus(userid:string):Promise<void>{
-        const tech=await this.techrepository.findById(userid)
+        const tech=await this._techrepository.findById(userid)
 
         if(!tech){
             throw new Error("tech not found")

@@ -4,7 +4,7 @@ import { BookingRepository } from "../../../domain/repository/Bookingrepository"
 import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
 
 export class WalletPayment{
-    constructor(private bookingrepository:BookingRepository, private walletrepository:walletRepository,private transactionrepository:TransactionRepository){}
+    constructor(private _bookingrepository:BookingRepository, private _walletrepository:walletRepository,private _transactionrepository:TransactionRepository){}
 
     async WalletConsultationPayment(bookingdata:Partial<IBooking>,status:"completed"| "failed"):Promise<{success:boolean,booking:IBooking}>{
             if(!bookingdata.addressId||!bookingdata.userId|| !bookingdata.technicianId){
@@ -14,7 +14,7 @@ export class WalletPayment{
             console.log("usecase")
             console.log(bookingdata)
 
-            const userwallet=await this.walletrepository.findById(bookingdata.userId.toString())
+            const userwallet=await this._walletrepository.findById(bookingdata.userId.toString())
             console.log("userwallety",userwallet)
             if(!userwallet) throw new Error("wallt not founded")
 
@@ -22,9 +22,9 @@ export class WalletPayment{
                 throw new Error("insufficeint Balance")
             }
             
-            const res=await this.walletrepository.decreasebalance(bookingdata.userId.toString(),bookingdata.consultationFee!)
+            const res=await this._walletrepository.decreasebalance(bookingdata.userId.toString(),bookingdata.consultationFee!)
             console.log(res)
-            let booking=await this.bookingrepository.creates({
+            let booking=await this._bookingrepository.creates({
                 userId:bookingdata.userId,
                 technicianId:bookingdata.technicianId,
                 rateperhour:bookingdata.rateperhour,
@@ -41,7 +41,7 @@ export class WalletPayment{
                 booking.consultationpayStatus="completed";
 
                 try {
-                    const res=await this.transactionrepository.create({
+                    const res=await this._transactionrepository.create({
                         ownerId: booking.userId.toString(),
                         userType:userwallet.userType,
                         type: "DEBIT",

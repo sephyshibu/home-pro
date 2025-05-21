@@ -3,11 +3,11 @@ import { BookingRepository } from "../../../domain/repository/Bookingrepository"
 
 
 export class fetchBookingswhichcompletedrejected{
-    constructor(private bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:BookingRepository){}
 
     async fetchBookingscommpletereject(techId:string):Promise<IBooking[]|null>{
         try {
-            const booking=await this.bookingrepository.fetchcompletedandrejected(techId)
+            const booking=await this._bookingrepository.fetchcompletedandrejected(techId)
             if(!booking){
                 throw new Error('no bookings')
             }

@@ -1,12 +1,12 @@
 import { BookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class RequestSession{
-    constructor(private bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:BookingRepository){}
 
     async requestsession(bookingId: string, type: string) {
     try {
         // Use the repository to add the session request
-        const booking = await this.bookingrepository.addsessionRequest(bookingId, type);
+        const booking = await this._bookingrepository.addsessionRequest(bookingId, type);
   
         return {
           success: true,

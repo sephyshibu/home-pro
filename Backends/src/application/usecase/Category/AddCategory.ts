@@ -3,14 +3,14 @@ import { ICategory } from "../../../domain/models/Caegory";
 
 
 export class AddCategory{
-    constructor(private categoryrepository:Categoryrepository){}
+    constructor(private _categoryrepository:Categoryrepository){}
 
 
     async addCategory(name:string, description:string, image:string):Promise<{message:string}>
     {
         const sanitizedName = name.trim().toLowerCase();
         const sanitizedDesc = description.trim();
-        const existingcat=await this.categoryrepository.findByname(sanitizedName)
+        const existingcat=await this._categoryrepository.findByname(sanitizedName)
 
         if(existingcat){
             throw new Error("category already existed")
@@ -23,7 +23,7 @@ export class AddCategory{
             image,
             isBlocked:false
         }
-        await this.categoryrepository.createcategory(category)
+        await this._categoryrepository.createcategory(category)
         return{message:"Category added"}
     }
 }

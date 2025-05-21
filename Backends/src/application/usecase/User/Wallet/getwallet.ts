@@ -2,11 +2,11 @@ import { walletRepository } from "../../../../domain/repository/Walletrepository
 
 export class FetchWallet {
 
-    constructor(private walletrepository:walletRepository){}
+    constructor(private _walletrepository:walletRepository){}
 
 
     async fetchwalletbalance(id:string){
-        const wallet=await this.walletrepository.findById(id)
+        const wallet=await this._walletrepository.findById(id)
         if(!wallet) throw new Error("wallet not found")
         return wallet
     }

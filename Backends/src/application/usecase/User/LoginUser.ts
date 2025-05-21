@@ -4,11 +4,11 @@ import jwt from 'jsonwebtoken'
 
 
 export class LoginUser{
-    constructor(private userRepository:UserRepository){}
+    constructor(private _userRepository:UserRepository){}
 
     async login(email:string, password:string):Promise<{user:any,accesstoken:string, refreshtoken:string}>{
         console.log("sdfwf",email, password)
-        const user=await this.userRepository.findByEmail(email)
+        const user=await this._userRepository.findByEmail(email)
         if(!user){
             throw new Error("User Not found")
         }

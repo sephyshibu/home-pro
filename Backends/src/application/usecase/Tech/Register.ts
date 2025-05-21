@@ -6,13 +6,13 @@ import { EmailService } from "../../service/EmailService";
 
 
 export class Signuptech{
-    constructor(private techrepository:TechRepository, private emailservice:EmailService){}
+    constructor(private _techrepository:TechRepository, private _emailservice:EmailService){}
 
 
     async addtech(email:string, password:string, phone:string):Promise<{message:string}>{
         console.log(email,password,phone)
 
-        const existtech=await this.techrepository.findByEmail(email)
+        const existtech=await this._techrepository.findByEmail(email)
         if(existtech){
             throw new Error("email already existed")
         }
@@ -30,10 +30,10 @@ export class Signuptech{
        
 
 
-        await this.techrepository.createtech(tech)
+        await this._techrepository.createtech(tech)
 
         // ✉️ Send welcome email
-    const mailSent = await this.emailservice.sendEmail(email,password);
+    const mailSent = await this._emailservice.sendEmail(email,password);
   
       if (!mailSent) {
         console.warn("Technician registered, but welcome email failed to send");

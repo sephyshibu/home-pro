@@ -5,11 +5,11 @@ import { TransactionRepository } from "../../../domain/repository/Transsactionre
 import { calculateTotalWorkMinutes } from "../../../utils/CalculateMinutes";
 import { TechRepository } from "../../../domain/repository/Techrepository";
 export class FinalPaymentconfirm{
-   constructor(private bookingrepository:BookingRepository, private walletrepository:walletRepository,  private transactionrepository:TransactionRepository, private techrepository:TechRepository){}
+   constructor(private _bookingrepository:BookingRepository, private _walletrepository:walletRepository,  private _transactionrepository:TransactionRepository, private _techrepository:TechRepository){}
 
 
    async makefinalpaymentconfirm(bookingId:string,paymentId:string, status:"completed"): Promise<{success:boolean; booking:IBooking}>{
-    const booking=await this.bookingrepository.findById(bookingId)
+    const booking=await this._bookingrepository.findById(bookingId)
     if(!booking) throw new Error("no booking founded")
 
     let totalMinutes=calculateTotalWorkMinutes(booking.workTime)
@@ -19,8 +19,8 @@ export class FinalPaymentconfirm{
 
     const adminCommission = Math.ceil(totalFinalAmount * 0.05);
     const technicianCommission = totalFinalAmount - adminCommission;
-    await this.techrepository.increasenoofworks(booking.technicianId.toString())
-    const result=await this.bookingrepository.update(bookingId,{
+    await this._techrepository.increasenoofworks(booking.technicianId.toString())
+    const result=await this._bookingrepository.update(bookingId,{
         workFinalAmount:workFinalAmount,
         totalFinalAmount:totalFinalAmount,
         admincommision:adminCommission,
@@ -30,12 +30,12 @@ export class FinalPaymentconfirm{
         razorpayFinalPaymentId:paymentId,
         finalpaymenttransactionId:paymentId
     })
-    const wallet=await this.walletrepository.findById(booking.userId.toString())
+    const wallet=await this._walletrepository.findById(booking.userId.toString())
     console.log("user walalet", wallet)
     if(!wallet) throw new Error("no wallet founded")
 
     try {
-        const res=await this.transactionrepository.create({
+        const res=await this._transactionrepository.create({
             ownerId:booking.userId.toString(),
             userType:wallet.userType,
             type:"DEBIT",

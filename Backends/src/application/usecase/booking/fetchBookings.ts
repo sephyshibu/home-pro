@@ -3,14 +3,14 @@ import { BookingRepository } from "../../../domain/repository/Bookingrepository"
 
 
 export class FetchBookingbyUserId{
-    constructor(private bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:BookingRepository){}
 
     async fetchBookingdetails(userId:string,page:number){
         console.log("dasd",userId)
          const limit = 5;
          const skip = (page - 1) * limit;
-        const totalCount = await this.bookingrepository.countBookingsByUserId(userId);
-        const booking=await this.bookingrepository.fetchbookingByUserId(userId,limit,skip)
+        const totalCount = await this._bookingrepository.countBookingsByUserId(userId);
+        const booking=await this._bookingrepository.fetchbookingByUserId(userId,limit,skip)
         if(!booking) throw new Error("no booking")
 
         const formatted= booking.map((booking:any)=>{

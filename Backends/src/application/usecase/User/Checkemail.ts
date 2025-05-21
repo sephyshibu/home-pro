@@ -5,10 +5,10 @@ import { otpCache } from "../../../infrastructure/cache/OTPCache";
 
 
 export class CheckEmail{
-  constructor(private userRepository:UserRepository, private emailService:EmailService){}
+  constructor(private _userRepository:UserRepository, private _emailService:EmailService){}
 
   async execute(email:string):Promise<{message:string, email?:string}>{
-    const user=await this.userRepository.findByEmail(email)
+    const user=await this._userRepository.findByEmail(email)
     if(!user){
         throw new Error("email not found")
     }
@@ -19,7 +19,7 @@ export class CheckEmail{
 
     const otp=generateOTP()
 
-    const emailsent=await this.emailService.sendVerificationEmail(email, otp);
+    const emailsent=await this._emailService.sendVerificationEmail(email, otp);
 
     if(!emailsent){
         throw new Error("failed to send email")

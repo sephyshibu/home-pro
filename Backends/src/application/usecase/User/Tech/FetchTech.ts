@@ -2,7 +2,7 @@ import { TechRepository } from "../../../../domain/repository/Techrepository";
 
 export class FetchTechBasedOnAvailable {
 
-    constructor(private techrepository:TechRepository){}
+    constructor(private _techrepository:TechRepository){}
 
 
     async fetchTechBasedOnAvailble(pincode:string, date:string, categoryId:string){
@@ -12,7 +12,7 @@ export class FetchTechBasedOnAvailable {
         if(parsedFrontendDate<currentdate){
             throw new Error("date is not valid date")
         }
-        const technician=await this.techrepository.fetchTechbasedonavilablity(pincode,date,categoryId)
+        const technician=await this._techrepository.fetchTechbasedonavilablity(pincode,date,categoryId)
         if(!technician) throw new Error("technician not found")
         return technician
     }

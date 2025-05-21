@@ -4,9 +4,9 @@ import { walletRepository } from "../../../domain/repository/Walletrepository";
 import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
 import { ITransaction } from "../../../domain/models/Transactions";
 export class ConfirmPayment{
-    constructor(private bookingrepository:BookingRepository,
-                private walletrepository:walletRepository,
-                private transactionrepository: TransactionRepository
+    constructor(private _bookingrepository:BookingRepository,
+                private _walletrepository:walletRepository,
+                private _transactionrepository: TransactionRepository
 
     ){}
 
@@ -17,7 +17,7 @@ export class ConfirmPayment{
           console.log("usecase")
           console.log(bookingdata)
           
-        let booking = await this.bookingrepository.creates({
+        let booking = await this._bookingrepository.creates({
             userId: bookingdata.userId,
             technicianId: bookingdata.technicianId,
             rateperhour: bookingdata.rateperhour, 
@@ -36,7 +36,7 @@ export class ConfirmPayment{
             booking.consultationpayStatus = "completed"; 
             console.log("dfsfd")
 
-            const wallet=await this.walletrepository.findById(booking.userId.toString())
+            const wallet=await this._walletrepository.findById(booking.userId.toString())
             
             if (!wallet) {
                 throw new Error("Wallet not found");
@@ -44,7 +44,7 @@ export class ConfirmPayment{
             console.log("wallet",wallet)
             // Store the transaction for the user to track the consultation payment
             try {
-                const res=await this.transactionrepository.create({
+                const res=await this._transactionrepository.create({
                   ownerId: booking.userId.toString(),
                   userType:wallet.userType,
                   type: "DEBIT",
@@ -64,7 +64,7 @@ export class ConfirmPayment{
         } else {
             booking.consultationpayStatus = "failed"; // If payment fails, mark it as failed
           }
-          booking = await this.bookingrepository.update(booking.id!, { consultationpayStatus: booking.consultationpayStatus });
+          booking = await this._bookingrepository.update(booking.id!, { consultationpayStatus: booking.consultationpayStatus });
 
           return { success: true, booking };
 
