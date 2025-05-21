@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { fetchtransactions } from '../../../api/AdminApi/Transactions/fetchtransaction';
 import { Dialog } from '@headlessui/react';
+import { searchtransactions } from '../../../api/AdminApi/SearchTransaction/searchtransaction';
 import { fetchbooking } from '../../../api/AdminApi/Transactions/fetchbooking';
 interface Transaction {
     _id:string,
@@ -33,11 +34,16 @@ const TransactionPage: React.FC = () => {
     const[transaction,settransaction]=useState<Transaction[]>([])
     const[balance,setbalance]=useState<Balance>()
     const[currentPage,setcurrentPage]=useState(1)
- 
+    const [searchterm,setsearchterm]=useState('')
     const [isOpen, setIsOpen] = useState(false);
     const [bookingdetails, setbookingdetails] = useState<bookingdetals | null>(null);
+    
+    
     useEffect(()=>{
-        const fetchtrasnsaction=async()=>{
+        fetchtrasnsaction()
+    },[currentPage])
+
+    const fetchtrasnsaction=async()=>{
 
             if(!adminId){
                 navigate('/')
@@ -57,8 +63,6 @@ const TransactionPage: React.FC = () => {
             }
             
         }
-        fetchtrasnsaction()
-    },[currentPage])
 
     const handleClick=async(id:string)=>{
         try {
@@ -77,6 +81,26 @@ const TransactionPage: React.FC = () => {
         setbookingdetails(null);
       };
 
+      const handleSearch=async(e:React.ChangeEvent<HTMLInputElement>)=>{
+        setsearchterm(e.target.value)
+      }
+      useEffect(()=>{
+        const delaybounce=setTimeout(async()=>{
+          try {
+            if(searchterm.trim()==''){
+              fetchtrasnsaction()
+            }
+            else{
+              const response=await searchtransactions(searchterm)
+              settransaction(response.data.transaction)
+            }
+          } catch (error) {
+              console.error('Search failed', error);
+          }
+        },500)
+        return()=>clearTimeout(delaybounce)
+      },[searchterm])
+
   return (
     <div className="min-h-screen bg-gray-100 text-sm">
       
@@ -88,7 +112,17 @@ const TransactionPage: React.FC = () => {
 
         <div className="overflow-x-auto rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Platform Earnings : ₹{balance?.amount}</h2>
-
+          <div className="search-options">
+                <input
+                    type="text"
+                    value={searchterm}
+                    onChange={handleSearch}
+                    placeholder="Enter the search user"
+                    className="search-input"
+                />
+               
+            </div>
+       
           <table className="min-w-full bg-white rounded-lg">
             <thead className="bg-green-900 text-white">
               <tr>
@@ -126,6 +160,7 @@ const TransactionPage: React.FC = () => {
               ))}
             </tbody>
           </table>
+          
           <div className="mt-4 flex justify-center space-x-4">
           <button 
             onClick={() => setcurrentPage((prev) => Math.max(prev - 1, 1))} 
