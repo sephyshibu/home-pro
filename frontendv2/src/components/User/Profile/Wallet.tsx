@@ -4,6 +4,7 @@ import { walletdetails } from '../../../api/UserApi/Wallet/fetchWallet';
 import axiosInstanceuser from "../../../Axios/UserAxios/axios";
 import { Dialog } from '@headlessui/react';
 import { fetchbooking } from '../../../api/UserApi/Transactions/Bookings';
+
 interface Wallet {
   id:string,
   type: 'Credit' | 'Debit';
@@ -24,17 +25,14 @@ interface bookingdetals{
     techremark:string,
 }
 
-interface Walletbalance{
-    amount:number
-}
-
 export default function WalletPage() {
     const userId=localStorage.getItem('userId')
     const [walletlist,setwalletdetails]=useState<Wallet[]>([])
-    const[balance,setbalance]=useState<Walletbalance>()
+    const[balance,setbalance]=useState<number>(0)
      const [isOpen, setIsOpen] = useState(false);
     const [bookingdetails, setbookingdetails] = useState<bookingdetals | null>(null);
     const navigate=useNavigate()
+
     useEffect(()=>{
         const balance=async()=>{
                  const response=await axiosInstanceuser.get(`/fetchwalletbalance/${userId}`)
@@ -87,7 +85,7 @@ export default function WalletPage() {
         
 
         <section className="flex-1 p-8">
-          {/* <h2 className="text-xl font-semibold mb-4">Wallet Balance : ₹{balance}</h2> */}
+          <h2 className="text-xl font-semibold mb-4"> Wallet Balance : ₹{balance}</h2>
 
           {/* <div className="flex gap-2 mb-4">
             <input type="text" placeholder="Enter Amount" className="border px-4 py-2 rounded-md w-1/3" />
@@ -102,6 +100,7 @@ export default function WalletPage() {
                 <th className="text-left px-4 py-2">Transaction Status</th>
                 <th className="text-left px-4 py-2">Purpose</th>
                 <th className="text-left px-4 py-2">Amount</th>
+                <th className="text-left px-4 py-2">Action</th>
               </tr>
             </thead>
             <tbody>

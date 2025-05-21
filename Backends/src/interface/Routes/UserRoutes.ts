@@ -176,4 +176,5 @@ router.get('/fetchsessions/:bookingId',authToken,(req,res)=>usercontroller.fetch
 router.post('/finalpaymentprocess/:bookingId',authToken,(req,res)=>usercontroller.finalamountbeforeconfirm(req,res))
 router.post('/finalconfirmpayemnts',authToken,(req,res)=>usercontroller.finalpaymentconfirm(req,res))
 router.get('/fetchtransactionwithBookings/:transId',(req,res)=>usercontroller.transactionwithBookings(req,res))
+
 export {router as userRouter}
