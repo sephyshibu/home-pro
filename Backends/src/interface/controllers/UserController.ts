@@ -36,41 +36,41 @@ import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconf
 import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails';
 export class UserController{
     constructor(
-        private signupuser:Signup,
-        private checkemailuser:CheckEmail,
-        private loginuser:LoginUser,
-        private refreshtoken:RefreshToken,
-        private verifyotp:VerifyOTP,
-        private resendOTP:resnedOTP,
-        private googleLogin:GoogleLogin,
-        private forgetpasswordverifyOTP:ForgetpasswordVerifyOTP,
-        private forgtepasswordresendOtp:forgetpasswordresnedOTP,
-        private changePassword:changepassword,
-        private fetchcat:fetchCategory,
-        private getuserById:GetUserById,
-        private editprofile:EditProfile,
-        private fetchtechonavailable:FetchTechBasedOnAvailable,
-        private getcatbyId:GetCategoryById,
-        private fetchtechwithcategory:fetchTechwithcategory,
-        private addaddress: AddAddress,
-        private editaddress: Editaddress,
-        private getaddressbyid: GetAddressById,
-        private deleteaddress: DeleteAddressById,
-        private createBookingusecase:CreateBookingUseCase,
-        private confirmpayment:ConfirmPayment,
-        private fetchbookByUserid:FetchBookingbyUserId,
-        private passwordchnaging:PasswordChange,
-        private failpayment:HandleFailedPayment,
-        private retrypaymet:RetryConfirmPayment,
-        private updateusercancelreasons:updateusercancelreason,
-        private fetchwalletdetails:GetWallet,
-        private getwalletbalance:FetchWallet,
-        private walletpayconsultationFee:WalletPayment,
-        private fetchsession: FetchSession,
-        private acceptsessionrequest:Acceptsession,
-        private finalamount:FinalPayment,
-        private confirmfinalpayment:FinalPaymentconfirm,
-        private getTransactionwithbookings:GetTransactionWithBookings
+        private _signupuser:Signup,
+        private _checkemailuser:CheckEmail,
+        private _loginuser:LoginUser,
+        private _refreshtoken:RefreshToken,
+        private _verifyotp:VerifyOTP,
+        private _resendOTP:resnedOTP,
+        private _googleLogin:GoogleLogin,
+        private _forgetpasswordverifyOTP:ForgetpasswordVerifyOTP,
+        private _forgtepasswordresendOtp:forgetpasswordresnedOTP,
+        private _changePassword:changepassword,
+        private _fetchcat:fetchCategory,
+        private _getuserById:GetUserById,
+        private _editprofile:EditProfile,
+        private _fetchtechonavailable:FetchTechBasedOnAvailable,
+        private _getcatbyId:GetCategoryById,
+        private _fetchtechwithcategory:fetchTechwithcategory,
+        private _addaddress: AddAddress,
+        private _editaddress: Editaddress,
+        private _getaddressbyid: GetAddressById,
+        private _deleteaddress: DeleteAddressById,
+        private _createBookingusecase:CreateBookingUseCase,
+        private _confirmpayment:ConfirmPayment,
+        private _fetchbookByUserid:FetchBookingbyUserId,
+        private _passwordchnaging:PasswordChange,
+        private _failpayment:HandleFailedPayment,
+        private _retrypaymet:RetryConfirmPayment,
+        private _updateusercancelreasons:updateusercancelreason,
+        private _fetchwalletdetails:GetWallet,
+        private _getwalletbalance:FetchWallet,
+        private _walletpayconsultationFee:WalletPayment,
+        private _fetchsession: FetchSession,
+        private _acceptsessionrequest:Acceptsession,
+        private _finalamount:FinalPayment,
+        private _confirmfinalpayment:FinalPaymentconfirm,
+        private _getTransactionwithbookings:GetTransactionWithBookings
      
     
     ){}
@@ -80,7 +80,7 @@ export class UserController{
         try{
             const{name, email, password,phone}=req.body;
           
-            const result=await this.signupuser.adduser(name,email,password,phone);
+            const result=await this._signupuser.adduser(name,email,password,phone);
             res.status(201).json(result)
         }
         catch (err:any) {
@@ -91,7 +91,7 @@ export class UserController{
     async checkEmail(req:Request, res:Response):Promise<void>{
         try {
             const {email}=req.body
-            const result=await this.checkemailuser.execute(email)
+            const result=await this._checkemailuser.execute(email)
             res.status(200).json(result)
         } catch (error:any) {
             res.status(400).json({ message: error.message });
@@ -103,7 +103,7 @@ export class UserController{
           
             const{email,password}=req.body
             console.log(req.body)
-            const result=await this.loginuser.login(email, password)
+            const result=await this._loginuser.login(email, password)
             res.cookie("refreshtokenuser", result.refreshtoken,{
                 httpOnly:true,
                 secure:false,
@@ -123,7 +123,7 @@ export class UserController{
             try {
                 const{otp, details}=req.body;
                 console.log(otp,details)
-                const result=await this.verifyotp.verify(otp,details)
+                const result=await this._verifyotp.verify(otp,details)
                 res.status(200).json({message:result})
             } catch (err: any) {
                 res.status(400).json({ message: err.message });
@@ -134,7 +134,7 @@ export class UserController{
         try {
             const {otp,details}=req.body
             console.log(otp,details)
-            const result=await this.forgetpasswordverifyOTP.verify(otp,details)
+            const result=await this._forgetpasswordverifyOTP.verify(otp,details)
             res.status(200).json({message:result})
             } catch (err: any) {
                 res.status(400).json({ message: err.message });
@@ -147,7 +147,7 @@ export class UserController{
         try {
             const{password,email}=req.body
             console.log(password,email)
-            const result=await this.changePassword.changepass(password,email)
+            const result=await this._changePassword.changepass(password,email)
             res.status(200).json({message:result})
         } catch (err: any) {
             res.status(400).json({ message: err.message });
@@ -157,7 +157,7 @@ export class UserController{
     async forgetpasswordresnedOTP(req:Request, res:Response):Promise<void>{
         try {
             const {details}=req.body
-            const result=await this.forgtepasswordresendOtp.resend(details)
+            const result=await this._forgtepasswordresendOtp.resend(details)
             res.status(200).json({ message: result });
         } catch (err: any) {
           res.status(400).json({ message: err.message });
@@ -170,7 +170,7 @@ export class UserController{
     async resendotpcontroller(req:Request,res:Response):Promise<void>{
         try {
             const{details}=req.body
-            const result=await this.resendOTP.resend(details)
+            const result=await this._resendOTP.resend(details)
             res.status(200).json({ message: result });
         } catch (err: any) {
           res.status(400).json({ message: err.message });
@@ -181,7 +181,7 @@ export class UserController{
         try {
             console.log("google")
             const{email, sub, name}=req.body
-            const result=await this.googleLogin.GoogleLogin(email, sub, name);
+            const result=await this._googleLogin.GoogleLogin(email, sub, name);
             res.status(200).json({ message: "Google Login Successful", user: result.user, token: result.token });
         } catch (err: any) {
             res.status(400).json({ message: err.message });
@@ -192,7 +192,7 @@ export class UserController{
         try {
             const token=req.cookies?.refreshtokenuser;
             console.log("refreshtokencontroller",token)
-            const newaccesstoken=await this.refreshtoken.refresh(token);
+            const newaccesstoken=await this._refreshtoken.refresh(token);
             console.log("in refresh token controller with new access tokern ",newaccesstoken)
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
@@ -202,7 +202,7 @@ export class UserController{
 
     async fetchCategory(req:Request,res:Response):Promise<void>{
         try {
-            const category=await this.fetchcat.fetch()
+            const category=await this._fetchcat.fetch()
             res.status(200).json({category})
         } catch (error:any) {
             res.status(500).json({ message: error.message });
@@ -214,7 +214,7 @@ export class UserController{
         try {
             const {userId}=req.params
             console.log("usder Id", userId)
-            const user=await this.getuserById.getuserById(userId)
+            const user=await this._getuserById.getuserById(userId)
             res.status(200).json({user})
         } catch (err: any) {
             res.status(400).json({ message: err.message });
@@ -225,7 +225,7 @@ export class UserController{
         try {
             const{userId}=req.params
             const{name, email, phone}=req.body
-            const result=await this.editprofile.editprofile(userId,{name,email, phone})
+            const result=await this._editprofile.editprofile(userId,{name,email, phone})
             res.status(200).json({message:"user updated",user:result})
         } catch (error:any) {
             res.status(400).json({ message: error.message });
@@ -242,7 +242,7 @@ export class UserController{
                  return
             }
 
-            const technicians=await this.fetchtechonavailable.fetchTechBasedOnAvailble(pincode as string,date as string,categoryId as string)
+            const technicians=await this._fetchtechonavailable.fetchTechBasedOnAvailble(pincode as string,date as string,categoryId as string)
             console.log(technicians)
             if (!technicians || technicians.length === 0) {
                  res.status(404).json({ message: "No technicians available" });
@@ -272,7 +272,7 @@ export class UserController{
     async fetchCategoryById(req: Request, res: Response) {
         try {
           const { catid } = req.params;
-          const category = await this.getcatbyId.getcategorybyId(catid);
+          const category = await this._getcatbyId.getcategorybyId(catid);
           res.status(200).json({ category });
         } catch (err: any) {
           res.status(400).json({ message: err.message });
@@ -283,7 +283,7 @@ export class UserController{
             console.log("fetching")
             const{techid}=req.params
             console.log("techid",techid)
-            const technian=await this.fetchtechwithcategory.fetchtechwithcategory(techid)
+            const technian=await this._fetchtechwithcategory.fetchtechwithcategory(techid)
             console.log(technian)
             res.status(200).json({technian})
         } catch (err:any) {
@@ -297,7 +297,7 @@ export class UserController{
             console.log(userId)
             console.log(req.body)
             console.log(addressname)
-            const result = await this.addaddress.addaddress(
+            const result = await this._addaddress.addaddress(
                 userId,
                 types,
                 addressname,
@@ -321,7 +321,7 @@ export class UserController{
             const { types, addressname, street, city, state, country, pincode } = req.body;
             console.log(req.body)
             console.log("delete",addressId)
-            const result = await this.editaddress.editaddress(addressId, {
+            const result = await this._editaddress.editaddress(addressId, {
                 types,
                 addressname,
                 street,
@@ -341,7 +341,7 @@ export class UserController{
         try {
             const { addressId } = req.params;
             console.log("delete",addressId)
-            const deleted = await this.deleteaddress.deleteaddressbyId(addressId);
+            const deleted = await this._deleteaddress.deleteaddressbyId(addressId);
     
             if (!deleted) {
                 res.status(404).json({ message: "Address not found or already deleted" });
@@ -357,7 +357,7 @@ export class UserController{
         try {
             const { userId } = req.params;
             
-            const addresses = await this.getaddressbyid.getaddressbyId(userId);
+            const addresses = await this._getaddressbyid.getaddressbyId(userId);
 
             res.status(200).json({ addresses });
         } catch (err: any) {
@@ -371,7 +371,7 @@ export class UserController{
           const userId = req.params.userId;
           console.log(amount, userId)
       
-          const order = await this.createBookingusecase.execute(amount, userId);
+          const order = await this._createBookingusecase.execute(amount, userId);
           console.log("Razorpay Order:", JSON.stringify(order, null, 2));
 
           if (!order || !order.id) {
@@ -397,7 +397,7 @@ export class UserController{
                 razorpay_payment_id,
               } = req.body;
               console.log("controller",req.body)
-              const result=await this.confirmpayment.confirmPayment(
+              const result=await this._confirmpayment.confirmPayment(
                 {
                 userId,
                 technicianId: techid,
@@ -429,7 +429,7 @@ export class UserController{
             res.status(400).json({ message: "Missing required fields" });
             return;
           }
-          const result = await this.retrypaymet.retryconfirmPayment(
+          const result = await this._retrypaymet.retryconfirmPayment(
             {
               id: bookingId, // include ID explicitly
               userId,
@@ -451,7 +451,7 @@ export class UserController{
         try {
             const page = parseInt(req.query.page as string) || 1;
             const{userId}=req.query
-            const booking=await this.fetchbookByUserid.fetchBookingdetails(userId as string,page)
+            const booking=await this._fetchbookByUserid.fetchBookingdetails(userId as string,page)
   
             res.status(200).json(booking)
         } catch (err: any) {
@@ -465,7 +465,7 @@ export class UserController{
             const{userId}=req.params
             const{password,oldpassword}=req.body
             console.log(req.body)
-            const result=await this.passwordchnaging.editpassword(userId, oldpassword,password)
+            const result=await this._passwordchnaging.editpassword(userId, oldpassword,password)
             res.status(200).json({message:result.message})
         } catch (err: any) {
              if (err.message === "Old password is incorrect") {
@@ -481,7 +481,7 @@ export class UserController{
     async transactionwithBookings(req:Request,res:Response):Promise<void>{
         try {
             const {transId}=req.params
-            const result=await this.getTransactionwithbookings.execute(transId)
+            const result=await this._getTransactionwithbookings.execute(transId)
             res.status(200).json({result})
         } catch (error:any) {
             res.status(400).json({ message: error.message });
@@ -500,7 +500,7 @@ export class UserController{
       
             } = req.body;
         
-            const booking = await this.failpayment.execute({
+            const booking = await this._failpayment.execute({
               userId,
               technicianId:techid,
               addressId,
@@ -525,7 +525,7 @@ export class UserController{
             const{userremark}=req.body
           
             console.log("userremat=rk",userremark)
-            const result=await this.updateusercancelreasons.updateusercanel(bookingId,userremark)
+            const result=await this._updateusercancelreasons.updateusercanel(bookingId,userremark)
             res.status(200).json({message:"Update Cancel reason",updatebooker:result.updatebooker})
         } catch (error) {
             console.error("Error updating cancel reason", error);
@@ -540,7 +540,7 @@ export class UserController{
           
           
            
-            const result=await this.getwalletbalance.fetchwalletbalance(userId)
+            const result=await this._getwalletbalance.fetchwalletbalance(userId)
             res.status(200).json({message:"Balance",balance:result.balance})
         } catch (error) {
             console.error("Error in fetching balance", error);
@@ -553,7 +553,7 @@ export class UserController{
             console.log("enterin")
             const{userId}=req.params
             console.log(userId)
-            const walletdetail=await this.fetchwalletdetails.fetchwalletdetails(userId)
+            const walletdetail=await this._fetchwalletdetails.fetchwalletdetails(userId)
             res.status(200).json({walletdetail})
         } catch (error) {
             console.error("Error fetching wallet", error);
@@ -575,7 +575,7 @@ export class UserController{
         
               } = req.body;
               console.log("controller",req.body)
-              const result=await this.walletpayconsultationFee.WalletConsultationPayment(
+              const result=await this._walletpayconsultationFee.WalletConsultationPayment(
                 {
                 userId,
                 technicianId: techid,
@@ -610,7 +610,7 @@ export class UserController{
     async fetchsessionpending(req:Request,res:Response):Promise<void>{
         try {
             const{bookingId}=req.params
-            const response=await this.fetchsession.fetchpendingsession(bookingId)
+            const response=await this._fetchsession.fetchpendingsession(bookingId)
             res.status(200).json(response)
         }  catch (error) {
             console.error("Error fetching pending session", error);
@@ -622,7 +622,7 @@ export class UserController{
         try {
             const{bookingId}=req.params
             const{requestId,status}=req.body
-            const response=await this.acceptsessionrequest.acceptsession(bookingId,requestId,status)
+            const response=await this._acceptsessionrequest.acceptsession(bookingId,requestId,status)
             res.status(200).json(response)
         }  catch (error) {
             console.error("Error accepting session", error);
@@ -633,7 +633,7 @@ export class UserController{
     async finalamountbeforeconfirm(req:Request,res:Response):Promise<void>{
         try {
             const{bookingId}=req.params
-            const result=await this.finalamount.finalpayment(bookingId)
+            const result=await this._finalamount.finalpayment(bookingId)
             res.status(200).json(result)
         } catch (error) {
             console.error("Error accepting session", error);
@@ -654,7 +654,7 @@ export class UserController{
                 res.status(400).json({ message: "Missing required fields" });
                 return;
               }
-              const result=await this.confirmfinalpayment.makefinalpaymentconfirm(bookingId,razorpay_payment_id,"completed")
+              const result=await this._confirmfinalpayment.makefinalpaymentconfirm(bookingId,razorpay_payment_id,"completed")
               res.status(200).json({ success: true, booking: result.booking });
             } catch (err) {
               console.error("❌ Error confirming payment:", err);

@@ -7,7 +7,7 @@ import { MessageModel } from '../db/schemas/MessageModel'
 const messageUseCases = new ChatService(new MessagerepositoryImpl());
 export const initSocket = (io: Server) => {
   io.on('connection', (socket: Socket) => {
-    console.log(`User connected: ${socket.id}`);
+   
 
     // Join booking room
     socket.on('join-room', (bookingId: string) => {
@@ -16,7 +16,7 @@ export const initSocket = (io: Server) => {
 
     // Handle send message
     socket.on('send-message', async (message) => {
-      console.log("message", message)
+      
       const savedmessage=await messageUseCases.sendMessage(message);
       io.to(savedmessage.bookingId.toString()).emit('receive-message', message);
           const unreadCount = await messageUseCases.countUnreadMessages(
@@ -32,7 +32,7 @@ export const initSocket = (io: Server) => {
 
     socket.on('get-unread-counts', async (userId: string, callback) => {
     const unreadCounts = await messageUseCases.getUnreadCountsByBooking(userId);
-    console.log("unreadcounts",unreadCounts)
+    
     callback(unreadCounts);
   });
 
@@ -66,7 +66,7 @@ export const initSocket = (io: Server) => {
 
 
     socket.on('disconnect', () => {
-      console.log(`User disconnected: ${socket.id}`);
+    console.log("disconnect")
     });
   });
 };

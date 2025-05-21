@@ -76,7 +76,14 @@ const Login:React.FC=()=>{
                 const response=await axiosInstanceuser.post('/googlelogin',{email,sub, name})
                 console.log(response?.data)
                 const userId=response.data.user._id
-                localStorage.setItem("userId",userId)
+                const token = response.data.token;
+
+                dispatch(loginuser(response.data.user));
+                dispatch(addtoken({ token }));
+
+                localStorage.setItem("userId", userId);
+                
+               
                 navigate('/');
             } catch (err: any) {
                 if (err.response && err.response.data && err.response.data.message) {

@@ -21,26 +21,26 @@ import { Searchingcategory } from "../../application/usecase/Admin/SearchCategor
 import { SearchTransaction } from "../../application/usecase/Admin/SearchBookings/searchbookings";
 export class AdminController{
     constructor(
-        private loginadmin:Login,
-        private refreshtoken:RefreshToken,
-        private fetchalluser:fetchUser,
-        private blockunblock:BlockUnblock,
-        private fetchalltech:fetchtech,
-        private blockunblocktech:BlockUnBlock,
-        private signuptechs:Signuptech,
-        private addcategory:AddCategory,
-        private fetchallCategory:fetchCategory,
-        private BlockUnblockCat:BlockUnBlockCat,
-        private editcat:EditCategory,
-        private getCategoryById:GetCategoryById,
-        private gettransactiondetails:Gettransactions,
-        private gettransactionwithBookings:GetTransactionWithBookings,
-        private fetchrefundrequest:FetchrefundRequest,
-        private refundaccept:Refudaccept,
-        private searchuser:Searchinguser,
-        private searchtech:Searchingtech,
-        private searchcategory:Searchingcategory,
-        private searchbooking:SearchTransaction
+        private _loginadmin:Login,
+        private _refreshtoken:RefreshToken,
+        private _fetchalluser:fetchUser,
+        private _blockunblock:BlockUnblock,
+        private _fetchalltech:fetchtech,
+        private _blockunblocktech:BlockUnBlock,
+        private _signuptechs:Signuptech,
+        private _addcategory:AddCategory,
+        private _fetchallCategory:fetchCategory,
+        private _BlockUnblockCat:BlockUnBlockCat,
+        private _editcat:EditCategory,
+        private _getCategoryById:GetCategoryById,
+        private _gettransactiondetails:Gettransactions,
+        private _gettransactionwithBookings:GetTransactionWithBookings,
+        private _fetchrefundrequest:FetchrefundRequest,
+        private _refundaccept:Refudaccept,
+        private _searchuser:Searchinguser,
+        private _searchtech:Searchingtech,
+        private _searchcategory:Searchingcategory,
+        private _searchbooking:SearchTransaction
     ){}
 
 
@@ -49,7 +49,7 @@ export class AdminController{
 
         try {
             const{email, password}=req.body
-            const result=await this.loginadmin.loginadmin(email,password);
+            const result=await this._loginadmin.loginadmin(email,password);
             res.cookie("refreshtokenadmin", result.refreshtoken,{
                 httpOnly:true,
                 secure:false,
@@ -67,7 +67,7 @@ export class AdminController{
             const sortBy=req.query.sortBy as string|'name'
             const order=req.query.order as 'asc'|'desc'||'asc'
             const page = parseInt(req.query.page as string) || 1;
-            const { users, total } =await this.fetchalluser.fetch(sortBy,order,page)
+            const { users, total } =await this._fetchalluser.fetch(sortBy,order,page)
             res.status(200).json({users,total})
         }catch (error: any) {
             res.status(500).json({ message: error.message });
@@ -79,7 +79,7 @@ export class AdminController{
             const sortBy=req.query.sortBy as string|'name'
             const order=req.query.order as 'asc'|'desc'||'asc'
             const page=parseInt(req.query.page as string)|| 1;
-            const {tech,total}=await this.fetchalltech.fetch(sortBy,order,page)
+            const {tech,total}=await this._fetchalltech.fetch(sortBy,order,page)
             res.status(200).json({tech,total})
         } catch (error:any) {
             res.status(500).json({ message: error.message });
@@ -91,7 +91,7 @@ export class AdminController{
             const sortBy=req.query.sortBy as string|'name'
             const order=req.query.order as 'asc'|'desc'||'asc'
        
-            const cat=await this.fetchallCategory.fetch(sortBy,order)
+            const cat=await this._fetchallCategory.fetch(sortBy,order)
             res.status(200).json({cat})
         } catch (error:any) {
             res.status(500).json({ message: error.message });
@@ -102,7 +102,7 @@ export class AdminController{
         const currentPage=parseInt(req.query.page as string)||1
        
         try {
-            const {transactions,totaladmincommision}=await this.gettransactiondetails.gettransaction(currentPage)
+            const {transactions,totaladmincommision}=await this._gettransactiondetails.gettransaction(currentPage)
             console.log("controller transaction",transactions)
             res.status(200).json({transactions,totaladmincommision}) 
         } catch (error:any) {
@@ -116,7 +116,7 @@ export class AdminController{
         try {
             const token=req.cookies?.refreshtokenadmin;
              console.log("refreshtokencontrolleradmin",token)
-            const newaccesstoken=await this.refreshtoken.refresh(token);
+            const newaccesstoken=await this._refreshtoken.refresh(token);
              console.log("in refresh token controller admin with new access tokern ",newaccesstoken)
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
@@ -129,7 +129,7 @@ export class AdminController{
             const{userid}=req.params
             const{isBlocked}=req.body
             console.log(userid,isBlocked)
-            const updateduser=await this.blockunblock.blockunblock(userid,isBlocked)
+            const updateduser=await this._blockunblock.blockunblock(userid,isBlocked)
             res.status(200).json({message:"User Updated Successfully",user:updateduser})
         }  catch (error: any) {
             res.status(400).json({ message: error.message });
@@ -141,7 +141,7 @@ export class AdminController{
             const {catid}=req.params
             const{isBlocked}=req.body
             console.log("catid", catid,isBlocked)
-            const updatecategory=await this.BlockUnblockCat.blockunblockcat(catid, isBlocked)
+            const updatecategory=await this._BlockUnblockCat.blockunblockcat(catid, isBlocked)
             res.status(200).json({message:"category Updated Successfully",cat:updatecategory})
         }  catch (error: any) {
             res.status(400).json({ message: error.message });
@@ -153,7 +153,7 @@ export class AdminController{
             const {techid}=req.params
             const{isBlocked}=req.body
             console.log("techid", techid,isBlocked)
-            const updatetech=await this.blockunblocktech.blockunblocktech(techid, isBlocked)
+            const updatetech=await this._blockunblocktech.blockunblocktech(techid, isBlocked)
             res.status(200).json({message:"tech Updated Successfully",tech:updatetech})
         }  catch (error: any) {
             res.status(400).json({ message: error.message });
@@ -165,7 +165,7 @@ export class AdminController{
     
             try {
                 const{email,password, phone}=req.body
-                const result=await this.signuptechs.addtech(email,password,phone)
+                const result=await this._signuptechs.addtech(email,password,phone)
                 res.status(200).json(result)
             } 
             catch (err:any) {
@@ -177,7 +177,7 @@ export class AdminController{
     async addcategorys(req:Request,res:Response):Promise<void>{
         try {
             const{name, description, image}=req.body
-            const result=await this.addcategory.addCategory(name,description, image)
+            const result=await this._addcategory.addCategory(name,description, image)
             res.status(200).json(result)
             } 
             catch (err:any) {
@@ -189,7 +189,7 @@ export class AdminController{
     async fetchCategoryById(req: Request, res: Response) {
         try {
           const { catid } = req.params;
-          const category = await this.getCategoryById.getcategorybyId(catid);
+          const category = await this._getCategoryById.getcategorybyId(catid);
           res.status(200).json({ category });
         } catch (err: any) {
           res.status(400).json({ message: err.message });
@@ -200,7 +200,7 @@ export class AdminController{
         try {
             const{catid}=req.params
             const{ name, description, image}=req.body
-            const result=await this.editcat.editCategory(catid, { name, description, image })
+            const result=await this._editcat.editCategory(catid, { name, description, image })
             res.status(200).json({ message: "Category updated", category: result })
         } catch (error:any) {
             res.status(400).json({ message: error.message });
@@ -210,7 +210,7 @@ export class AdminController{
     async transactionwithBookings(req:Request,res:Response):Promise<void>{
         try {
             const {transId}=req.params
-            const result=await this.gettransactionwithBookings.execute(transId)
+            const result=await this._gettransactionwithBookings.execute(transId)
             res.status(200).json({result})
         } catch (error:any) {
             res.status(400).json({ message: error.message });
@@ -218,7 +218,7 @@ export class AdminController{
     }
     async fetchingrequestrefund(req:Request,res:Response):Promise<void>{
         try {
-            const result=await this.fetchrefundrequest.fetchrefundreq()
+            const result=await this._fetchrefundrequest.fetchrefundreq()
             console.log("controller", result)
             res.status(200).json({message:"success", Bookings:result})
         } catch (error:any) {
@@ -230,7 +230,7 @@ export class AdminController{
     async acceptingrefund(req:Request,res:Response):Promise<void>{
             try {
                 const{bookingId}=req.params
-                const result =await this.refundaccept.processrefund(bookingId)
+                const result =await this._refundaccept.processrefund(bookingId)
                 res.status(200).json({message:"refunded accepted"})
                 
             } catch (error:any) {
@@ -242,7 +242,7 @@ export class AdminController{
     async searchingUsers(req:Request,res:Response):Promise<void>{
         try {
             const{searchterm}=req.params
-            const user=await this.searchuser.searchinguser(searchterm)
+            const user=await this._searchuser.searchinguser(searchterm)
             res.status(200).json({user})
         } catch (error:any) {
                 console.error("Error in fetch user by search:", error);
@@ -252,7 +252,7 @@ export class AdminController{
     async searchingTech(req:Request,res:Response):Promise<void>{
         try {
             const{searchterm}=req.params
-            const tech=await this.searchtech.searchingtech(searchterm)
+            const tech=await this._searchtech.searchingtech(searchterm)
             res.status(200).json({tech})
         } catch (error:any) {
                 console.error("Error in fetch tech by search:", error);
@@ -262,7 +262,7 @@ export class AdminController{
     async searchingCategory(req:Request,res:Response):Promise<void>{
         try {
             const{searchterm}=req.params
-            const cat=await this.searchcategory.searchingcategory(searchterm)
+            const cat=await this._searchcategory.searchingcategory(searchterm)
             res.status(200).json({cat})
         } catch (error:any) {
                 console.error("Error in fetch tech by search:", error);
@@ -273,7 +273,7 @@ export class AdminController{
     async searchbookingtransaction(req:Request,res:Response):Promise<void>{
         try {
             const {searchterm}=req.params
-            const transaction=await this.searchbooking.SearchTransactionbybookingId(searchterm)
+            const transaction=await this._searchbooking.SearchTransactionbybookingId(searchterm)
             res.status(200).json({transaction})
         }catch (error:any) {
                 console.error("Error in fetch tech by search:", error);

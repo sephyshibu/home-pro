@@ -2,11 +2,16 @@ import React ,{useState,useEffect}from 'react';
 import {persistor} from '../../../app/store'
 import { useNavigate } from 'react-router';
 import logo from '../../../../public/images/Resized/Logo Landscape white-01-01.png'
-import { io,Socket } from 'socket.io-client';
+import socket from '../../../utils/socket';
 import { logoutuser } from '../../../features/UserSlice';
 import { cleartoken } from '../../../features/tokenSlice';
 import { useDispatch } from 'react-redux';
-const socket: Socket = io('http://localhost:3000'); 
+
+// const socket: Socket = io('http://localhost:3000', {
+//   transports: ['websocket'], // force WebSocket only
+// });
+
+
 const Header: React.FC = () => {
    const [unreadCounts, setUnreadCounts] = useState<{ bookingId: string; count: number; technicianName: string }[]>([]);
 

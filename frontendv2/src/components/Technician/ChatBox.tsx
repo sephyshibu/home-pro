@@ -1,7 +1,7 @@
 // components/ChatBox.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-
+import socket from '../../utils/socket';
 interface Message {
   senderId: string;
   receiverId: string;
@@ -17,7 +17,7 @@ interface ChatBoxProps {
   techId: string;
 }
 
-const socket: Socket = io('http://localhost:3000'); // or your backend URL
+// const socket: Socket = io('http://localhost:3000'); // or your backend URL
 
 const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
   const [messages, setMessages] = useState<Message[]>([]);

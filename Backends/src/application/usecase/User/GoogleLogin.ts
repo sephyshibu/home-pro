@@ -26,6 +26,7 @@ export class GoogleLogin{
                     googleIds:sub
                 }
                 user=await this.userRepository.createUser(newuser)
+                console.log("google user created",user)
                 await WalletModel.create({
                     ownerId:user._id,
                     userType:"user"

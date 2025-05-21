@@ -15,19 +15,19 @@ import { FetchTransactionsinTechWallet } from "../../application/usecase/Wallet/
 
 export class techController{
     constructor(
-        private logintech:LoginTech,
-        private refreshtoken:RefreshToken,
-        private gettechbyid:GetTechById,
-        private edittech:EditTech,
-        private fetchcat:fetchCategory,
-        private fetchbookingbytechbeforeaccept:FetchBookingByTechId,
-        private requestacceptbytech:bookingRequestAcceptByTech,
-        private upcoming:FetchUpcoming,
-        private passwordhcange:PasswordChange,
-        private requestrejectbyTech:bookingRequestRejectByTech,
-        private requestsessions:RequestSession,
-        private fetchbookingwithcompleteandreject:fetchBookingswhichcompletedrejected,
-        private fetchtransactionintechwallet:FetchTransactionsinTechWallet
+        private _logintech:LoginTech,
+        private _refreshtoken:RefreshToken,
+        private _gettechbyid:GetTechById,
+        private _edittech:EditTech,
+        private _fetchcat:fetchCategory,
+        private _fetchbookingbytechbeforeaccept:FetchBookingByTechId,
+        private _requestacceptbytech:bookingRequestAcceptByTech,
+        private _upcoming:FetchUpcoming,
+        private _passwordhcange:PasswordChange,
+        private _requestrejectbyTech:bookingRequestRejectByTech,
+        private _requestsessions:RequestSession,
+        private _fetchbookingwithcompleteandreject:fetchBookingswhichcompletedrejected,
+        private _fetchtransactionintechwallet:FetchTransactionsinTechWallet
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -35,7 +35,7 @@ export class techController{
 
         try {
             const{email,password}=req.body
-            const result=await this.logintech.logintech(email,password)
+            const result=await this._logintech.logintech(email,password)
             res.cookie("refreshtokentech", result.refreshtoken,{
                 httpOnly:true,
                 secure:false,
@@ -52,7 +52,7 @@ export class techController{
         try {
             const token=req.cookies?.refreshtokentech;
             console.log("refreshtokencontrollertech",token)
-            const newaccesstoken=await this.refreshtoken.refresh(token);
+            const newaccesstoken=await this._refreshtoken.refresh(token);
              console.log("in refresh token controller tech with new access tokern ",newaccesstoken)
             res.status(200).json({ token: newaccesstoken });
         } catch (err: any) {
@@ -63,7 +63,7 @@ export class techController{
     async fetchTechById(req:Request, res:Response){
         try {
             const{techId}=req.params
-           const tech= await this.gettechbyid.gettechbyid(techId)
+           const tech= await this._gettechbyid.gettechbyid(techId)
            res.status(200).json({tech})
         } catch (err: any) {
             res.status(400).json({ message: err.message });
@@ -85,7 +85,7 @@ export class techController{
                 workphotos}=req.body
 
             console.log(req.body)
-            const result= await this.edittech.edittech(techId,{name,email,
+            const result= await this._edittech.edittech(techId,{name,email,
                 phone,
                 rateperhour,
                 serviceablepincode,
@@ -103,7 +103,7 @@ export class techController{
 
     async fetchCategory(req:Request,res:Response):Promise<void>{
         try {
-            const category=await this.fetchcat.fetch()
+            const category=await this._fetchcat.fetch()
             res.status(200).json({category})
         } catch (error:any) {
             res.status(500).json({ message: error.message });
@@ -113,7 +113,7 @@ export class techController{
     async fetchRequestByTech(req:Request,res:Response):Promise<void>{
         try {
             const{techId}=req.params
-            const bokings=await this.fetchbookingbytechbeforeaccept.fetchBookingDetailsRequest(techId)
+            const bokings=await this._fetchbookingbytechbeforeaccept.fetchBookingDetailsRequest(techId)
             console.log("contoller", bokings)
             res.status(200).json({bokings})
         } catch (err: any) {
@@ -125,7 +125,7 @@ export class techController{
     async bookingrequest(req:Request, res:Response):Promise<void>{
         try {
             const{bookingId}=req.params
-            const result=await this.requestacceptbytech.bookingreacceptbytech(bookingId)
+            const result=await this._requestacceptbytech.bookingreacceptbytech(bookingId)
             console.log("controller",result)
             res.status(200).json({result})
         } catch (err: any) {
@@ -139,7 +139,7 @@ export class techController{
             const{bookingId}=req.params
             const{reason}=req.body
 
-            const result=await this.requestrejectbyTech.bookingreacceptbytech(bookingId,reason)
+            const result=await this._requestrejectbyTech.bookingreacceptbytech(bookingId,reason)
             console.log(result)
             res.status(200).json({result})
         }  catch (err: any) {
@@ -152,7 +152,7 @@ export class techController{
     async fetchupcomingevnts(req:Request,res:Response):Promise<void>{
         try {
             const{techId}=req.params
-            const booking=await this.upcoming.fetchupcoming(techId)
+            const booking=await this._upcoming.fetchupcoming(techId)
             console.log("controller", booking)
             res.status(200).json({booking})
 
@@ -168,7 +168,7 @@ export class techController{
             const{techId}=req.params
             const{password}=req.body
             console.log(req.body)
-            const result=await this.passwordhcange.editpassword(techId, password)
+            const result=await this._passwordhcange.editpassword(techId, password)
             res.status(200).json({message:result.message})
         } catch (err: any) {
             res.status(500).json({ message: err.message });
@@ -180,7 +180,7 @@ export class techController{
             const{bookingId}=req.params
             const {types}=req.body
 
-            const result=await this.requestsessions.requestsession(bookingId, types)
+            const result=await this._requestsessions.requestsession(bookingId, types)
             res.status(200).json(result)
         } catch (err: any) {
             res.status(500).json({ message: err.message });
@@ -191,7 +191,7 @@ export class techController{
     async completeandrejectbookings(req:Request,res:Response):Promise<void>{
         try {
             const{techId}=req.params
-            const result=await this.fetchbookingwithcompleteandreject.fetchBookingscommpletereject(techId)
+            const result=await this._fetchbookingwithcompleteandreject.fetchBookingscommpletereject(techId)
             res.status(200).json({booking:result})
         } catch (err: any) {
             res.status(500).json({ message: err.message });
@@ -203,7 +203,7 @@ export class techController{
         try {
             const{techId}=req.params
 
-            const result=await this.fetchtransactionintechwallet.transactiondetails(techId)
+            const result=await this._fetchtransactionintechwallet.transactiondetails(techId)
             res.status(200).json(result);
         } catch (err) {
           console.error("❌ Error confirming payment:", err);
