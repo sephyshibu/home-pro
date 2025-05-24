@@ -35,6 +35,9 @@ import { FinalPayment } from '../../application/usecase/booking/makefinalpayment
 import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconfirmpayment';
 import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails';
 import { FetchReviewByTechId } from '../../application/usecase/Review/fetchReview';
+import { AddReview } from '../../application/usecase/Review/addreview';
+
+
 export class UserController{
     constructor(
         private _signupuser:Signup,
@@ -72,7 +75,8 @@ export class UserController{
         private _finalamount:FinalPayment,
         private _confirmfinalpayment:FinalPaymentconfirm,
         private _getTransactionwithbookings:GetTransactionWithBookings,
-        private _fetchreviewbytech:FetchReviewByTechId
+        private _fetchreviewbytech:FetchReviewByTechId,
+        private _addreview:AddReview
      
     
     ){}
@@ -678,6 +682,18 @@ export class UserController{
 
         } catch (err) {
               console.error("❌ Error in fetching review:", err);
+              res.status(500).json({ message: "Internal server error" });
+            }
+    }
+
+    async Addingreview(req:Request,res:Response):Promise<void>{
+        try {
+            const{userId,techId, description, points}=req.body
+            console.log("adding review", req.body)
+            const response=await this._addreview.addreview(userId,techId,description,points)
+            res.status(200).json(response)
+        } catch (err) {
+              console.error("❌ Error in adding review:", err);
               res.status(500).json({ message: "Internal server error" });
             }
     }

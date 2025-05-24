@@ -47,7 +47,7 @@ import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconf
 import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails'
 import { FetchReviewByTechId } from '../../application/usecase/Review/fetchReview'
 import { ReviewrepositoryImpl } from '../../infrastructure/repository/ReviewRepositoryImpl'
-
+import { AddReview } from '../../application/usecase/Review/addreview'
 const router=express.Router()
 
 
@@ -99,7 +99,7 @@ const finalamounttopay= new FinalPayment(bookingrepository)
 const confirmfinalpayment= new FinalPaymentconfirm(bookingrepository,walletRepository,transactionrepository,techrepository)
 const gettransactionwithbookings=new GetTransactionWithBookings(transactionrepository, bookingrepository)
 const fetchingreviewbytechfromuser= new FetchReviewByTechId(reviewrepository)
-
+const addingreviewbyuser= new AddReview(reviewrepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -136,7 +136,8 @@ const usercontroller= new UserController(
     finalamounttopay,
     confirmfinalpayment,
     gettransactionwithbookings,
-    fetchingreviewbytechfromuser
+    fetchingreviewbytechfromuser,
+    addingreviewbyuser
   
     
 
@@ -183,4 +184,7 @@ router.post('/finalpaymentprocess/:bookingId',authToken,(req,res)=>usercontrolle
 router.post('/finalconfirmpayemnts',authToken,(req,res)=>usercontroller.finalpaymentconfirm(req,res))
 router.get('/fetchtransactionwithBookings/:transId',authToken,(req,res)=>usercontroller.transactionwithBookings(req,res))
 router.get('/fetchreview/:techId',authToken,(req,res)=>usercontroller.fetchreviewbytechIdfromUser(req,res))
+router.post('/addreview',authToken,(req,res)=>usercontroller.Addingreview(req,res))
+
+
 export {router as userRouter}

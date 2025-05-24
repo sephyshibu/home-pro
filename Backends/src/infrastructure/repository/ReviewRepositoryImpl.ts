@@ -21,7 +21,9 @@ export class ReviewrepositoryImpl implements Reviewrepository{
     // async fetchreviewbyuserId(userId: string): Promise<IReview[] | null> {
         
     // }
-    // async addreview(review: IReview): Promise<IReview> {
-        
-    // }
+    async addreview(review: IReview): Promise<IReview> {
+        console.log("in implimentation",review)
+        const newreview=await ReviewModel.create(review)
+        return newreview.save()
+    }
 }
