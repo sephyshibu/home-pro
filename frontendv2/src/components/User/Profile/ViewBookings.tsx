@@ -140,7 +140,7 @@ const ViewBookingsProfile:React.FC=()=> {
             
           });
           toast.success("Final Payment successfully!");
-          navigate('/thankyouservice')
+          navigate(`/thankyouservice/${techId}`)
         },
         prefill: {
           name: "User HomePro",

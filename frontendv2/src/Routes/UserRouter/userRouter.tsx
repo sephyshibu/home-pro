@@ -42,7 +42,7 @@ const UserRouter=()=> {
         <Route path='/viewprofile' element={<TechnicianProfile/>}/>
         <Route path='/proceedpayment' element={<PaymentPage/>}/>
         <Route path='/thankyou' element={<ThankYouPage/>}/>
-         <Route path='/thankyouservice' element={<ThankYouPageService/>}/>
+         <Route path='/thankyouservice/:techId' element={<ThankYouPageService/>}/>
         <Route path='/viewbookingddetails' element={<ViewBookingsProfile/>}/>
         <Route path='/myaccount' element={<UserLayout />}>
           {/* When /myaccount, redirect to /myaccount/profile */}
