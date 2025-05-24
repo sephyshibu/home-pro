@@ -22,11 +22,15 @@ interface Technician{
     description:string
   }
 }
-interface Review{
-  username:string,
-  description:string,
-  points:number
+interface Review {
+  userId: {
+    _id: string;
+    name: string;
+  };
+  description: string;
+  points: number;
 }
+
 
 interface Category{
   _id:string,

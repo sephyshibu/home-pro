@@ -45,6 +45,9 @@ import { Acceptsession } from '../../application/usecase/Sessions/acceptsession'
 import { FinalPayment } from '../../application/usecase/booking/makefinalpaymenty'
 import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconfirmpayment'
 import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails'
+import { FetchReviewByTechId } from '../../application/usecase/Review/fetchReview'
+import { ReviewrepositoryImpl } from '../../infrastructure/repository/ReviewRepositoryImpl'
+
 const router=express.Router()
 
 
@@ -56,7 +59,7 @@ const addressrepository= new AddressRepositoryImpl()
 const bookingrepository= new bookingrepositoryImpl()
 const transactionrepository = new TransactionRepositoryImpl();
 const walletRepository= new walletRepositoryimpl()
-
+const reviewrepository=new ReviewrepositoryImpl()
 
 const emailService= new EmailService()
 const signupuser= new Signup(userRepository,emailService)
@@ -95,6 +98,8 @@ const acceptingsession= new Acceptsession(bookingrepository)
 const finalamounttopay= new FinalPayment(bookingrepository)
 const confirmfinalpayment= new FinalPaymentconfirm(bookingrepository,walletRepository,transactionrepository,techrepository)
 const gettransactionwithbookings=new GetTransactionWithBookings(transactionrepository, bookingrepository)
+const fetchingreviewbytechfromuser= new FetchReviewByTechId(reviewrepository)
+
 
 const usercontroller= new UserController(
     signupuser,
@@ -130,7 +135,8 @@ const usercontroller= new UserController(
     acceptingsession,
     finalamounttopay,
     confirmfinalpayment,
-    gettransactionwithbookings
+    gettransactionwithbookings,
+    fetchingreviewbytechfromuser
   
     
 
@@ -175,6 +181,6 @@ router.post('/acceptsessionrequest/:bookingId',authToken,(req,res)=>usercontroll
 router.get('/fetchsessions/:bookingId',authToken,(req,res)=>usercontroller.fetchsessionpending(req,res))
 router.post('/finalpaymentprocess/:bookingId',authToken,(req,res)=>usercontroller.finalamountbeforeconfirm(req,res))
 router.post('/finalconfirmpayemnts',authToken,(req,res)=>usercontroller.finalpaymentconfirm(req,res))
-router.get('/fetchtransactionwithBookings/:transId',(req,res)=>usercontroller.transactionwithBookings(req,res))
-
+router.get('/fetchtransactionwithBookings/:transId',authToken,(req,res)=>usercontroller.transactionwithBookings(req,res))
+router.get('/fetchreview/:techId',authToken,(req,res)=>usercontroller.fetchreviewbytechIdfromUser(req,res))
 export {router as userRouter}

@@ -34,6 +34,7 @@ import { Acceptsession } from '../../application/usecase/Sessions/acceptsession'
 import { FinalPayment } from '../../application/usecase/booking/makefinalpaymenty';
 import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconfirmpayment';
 import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails';
+import { FetchReviewByTechId } from '../../application/usecase/Review/fetchReview';
 export class UserController{
     constructor(
         private _signupuser:Signup,
@@ -70,7 +71,8 @@ export class UserController{
         private _acceptsessionrequest:Acceptsession,
         private _finalamount:FinalPayment,
         private _confirmfinalpayment:FinalPaymentconfirm,
-        private _getTransactionwithbookings:GetTransactionWithBookings
+        private _getTransactionwithbookings:GetTransactionWithBookings,
+        private _fetchreviewbytech:FetchReviewByTechId
      
     
     ){}
@@ -661,6 +663,24 @@ export class UserController{
               res.status(500).json({ message: "Internal server error" });
             }
         }
+
+    async fetchreviewbytechIdfromUser(req:Request,res:Response):Promise<void>{
+        try {
+            const {techId}=req.params
+            console.log("controller in user review techId", techId)
+            if(!techId){
+                res.status(400).json({message:"tech Id is missing"})
+                return
+            }
+
+            const result=await this._fetchreviewbytech.fetchreviewtechId(techId)
+            res.status(200).json({reviews:result})
+
+        } catch (err) {
+              console.error("❌ Error in fetching review:", err);
+              res.status(500).json({ message: "Internal server error" });
+            }
+    }
 
         
 
