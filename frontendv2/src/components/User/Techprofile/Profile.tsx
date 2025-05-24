@@ -68,6 +68,25 @@ const TechnicianProfile:React.FC=()=> {
     }
   })
   const[review,setreview]=useState<Review[]>([])
+  const [currentReviewPage, setCurrentReviewPage] = useState(0);
+  const reviewsPerPage = 2;
+
+  const totalPages = Math.ceil(review.length / reviewsPerPage);
+  const startIdx = currentReviewPage * reviewsPerPage;
+  const currentReviews = review.slice(startIdx, startIdx + reviewsPerPage);
+
+  const handleNext = () => {
+    if (currentReviewPage < totalPages - 1) {
+      setCurrentReviewPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentReviewPage > 0) {
+      setCurrentReviewPage((prev) => prev - 1);
+    }
+  };
+
 
   useEffect(()=>{
 
@@ -151,6 +170,56 @@ const handleLoginLogout=async()=>{
           </div>
           </div>
         </div>
+        {/* Reviews Section */}
+       <div className="col-span-6 bg-gray-100 p-4 rounded shadow mt-6">
+        <h2 className="text-xl font-bold mb-4">Customer Reviews</h2>
+
+        {review.length > 0 ? (
+          <div className="flex items-center">
+            {/* Left Arrow */}
+            <button
+              onClick={handlePrev}
+              disabled={currentReviewPage === 0}
+              className="text-2xl px-2 disabled:opacity-30"
+            >
+              ◀
+            </button>
+
+            {/* Review Cards */}
+            <div className="flex space-x-4 overflow-hidden">
+              {currentReviews.map((rev, index) => (
+                <div
+                  key={index}
+                  className="min-w-[250px] bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow duration-300"
+                >
+                  {/* Star Ratings */}
+                  <div className="flex text-yellow-500 mb-2">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span key={i}>{i < rev.points ? '★' : '☆'}</span>
+                    ))}
+                  </div>
+
+                  <h4 className="font-semibold text-gray-800 mb-1">{rev.userId.name}</h4>
+                  <p className="text-gray-600 text-sm">{rev.description}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Right Arrow */}
+            <button
+              onClick={handleNext}
+              disabled={currentReviewPage >= totalPages - 1}
+              className="text-2xl px-2 disabled:opacity-30"
+            >
+              ▶
+            </button>
+          </div>
+        ) : (
+          <p className="text-gray-500">No reviews yet for this technician.</p>
+        )}
+      </div>
+
+
 
         {/* Work Photos */}
         <div className="col-span-1 md:col-span-2">
@@ -162,7 +231,7 @@ const handleLoginLogout=async()=>{
         </div>
 
         {/* Reviews Section */}
-      <div className="col-span-6 bg-gray-100 p-4 rounded shadow mt-6">
+      {/* <div className="col-span-6 bg-gray-100 p-4 rounded shadow mt-6">
         <h2 className="text-xl font-bold mb-4">Customer Reviews</h2>
         {review.length > 0 ? (
           review.map((rev, index) => (
@@ -175,7 +244,7 @@ const handleLoginLogout=async()=>{
         ) : (
           <p className="text-gray-500">No reviews yet for this technician.</p>
         )}
-      </div>
+      </div> */}
 
       
 
