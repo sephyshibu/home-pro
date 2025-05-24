@@ -22,6 +22,7 @@ const Header: React.FC = () => {
     useEffect(() => {
     if (userId) {
       socket.emit('get-unread-counts', userId, (data: any[]) => {
+        console.log('socket data',data)
         setUnreadCounts(data);
       });
 

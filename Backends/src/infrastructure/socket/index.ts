@@ -27,6 +27,7 @@ export const initSocket = (io: Server) => {
       socket.to(savedmessage.bookingId.toString()).emit('new_unread', {
           bookingId: savedmessage.bookingId,
           unreadCount,
+          
         });
     });
 

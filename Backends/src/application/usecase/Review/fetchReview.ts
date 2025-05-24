@@ -7,6 +7,7 @@ export class FetchReviewByTechId{
     async fetchreviewtechId(techId:string):Promise<IReview[]|null>{
         try {
             const reviews = await this._reviewrepository.fetchreviewbyTechId(techId);
+            console.log("review",reviews)
             return reviews;
         } catch (error) {
             console.error(`Error fetching reviews for tech ID ${techId}:`, error);

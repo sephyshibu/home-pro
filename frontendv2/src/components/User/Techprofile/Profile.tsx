@@ -4,7 +4,7 @@ import { fetchTechById } from "../../../api/UserApi/fetchtechbyid";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router";
 import {persistor} from '../../../app/store'
-import { ReviewDetails } from "../../../api/AdminApi/Review/fetchreview";
+import { ReviewDetails } from "../../../api/UserApi/Review/fetchreview";
 
 interface Technician{
   _id:string
@@ -160,6 +160,23 @@ const handleLoginLogout=async()=>{
             </button>
           </div>
         </div>
+
+        {/* Reviews Section */}
+      <div className="col-span-6 bg-gray-100 p-4 rounded shadow mt-6">
+        <h2 className="text-xl font-bold mb-4">Customer Reviews</h2>
+        {review.length > 0 ? (
+          review.map((rev, index) => (
+            <div key={index} className="bg-white rounded p-4 shadow mb-4">
+              <p className="text-lg font-semibold">{rev.userId.name}</p>
+              <p className="text-gray-600">{rev.description}</p>
+              <p className="text-yellow-500">⭐ {rev.points}/5</p>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">No reviews yet for this technician.</p>
+        )}
+      </div>
+
       
 
       {/* Footer */}

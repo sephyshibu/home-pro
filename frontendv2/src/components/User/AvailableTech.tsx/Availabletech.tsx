@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchcategory } from '../../../api/UserApi/fetchcategory';
+import { ReviewDetails } from '../../../api/UserApi/Review/fetchreview';
 import { useNavigate } from 'react-router-dom';
 import { NavLink ,useSearchParams} from 'react-router-dom';
 import { fetchTechnicianbasedonavailableSlot } from '../../../api/UserApi/fetchtechnician';
 import {persistor} from '../../../app/store'
+
+
 interface Technician {
   _id: string;
   name: string;
@@ -19,6 +22,9 @@ interface category{
     description:string
 }
 
+
+
+
 const TechnicianList: React.FC = () => {
   // const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -28,6 +34,7 @@ const TechnicianList: React.FC = () => {
   const time = searchParams.get('time');
   const categoryId = searchParams.get('categoryId');
   const [technicians, setTechnicians] = useState<Technician[]>([]);
+ 
   const [category, setcategory] = useState<category | null>(null);
 
   const navigate= useNavigate()
@@ -51,6 +58,9 @@ const TechnicianList: React.FC = () => {
     };
     fetchCategory();
   }, [categoryId]);
+
+
+
 
 
   const userId=localStorage.getItem('userId')
@@ -118,6 +128,7 @@ const TechnicianList: React.FC = () => {
                 <th className="px-4 py-3 text-left">Rate per Hour</th>
                 <th className="px-4 py-3 text-left">Action</th>
               </tr>
+              
             </thead>
             <tbody className="divide-y">
               {technicians.map((tech:Technician) => (

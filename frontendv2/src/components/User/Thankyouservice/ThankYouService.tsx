@@ -16,6 +16,7 @@ const ThankYouPage: React.FC = () => {
     }
 
      const handleSubmit = async () => {
+      console.log("thank u service techId",techId)
         if (!description.trim() || !techId) return;
 
         try {

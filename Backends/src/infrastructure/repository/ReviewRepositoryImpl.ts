@@ -1,16 +1,18 @@
 import { IReview } from "../../domain/models/Review";
 import { Reviewrepository } from "../../domain/repository/Reviewrepository";
 import { ReviewModel } from "../db/schemas/ReviewModel";
-
+import mongoose from "mongoose";
 
 export class ReviewrepositoryImpl implements Reviewrepository{
     async fetchreviewbyTechId(techId: string): Promise<IReview[] | null> {
+        console.log("review techId", techId)
         try {
             
-            const reviews=await ReviewModel.find({techId:techId}).populate('userId', 'name')
+            const reviews=await ReviewModel.find({ techId: new mongoose.Types.ObjectId(techId) }).populate('userId', 'name')
             if(!reviews){
                 return null
             }
+            console.log("fetching reviews",reviews)
             
             return reviews
         } catch (error) {
