@@ -4,6 +4,7 @@ import { fetchTechById } from "../../../api/UserApi/fetchtechbyid";
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router";
 import {persistor} from '../../../app/store'
+import { ReviewDetails } from "../../../api/AdminApi/Review/fetchreview";
 
 interface Technician{
   _id:string
@@ -20,6 +21,11 @@ interface Technician{
     name:string,
     description:string
   }
+}
+interface Review{
+  username:string,
+  description:string,
+  points:number
 }
 
 interface Category{
@@ -57,12 +63,16 @@ const TechnicianProfile:React.FC=()=> {
       description:""
     }
   })
+  const[review,setreview]=useState<Review[]>([])
 
   useEffect(()=>{
+
+
     const fetchtech=async()=>{
       try {
-        const response=await fetchTechById(techid)
-        settechnician(response)
+        const [techresponse, reviewresponse]=await Promise.all([fetchTechById(techid), ReviewDetails(techid)]) 
+        settechnician(techresponse)
+        setreview(reviewresponse)
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
