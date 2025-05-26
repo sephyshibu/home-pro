@@ -39,6 +39,7 @@ export class FetchBookingbyUserId{
             userremark:booking.userremark,
             techremark:booking.techremark,
             refundrequestAccept:booking.refundrequestAccept,
+            totalFinalAmount:booking.totalFinalAmount
          
 
             }

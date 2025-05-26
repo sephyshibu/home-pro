@@ -3,9 +3,12 @@ import { BookingDetails } from "../../../api/UserApi/Service/fetchbooking";
 import { useNavigate } from "react-router";
 import { Dialog, DialogPanel,DialogTitle} from "@headlessui/react";
 import axiosInstanceuser from "../../../Axios/UserAxios/axios";
-
+import InvoicePDF from "./Invoice";
 import { updatecancelreason } from "../../../api/UserApi/cancelrequest/Cancelreason";
 import toast from "react-hot-toast";
+import { pdf } from "@react-pdf/renderer";
+
+
 interface servicepage {
   _id:string,
   techIds:string,
@@ -22,13 +25,14 @@ interface servicepage {
   consultationpayStatus:string,
   finalpaymentStatus:string,
   sessionrequest:[{types:string, status:string}],
-  worktime:[{}],
+  workTime:{start:Date, end:Date}[],
   workaddress:string,
   totalhours:number,
   pincode:string,
   userremark:string,
   techremark:string,
-  refundrequestAccept:boolean
+  refundrequestAccept:boolean,
+  totalFinalAmount:string
 
 }
 
@@ -48,13 +52,29 @@ const getTechStatusColor = (status: string) => {
   return status === "Accepted" ? "text-green-600" : "text-red-600";
 };
 
+function calculatetotalminutes(workTime?:{start:Date, end:Date}[]|null){
+  let totlaminutes=0
+  if (!Array.isArray(workTime)) return 0;
+workTime
+  workTime.forEach((work)=>{
+    if(work.start && work.end){
+      const start=new Date(work.start)
+      const end= new Date(work.end)
+      const duration=end.getTime()-start.getTime()
+      totlaminutes+=Math.floor(duration/60000)
+    }
+  })
+  console.log("total min",totlaminutes)
+  return totlaminutes
+}
+
 const MyServicesPage: React.FC = () => {
     const userId=localStorage.getItem("userId")
     const[booking,setbooking]=useState<servicepage[]|null>([])
     const[bookingid,setbookingid]=useState<string|null>(null)
     const [currentPage, setCurrentPage] = useState<number>(1);
-const [totalPages, setTotalPages] = useState<number>(1);
-
+    const [totalPages, setTotalPages] = useState<number>(1);
+    
     const[isopen,setisopen]=useState(false)
     const[form,setform]=useState({
       userremark:""
@@ -167,6 +187,32 @@ const [totalPages, setTotalPages] = useState<number>(1);
       setisopen(true)
     }
 
+    const handleDownloadPDF=async(bookingId:string)=>{
+      try {
+        const bookingItem=booking?.find((item)=>item._id===bookingId)
+
+        if(!bookingItem) return
+        console.log('booking work time', bookingItem.workTime)
+        const totlaminutes=calculatetotalminutes(bookingItem?.workTime)
+        console.log("minuuuu",totlaminutes)
+
+        
+        const blob=await pdf(<InvoicePDF booking={{...bookingItem,totalminutes:totlaminutes}}  />).toBlob()
+        console.log("blobl", blob)
+        const url=URL.createObjectURL(blob)
+        const link=document.createElement('a')
+        link.href=url
+        link.download=`invoice-${bookingItem._id}.pdf`
+        link.click()
+        URL.revokeObjectURL(url)
+      } catch (error) {
+       
+        toast.error("Error generating invoice PDF");
+        console.error("PDF Generation Error:", error);
+  
+      }
+    }
+
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -232,7 +278,18 @@ const [totalPages, setTotalPages] = useState<number>(1);
                     >
                       Retry Payment
                     </button>
+                    
                   )}
+                  </td>
+                  <td>
+                    {bookingItem.finalpaymentStatus==='completed' &&(
+                      <button
+                              onClick={()=>handleDownloadPDF(bookingItem._id)}
+                              className="mt-5 mb-3  bg-red-950 text-white py-2 px-1 rounded hover:bg-red-800">
+                        Download Invoice
+
+                      </button>
+                    )}
                   </td>
                   <td>
                   {(bookingItem.techStatus.toLowerCase()=="pending" && bookingItem.userremark=='' && bookingItem.consultationpayStatus==='completed') && (
