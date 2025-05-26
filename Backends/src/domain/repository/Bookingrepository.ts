@@ -1,5 +1,9 @@
 import { IBooking } from "../models/Bookings";
 import { IUser } from "../models/User";
+export interface TechDashboardSummary {
+  totalOrders: number;
+  totalSales: number;
+}
 
 
 export interface BookingRepository {
@@ -17,4 +21,8 @@ export interface BookingRepository {
     acceptsession(bookingId:string,requestId:string):Promise<IBooking|null>
     fetchcompletedandrejected(techId:string):Promise<IBooking[]|null>
     countBookingsByUserId(userId:string):Promise<number>
+    countBookingBytechId(techId:string):Promise<number>
+    totalSales(techId: string): Promise<TechDashboardSummary>;
+
+
 }

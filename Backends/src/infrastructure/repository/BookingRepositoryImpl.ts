@@ -4,6 +4,13 @@ import {BookingModels} from '../db/schemas/BookingModel';
 import { TechModel } from "../db/schemas/techModel";
 import { AddressModel } from "../db/schemas/AddressModel";
 import { IUser } from "../../domain/models/User";
+import mongoose from "mongoose";
+
+interface TechDashboardSummary {
+  totalOrders: number;
+  totalSales: number;
+
+}
 export class bookingrepositoryImpl implements BookingRepository{
     async creates(booking: Omit<IBooking, "id">): Promise<IBooking> {
         console.log("impl", booking)
@@ -126,6 +133,47 @@ export class bookingrepositoryImpl implements BookingRepository{
 
       async countBookingsByUserId(userId: string): Promise<number> {
       return await BookingModels.countDocuments({ userId });
+    }
+    async countBookingBytechId(techId: string): Promise<number> {
+        const count=await BookingModels.countDocuments({
+          technicianId:techId,
+          userremark:"",
+          techremark:"",
+          consultationpayStatus:"completed",
+          isconfirmedbyTech:"accepted"
+        }).exec()
+
+        return count
+    }
+
+    async totalSales(techId: string): Promise<TechDashboardSummary> {
+        const result=await BookingModels.aggregate([
+          {$match:{
+              technicianId:new mongoose.Types.ObjectId(techId),
+              finalpayStatus:"completed"
+          }
+        },
+        {$group:{
+            _id:null,
+            totalOrders:{$sum:1},
+            totalSales:{$sum:"$techcommision"}
+          }
+        },
+        {$project:{
+          _id:0,
+          totalOrders:1,
+          totalSales:1
+
+        }}
+
+        ])
+
+        if(result.length===0){
+          return {totalOrders:0, totalSales:0}
+        }
+
+        return result[0] as TechDashboardSummary
+
     }
 
       async fetchbookingByTechId(techId:string):Promise<IBooking[]|null>{
