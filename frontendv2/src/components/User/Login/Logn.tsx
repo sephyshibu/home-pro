@@ -73,7 +73,7 @@ const Login:React.FC=()=>{
                 const{email, sub, name}=credential
 
                 console.log(email)
-                const response=await axiosInstanceuser.post('/googlelogin',{email,sub, name})
+                const response=await axiosInstanceuser.post('/api/googlelogin',{email,sub, name})
                 console.log(response?.data)
                 const userId=response.data.user._id
                 const token = response.data.token;
@@ -121,7 +121,7 @@ const Login:React.FC=()=>{
         
         try {
             const{email,password}=formdata
-            const response=await axiosInstanceuser.post('/login',{email,password})
+            const response=await axiosInstanceuser.post('/api/login',{email,password})
             dispatch(loginuser(response.data.user))
             dispatch(addtoken({token:response.data.token}))
             console.log(response)

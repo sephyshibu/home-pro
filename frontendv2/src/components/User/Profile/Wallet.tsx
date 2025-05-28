@@ -35,7 +35,7 @@ export default function WalletPage() {
 
     useEffect(()=>{
         const balance=async()=>{
-                 const response=await axiosInstanceuser.get(`/fetchwalletbalance/${userId}`)
+                 const response=await axiosInstanceuser.get(`/api/fetchwalletbalance/${userId}`)
                  console.log("asf",response.data.balance)
                  setbalance(response.data.balance)
         }

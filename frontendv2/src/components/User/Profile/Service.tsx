@@ -146,7 +146,7 @@ const MyServicesPage: React.FC = () => {
       }
     
       try {
-        const res = await axiosInstanceuser.post(`/create-order/${userId}`, {
+        const res = await axiosInstanceuser.post(`/api/create-order/${userId}`, {
           amount,
         });
     
@@ -157,7 +157,7 @@ const MyServicesPage: React.FC = () => {
           name: "HomePro",
           order_id: res.data.id,
           handler: async (response: any) => {
-            await axiosInstanceuser.post("/confirm-payment-retry", {
+            await axiosInstanceuser.post("/api/confirm-payment-retry", {
               userId,
               razorpay_payment_id: response.razorpay_payment_id,
               bookingId, // reusing the same booking

@@ -2,7 +2,7 @@ import axiosInstanceuser from "../../../Axios/UserAxios/axios";
 
 export const finalamount=async(bookingId:string)=>{
     try {
-        const resposne=await axiosInstanceuser.post(`/finalpaymentprocess/${bookingId}`)
+        const resposne=await axiosInstanceuser.post(`/api/finalpaymentprocess/${bookingId}`)
         console.log(resposne)
         return resposne.data
     } catch (error: any) {

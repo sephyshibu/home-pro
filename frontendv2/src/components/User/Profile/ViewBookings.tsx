@@ -123,7 +123,7 @@ const ViewBookingsProfile:React.FC=()=> {
     }
 
     try {
-      const res = await axiosInstanceuser.post(`/create-order/${userId}`, {
+      const res = await axiosInstanceuser.post(`/api/create-order/${userId}`, {
         amount,
       });
       const options = {
@@ -133,7 +133,7 @@ const ViewBookingsProfile:React.FC=()=> {
         name: "HomePro",
         order_id: res.data.id,
         handler: async (response: any) => {
-          await axiosInstanceuser.post("/finalconfirmpayemnts", {
+          await axiosInstanceuser.post("/api/finalconfirmpayemnts", {
             razorpay_payment_id: response.razorpay_payment_id,
             bookingId, 
             // reusing the same booking

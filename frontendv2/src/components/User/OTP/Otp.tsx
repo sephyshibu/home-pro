@@ -41,7 +41,7 @@ const Otp:React.FC=()=>{
     const handleSubmit=async(e:React.FormEvent)=>{
         e.preventDefault()
         try {
-            const response=await axiosInstanceuser.post('/verifyotp',{otp:otp.otp,details})
+            const response=await axiosInstanceuser.post('/api/verifyotp',{otp:otp.otp,details})
             setmsg(response.data.message)
             seterror('');
             navigate('/login');
@@ -53,7 +53,7 @@ const Otp:React.FC=()=>{
 
     const handleResend=async()=>{
         try {
-            await axiosInstanceuser.post('/resendotp',{details})
+            await axiosInstanceuser.post('/api/resendotp',{details})
             setmsg('OTP resent successfully!');
             seterror('');
             setmin(1);

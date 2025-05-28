@@ -2,7 +2,7 @@ import axiosInstanceuser from "../../../Axios/UserAxios/axios";
 
 export const ReviewDetails=async(techid:string)=>{
     try {
-        const response=await axiosInstanceuser.get(`/fetchreview/${techid}`)
+        const response=await axiosInstanceuser.get(`/api/fetchreview/${techid}`)
         console.log("review",response.data.reviews)
         return response.data.reviews
     } catch (error: any) {

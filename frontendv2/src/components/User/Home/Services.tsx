@@ -34,7 +34,7 @@ const Services: React.FC = () => {
   useEffect(()=>{
     const fetchcategory=async()=>{
       try {
-        const response= await axiosInstanceuser.get('/fetchcategory')
+        const response= await axiosInstanceuser.get('/api/fetchcategory')
         const categories=response.data.category.filter((cat:any)=>cat.isBlocked===false)
         setcategories(categories)
       } catch (error) {

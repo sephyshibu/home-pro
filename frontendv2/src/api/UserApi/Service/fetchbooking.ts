@@ -2,7 +2,7 @@ import axiosInstanceuser from "../../../Axios/UserAxios/axios";
 
 export const BookingDetails=async(userId:string, currentPage:number=1)=>{
     try {
-        const response=await axiosInstanceuser.get(`/fetchbookings?page=${currentPage}&userId=${userId}`)
+        const response=await axiosInstanceuser.get(`/api/fetchbookings?page=${currentPage}&userId=${userId}`)
         console.log("bpokij",response)
         return response.data
     } catch (error: any) {

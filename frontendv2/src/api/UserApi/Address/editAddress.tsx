@@ -13,7 +13,7 @@ export const editAddress = async (addressId: string, updatedData: {
 }) => {
   
 
-  const response = await axiosInstanceuser.put(`/editaddress/${addressId}`,
+  const response = await axiosInstanceuser.put(`/api/editaddress/${addressId}`,
     updatedData,
     
   );

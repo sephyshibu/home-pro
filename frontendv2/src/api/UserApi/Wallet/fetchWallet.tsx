@@ -2,7 +2,7 @@ import axiosInstanceuser from "../../../Axios/UserAxios/axios";
 
 export const walletdetails=async(userId:string)=>{
     try {
-        const response=await axiosInstanceuser.get(`/fetchwalletdetails/${userId}`)
+        const response=await axiosInstanceuser.get(`/api/fetchwalletdetails/${userId}`)
         return response.data.walletdetail
     } catch (error: any) {
         console.error("Error fetchingwallet", error);

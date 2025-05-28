@@ -31,7 +31,7 @@ const ProfilePage: React.FC = () => {
         return
       }
       try {
-        const response= await axiosInstanceuser.get(`/fetchinguser/${userId}`);
+        const response= await axiosInstanceuser.get(`/api/fetchinguser/${userId}`);
         setUser(response.data.user)
       } catch (error) {
         console.error('Failed to fetch users', error);
@@ -56,7 +56,7 @@ const ProfilePage: React.FC = () => {
   const handleSave = async () => {
     if (!validateForm()) return;
     try {
-      const response = await axiosInstanceuser.put(`/updateuser/${userId}`, editData);
+      const response = await axiosInstanceuser.put(`/api/updateuser/${userId}`, editData);
       setUser(editData); // Update the local state with new data
       setIsOpen(false);
     } catch (error) {

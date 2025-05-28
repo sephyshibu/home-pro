@@ -2,7 +2,7 @@ import axiosInstanceuser from "../../../Axios/UserAxios/axios";
 
 export const fetchaddress=async(userId:string)=>{
     try {
-        const response=await axiosInstanceuser.get(`/fetchaddress/${userId}`)
+        const response=await axiosInstanceuser.get(`/api/fetchaddress/${userId}`)
         return response.data.addresses
     } catch (error: any) {
         console.error("Error fetching address:", error);

@@ -71,7 +71,7 @@ const ChangePassword:React.FC=()=>{
 
         try {
             const{password}=formdata
-            const response=await axiosInstanceuser.post('/chnagepasswords',{password,email})
+            const response=await axiosInstanceuser.post('/api/chnagepasswords',{password,email})
       
             navigate('/login')
             console.log(response?.data?.message)

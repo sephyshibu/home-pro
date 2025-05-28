@@ -45,7 +45,7 @@ const Otp:React.FC=()=>{
         console.log("details", details); // Should print the email
         try {
           
-            const response=await axiosInstanceuser.post('/forgetpassverifyotp',{otp:otp.otp,details})
+            const response=await axiosInstanceuser.post('/api/forgetpassverifyotp',{otp:otp.otp,details})
             setmsg(response.data.message)
             seterror('');
             navigate('/changepassword',{state:{details:details}});
@@ -63,7 +63,7 @@ const Otp:React.FC=()=>{
             return;
         }
         try {
-            await axiosInstanceuser.post('/forgetpassresendotp',{details})
+            await axiosInstanceuser.post('/api/forgetpassresendotp',{details})
             setmsg('OTP resent successfully!');
             seterror('');
             setmin(1);

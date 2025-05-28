@@ -219,7 +219,7 @@ const PaymentPage: React.FC = () => {
         if(selectedMethod==="RazorPay"){
             try{
               
-              const res= await axiosInstanceuser.post(`/create-order/${userId}`,{
+              const res= await axiosInstanceuser.post(`/api/create-order/${userId}`,{
                   amount:technician.consulationFee
               })
               const options = {
@@ -229,7 +229,7 @@ const PaymentPage: React.FC = () => {
                   name: "HomePro",
                   order_id: res.data.id,
                   handler: async (response:any) => {
-                    await axiosInstanceuser.post("/confirm-payment", {
+                    await axiosInstanceuser.post("/api/confirm-payment", {
                       userId,
                       techid,
                       addressId: selectedAddressId,
@@ -260,7 +260,7 @@ const PaymentPage: React.FC = () => {
                 rzp.open();
                 // Add payment failed handler
           rzp.on("payment.failed", async (response: any) => {
-            await axiosInstanceuser.post("/payment-failed", {
+            await axiosInstanceuser.post("/api/payment-failed", {
               userId,
               techid,
               addressId: selectedAddressId,
@@ -287,7 +287,7 @@ const PaymentPage: React.FC = () => {
           if (selectedMethod=="Wallet"){
             try {
                 if(!userId) return 
-                    const res= await axiosInstanceuser.post("/walletpayment",{
+                    const res= await axiosInstanceuser.post("/api/walletpayment",{
                         userId,
                         techid,
                         addressId:selectedAddressId,

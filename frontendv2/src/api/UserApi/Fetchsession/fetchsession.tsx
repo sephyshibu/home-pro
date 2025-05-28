@@ -2,7 +2,7 @@ import axiosInstanceuser from "../../../Axios/UserAxios/axios";
 
 export const fetchSessionRequests = async (bookingId: string) => {
   try {
-    const response = await axiosInstanceuser.get(`/fetchsessions/${bookingId}`);
+    const response = await axiosInstanceuser.get(`/api/fetchsessions/${bookingId}`);
     console.log("fetching sessio",response.data)
     return response.data; // Assume it returns an array of session requests
   } catch (error) {

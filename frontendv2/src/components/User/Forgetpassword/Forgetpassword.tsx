@@ -51,7 +51,7 @@ const ForgetPassword: React.FC = () => {
              try {
 
                 const{email}=formdata
-                const response=await axiosInstanceuser.post('/checkemail',{email})
+                const response=await axiosInstanceuser.post('/api/checkemail',{email})
                 navigate('/forgetpassotp',{state:{details:formdata}})
                 console.log(response?.data?.message)
             

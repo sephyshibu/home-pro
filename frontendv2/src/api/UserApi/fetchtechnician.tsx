@@ -4,7 +4,7 @@ import axiosInstanceuser from "../../Axios/UserAxios/axios";
 export const fetchTechnicianbasedonavailableSlot=async( pincode:string,date:string,categoryId:string)=>{
     try {
         const response = await axiosInstanceuser.get(
-          `/technicians/available?pincode=${pincode}&date=${date}&categoryId=${categoryId}`
+          `/api/technicians/available?pincode=${pincode}&date=${date}&categoryId=${categoryId}`
         );
         return response.data.technicians;
       } catch (error: any) {
