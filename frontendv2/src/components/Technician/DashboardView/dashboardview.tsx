@@ -76,8 +76,8 @@ const TechDashboard: React.FC=() => {
         {
           label: 'Tech Commission',
           data: all.map(item => item.commission),
-          backgroundColor: '#4F46E5',
-          borderColor: '#4F46E5',
+          backgroundColor: '#FFDF00',
+          borderColor: '#FFDF00',
           tension: 0.4,
           fill: false,
         },
@@ -92,19 +92,19 @@ const TechDashboard: React.FC=() => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white rounded-2xl shadow p-4 text-center">
           <h2 className="text-lg font-semibold">Total Orders</h2>
-         <p className="text-xl font-bold text-blue-600">{stats?.totalOrders ?? 0}</p>
+         <p className="text-xl font-bold">{stats?.totalOrders ?? 0}</p>
 
         </div>
         <div className="bg-white rounded-2xl shadow p-4 text-center">
           <h2 className="text-lg font-semibold">Total Commission</h2>
-         <p className="text-xl font-bold text-blue-600">{stats?.totalCommission ?? 0}</p>
+         <p className="text-xl font-bold">{stats?.totalCommission ?? 0}</p>
 
         </div>
       </div>
 
       <div className="flex gap-4 items-center mb-4">
-        <button onClick={() => setFilter('month')} className={`px-4 py-2 rounded ${filter === 'month' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Monthly</button>
-        <button onClick={() => setFilter('week')} className={`px-4 py-2 rounded ${filter === 'week' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Weekly</button>
+        <button onClick={() => setFilter('month')} className={`px-4 py-2 rounded ${filter === 'month' ? 'bg-[#FFDF00] text-black' : 'bg-gray-200'}`}>Monthly</button>
+        <button onClick={() => setFilter('week')} className={`px-4 py-2 rounded ${filter === 'week' ? 'bg-[#FFDF00] text-black' : 'bg-gray-200'}`}>Weekly</button>
         <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="border p-2 rounded" />
         <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} className="border p-2 rounded" />
       </div>
