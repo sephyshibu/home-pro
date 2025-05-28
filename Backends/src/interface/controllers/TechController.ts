@@ -13,7 +13,7 @@ import { RequestSession } from "../../application/usecase/Sessions/requestSessio
 import { fetchBookingswhichcompletedrejected } from "../../application/usecase/booking/fetchcompletedrejected";
 import { FetchTransactionsinTechWallet } from "../../application/usecase/Wallet/fetchtransactiondetailsintech";
 import { GetTechDashboardStatsUseCase } from "../../application/usecase/Tech/Dashboard/dashboard";
-
+import { FetchReviewByTechId } from "../../application/usecase/Review/fetchReview";
 export class techController{
     constructor(
         private _logintech:LoginTech,
@@ -29,7 +29,8 @@ export class techController{
         private _requestsessions:RequestSession,
         private _fetchbookingwithcompleteandreject:fetchBookingswhichcompletedrejected,
         private _fetchtransactionintechwallet:FetchTransactionsinTechWallet,
-        private _techdashboard:GetTechDashboardStatsUseCase
+        private _techdashboard:GetTechDashboardStatsUseCase,
+        private _fetchreview:FetchReviewByTechId
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -231,6 +232,18 @@ export class techController{
             res.status(200).json({result})
         } catch (err) {
           console.error("❌ Error dashboard:", err);
+          res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
+    async fetchreview(req:Request,res:Response):Promise<void>{
+        try {
+            const {techId}=req.params
+            const result=await this._fetchreview.fetchreviewtechId(techId)
+            console.log("controller",result)
+            res.status(200).json(result)
+        }  catch (err) {
+          console.error("❌ Error in review fetch:", err);
           res.status(500).json({ message: "Internal server error" });
         }
     }

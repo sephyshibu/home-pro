@@ -20,6 +20,8 @@ import { fetchBookingswhichcompletedrejected } from '../../application/usecase/b
 import { FetchTransactionsinTechWallet } from '../../application/usecase/Wallet/fetchtransactiondetailsintech'
 import { TransactionRepositoryImpl } from '../../infrastructure/repository/TransactionRepositoryImpl'
 import { GetTechDashboardStatsUseCase } from '../../application/usecase/Tech/Dashboard/dashboard'
+import { FetchReviewByTechId } from '../../application/usecase/Review/fetchReview'
+import { ReviewrepositoryImpl } from '../../infrastructure/repository/ReviewRepositoryImpl'
 const router=express.Router()
 
 const techrepository= new TechRepositoryImpl()
@@ -27,6 +29,7 @@ const categoryrepository= new categoryRepositoryImpl()
 const bookingrepository=new bookingrepositoryImpl()
 const walletrepository= new walletRepositoryimpl()
 const transactionrespository=new TransactionRepositoryImpl()
+const reviewrepository=new ReviewrepositoryImpl()
 
 
 const logintechs= new LoginTech(techrepository)
@@ -43,6 +46,7 @@ const requestsessionbytech= new RequestSession(bookingrepository)
 const fetchcompleterejectbookings= new fetchBookingswhichcompletedrejected(bookingrepository)
 const fetchtransactionintech= new FetchTransactionsinTechWallet(transactionrespository,bookingrepository)
 const techdashboard=new GetTechDashboardStatsUseCase(techrepository)
+const fetchreviews= new FetchReviewByTechId(reviewrepository)
 
 const TechController= new techController(
     logintechs,
@@ -58,7 +62,8 @@ const TechController= new techController(
     requestsessionbytech,
     fetchcompleterejectbookings,
     fetchtransactionintech,
-    techdashboard
+    techdashboard,
+    fetchreviews
     
 )
 
@@ -78,4 +83,5 @@ router.post('/api/requestsession/:bookingId',authToken,(req,res)=>TechController
 router.get('/api/fetchbookings/:techId',authToken,(req,res)=>TechController.completeandrejectbookings(req,res))
 router.get('/api/fetchtransactiondetails/:techId',authToken,(req,res)=>TechController.fetchtransactiontechwallet(req,res))
 router.get('/api/tech/stats/:techId',authToken,(req,res)=>TechController.getDashboardTechId(req,res))
+router.get('/api/fetchreview/:techId',(req,res)=>TechController.fetchreview(req,res))
 export{router as techRouter}

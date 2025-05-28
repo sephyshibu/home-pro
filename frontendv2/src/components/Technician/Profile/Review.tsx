@@ -23,7 +23,8 @@ const Review:React.FC=()=>{
             if(!techId) return
             try {
                 const res=await fetchreviews(techId)
-                setreview(res.review)
+                console.log('review',res)
+                setreview(res)
             }  catch (error) {
                 console.error("Error fetching review:", error);
             }
@@ -37,6 +38,7 @@ const Review:React.FC=()=>{
             <div className="flex flex-grow bg-gray-100">
                 <main className="flex-grow p-6">
                     <h2 className="text-xl font-semibold mb-4">My Reviews</h2>
+                     <div className="overflow-x-auto">
                     <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
                         <thead className="bg-amber-300 text-black">
                             <tr>
@@ -51,16 +53,17 @@ const Review:React.FC=()=>{
                                     <td className="px-4 py-3 flex items-center space-x-4">
                                         {rev.userId.name}
                                     </td>
-                                    <td className="px-4 py-3 flex items-center space-x-4">
+                                    <td className="px-4 py-3">
                                         {rev.description}
                                     </td>
-                                    <td className="px-4 py-3 flex items-center space-x-4">
+                                    <td className="px-4 py-3">
                                         {rev.points}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    </div>
                 </main>
             </div>
         </div>
