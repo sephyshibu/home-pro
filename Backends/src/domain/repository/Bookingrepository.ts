@@ -8,6 +8,7 @@ export interface TechDashboardSummary {
 
 export interface BookingRepository {
     creates(booking: IBooking): Promise<IBooking>;
+    findBookingByUserTechDate(userId: string, technicianId: string, bookedDate: string): Promise<IBooking | null> 
     update(bookingId: Object, updatedBooking: Partial<IBooking>): Promise<IBooking>;
     fetchbookingByUserId(userId:string,limit:number, skip:number):Promise<IBooking[]>
     fetchbookingByTechId(techId:string):Promise<IBooking[]|null>

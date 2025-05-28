@@ -61,6 +61,7 @@ const BookingModel = new mongoose.Schema<IBooking>({
   finalpaymenttransactionId:{type:String,default:""}, 
   refundrequestAccept:{type:Boolean, default:false},
 
+
 });
 
 export const BookingModels= mongoose.model<IBooking>("Booking", BookingModel);

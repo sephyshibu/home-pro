@@ -14,6 +14,25 @@ export class ConfirmPayment{
         if (!bookingdata.userId || !bookingdata.technicianId || !bookingdata.addressId) {
             throw new Error("Missing required fields");
           }
+
+        //locking
+
+        const existingBooking = await this._bookingrepository.findBookingByUserTechDate(
+        bookingdata.userId.toString(),
+        bookingdata.technicianId.toString(),
+        bookingdata.booked_date!
+      );
+      console.log('existing', existingBooking)
+
+      if (existingBooking) {
+        if (existingBooking.consultationpayStatus === "completed") {
+          throw new Error("Payment already completed for this booking.");
+        }
+        if (existingBooking.consultationpayStatus === "pending") {
+          throw new Error("Payment already in progress for this booking.");
+        }
+      }
+
           console.log("usecase")
           console.log(bookingdata)
           
@@ -64,7 +83,7 @@ export class ConfirmPayment{
         } else {
             booking.consultationpayStatus = "failed"; // If payment fails, mark it as failed
           }
-          booking = await this._bookingrepository.update(booking.id!, { consultationpayStatus: booking.consultationpayStatus });
+          booking = await this._bookingrepository.update(booking.id!, { consultationpayStatus: booking.consultationpayStatus});
 
           return { success: true, booking };
 

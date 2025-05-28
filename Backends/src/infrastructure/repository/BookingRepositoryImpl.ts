@@ -71,6 +71,50 @@ export class bookingrepositoryImpl implements BookingRepository{
         throw error; // re-throw so service layer can handle
       }
       }
+
+    async findBookingByUserTechDate(userId: string, technicianId: string, bookedDate: string): Promise<IBooking | null> {
+      const existing = await BookingModels.findOne({
+        userId,
+        technicianId,
+        booked_date: bookedDate,
+      });
+
+      return existing ? {
+        id: existing._id.toString(),
+        userId: existing.userId.toString(),
+        technicianId: existing.technicianId.toString(),
+        addressId: existing.addressId.toString(),
+        location: existing.location,
+        booked_date: existing.booked_date,
+        consultationpayStatus: existing.consultationpayStatus,
+        consultationFee: existing.consultationFee,
+        razorpayPaymentId: existing.razorpayPaymentId,
+        consultationtransactionId: existing.consultationtransactionId,
+        rateperhour: existing.rateperhour,
+        workstatus: existing.workstatus,
+        totalhours: existing.totalhours,
+        isStartAccept: existing.isStartAccept,
+        isEndAccept: existing.isEndAccept,
+        isPauseAccept: existing.isPauseAccept,
+        isconfirmedbyTech: existing.isconfirmedbyTech,
+        techremark: existing.techremark,
+        userremark: existing.userremark,
+        pincode: existing.pincode,
+        workTime: existing.workTime,
+        workFinalAmount: existing.workFinalAmount,
+        totalFinalAmount: existing.totalFinalAmount,
+        admincommision: existing.admincommision,
+        techcommision: existing.techcommision,
+        consultationpaymethod: existing.consultationpaymethod,
+        finalpayStatus: existing.finalpayStatus,
+        finalpaymethod: existing.finalpaymethod,
+        razorpayFinalPaymentId: existing.razorpayFinalPaymentId,
+        finalpaymenttransactionId: existing.finalpaymenttransactionId,
+        refundrequestAccept: existing.refundrequestAccept,
+      } : null;
+    }
+
+
       async update(id: string, updateData: Partial<IBooking>): Promise<IBooking> {
         const updated = await BookingModels.findByIdAndUpdate(id, updateData, { new: true }).lean();
         if (!updated) throw new Error("Booking not found");

@@ -229,6 +229,7 @@ const PaymentPage: React.FC = () => {
                   name: "HomePro",
                   order_id: res.data.id,
                   handler: async (response:any) => {
+                    try{
                     await axiosInstanceuser.post("/api/confirm-payment", {
                       userId,
                       techid,
@@ -240,6 +241,17 @@ const PaymentPage: React.FC = () => {
                     });
                     toast.success("Payment successful!");
                     navigate('/thankyou')
+                  }
+                  catch (error: any) {
+                  const message = error?.response?.data?.message;
+                  if (message === "Payment already completed for this booking.") {
+                    toast.error(message);
+                  } else if (message === "Payment already in progress for this booking.") {
+                    toast.error(message);
+                  } else {
+                    toast.error("Something went wrong. Please try again.");
+                  }
+                  }
                     
                   },
                   prefill: {
@@ -279,9 +291,15 @@ const PaymentPage: React.FC = () => {
           });
 
           
-          } catch (error) {
-            toast.error("Error initiating payment");
-            console.error(error);
+          } catch (error: any) {
+          const message = error?.response?.data?.message;
+          if (message === "Payment already completed for this booking.") {
+            toast.error(message);
+          } else if (message === "Payment already in progress for this booking.") {
+            toast.error(message);
+          } else {
+            toast.error("Something went wrong. Please try again.");
+          }
           }
         }else{
           if (selectedMethod=="Wallet"){

@@ -418,8 +418,21 @@ export class UserController{
               razorpay_payment_id,
               "completed")
               res.status(200).json(result.booking);
-            } catch (error) {
-              res.status(500).json({ message: "Payment failed", retry: true });
+              return
+            } catch (error: any) {
+                if (error.message === "Payment already completed for this booking.") {
+                 res.status(400).json({ message: error.message });
+                 return
+                }
+
+                if (error.message === "Payment already in progress for this booking.") {
+                 res.status(409).json({ message: error.message });
+                 return
+                }
+
+                console.error("Unexpected payment error:", error);
+                res.status(500).json({ message: "Payment failed", retry: true });
+                return
             }
     }
 
