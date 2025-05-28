@@ -19,6 +19,9 @@ import { Searchinguser } from "../../application/usecase/Admin/SearchUser/search
 import { Searchingtech } from "../../application/usecase/Admin/SearchTech/searchtech";
 import { Searchingcategory } from "../../application/usecase/Admin/SearchCategory/searchcategory";
 import { SearchTransaction } from "../../application/usecase/Admin/SearchBookings/searchbookings";
+import { GetAdminDashboard } from "../../application/usecase/Admin/Dashboard";
+
+
 export class AdminController{
     constructor(
         private _loginadmin:Login,
@@ -40,7 +43,8 @@ export class AdminController{
         private _searchuser:Searchinguser,
         private _searchtech:Searchingtech,
         private _searchcategory:Searchingcategory,
-        private _searchbooking:SearchTransaction
+        private _searchbooking:SearchTransaction,
+        private _admindashboard:GetAdminDashboard
     ){}
 
 
@@ -279,6 +283,19 @@ export class AdminController{
                 console.error("Error in fetch tech by search:", error);
                 res.status(500).json({ message: "Internal Server Error", error: error.message });
             }
+    }
+
+    async getDashboard(req:Request,res:Response):Promise<void>{
+        console.log("admin controller")
+        try {
+            const{fromDate,toDate,filter}=req.query
+
+            const result=await this._admindashboard.execute({fromDate:fromDate as string,toDate:toDate as string,filter:filter as 'week'|'month'})
+            res.status(200).json({result})
+        }catch (err) {
+          console.error("❌ Error dashboard:", err);
+          res.status(500).json({ message: "Internal server error" });
+        }
     }
     
 

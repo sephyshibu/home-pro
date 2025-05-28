@@ -230,7 +230,7 @@ export class techController{
             console.log("final res", result)
             res.status(200).json({result})
         } catch (err) {
-          console.error("❌ Error confirming payment:", err);
+          console.error("❌ Error dashboard:", err);
           res.status(500).json({ message: "Internal server error" });
         }
     }

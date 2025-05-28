@@ -14,14 +14,14 @@ interface MonthlyCommisionData{
 
 interface CommissionStatus{
     totalOrders:number;
-    totalCommission:number;
+    totaladmincommision:number;
     graphData:MonthlyCommisionData[]
 }
 
-const AdminDashboard: React.FC=()=>{
+const AdminDashboards: React.FC=()=>{
     const [stats,setStats]=useState<CommissionStatus>({
         totalOrders:0,
-        totalCommission:0,
+        totaladmincommision:0,
         graphData:[]
     })
 
@@ -32,6 +32,7 @@ const AdminDashboard: React.FC=()=>{
 
     const fetchData=async()=>{
         try {
+            
             const res=await axiosInstanceadmin.get('/api/admindashboard',{
                 params:{
                     fromDate,
@@ -55,7 +56,7 @@ const AdminDashboard: React.FC=()=>{
     const generateLineData=()=>{
         if(!stats || !Array.isArray(stats.graphData)){
             return {
-                label:[],
+                labels:[],
                 datasets:[]
             }
         }
@@ -66,13 +67,13 @@ const AdminDashboard: React.FC=()=>{
         })).sort((a,b)=>a.date.getTime()-b.date.getTime())
 
         return{
-            label:all.map(item=>item.date.toLocaleDateString()),
+            labels:all.map(item=>item.date.toLocaleDateString()),
             datasets:[
                 {
                     label:"Admin Commission",
                     data:all.map(item=>item.commission),
-                    backgroundColor: '#4F46E5',
-                    borderColor: '#4F46E5',
+                    backgroundColor: '#45ae66',
+                    borderColor: '#45ae66',
                     tension: 0.4,
                     fill: false,
                 }
@@ -88,17 +89,17 @@ const AdminDashboard: React.FC=()=>{
             <div className="grid grid-cols-2 md:grid-cols-4 mb-6">
                 <div className="bg-white rounded-2xl shadow p-4 text-center">
                     <h2 className="text-lg font-semibold">Total Orders</h2>
-                    <p className="text-xl font-bold text-blue-600">{stats?.totalOrders ?? 0}</p>
+                    <p className="text-xl font-bold #45ae66">{stats?.totalOrders ?? 0}</p>
 
                 </div>
                 <div className="bg-white rounded-2xl shadow p-4 text-center">
                     <h2 className="text-lg font-semibold">Total Commission</h2>
-                    <p className="text-xl font-bold text-blue-600">{stats?.totalCommission ?? 0}</p>
+                    <p className="text-xl font-bold #45ae66">{stats?.totaladmincommision ?? 0}</p>
                 </div>
             </div>
                   <div className="flex gap-4 items-center mb-4">
-                    <button onClick={() => setfilter('month')} className={`px-4 py-2 rounded ${filter === 'month' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Monthly</button>
-                    <button onClick={() => setfilter('week')} className={`px-4 py-2 rounded ${filter === 'week' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Weekly</button>
+                    <button onClick={() => setfilter('month')} className={`px-4 py-2 rounded ${filter === 'month' ? 'bg-[#45ae66] text-white' : 'bg-gray-200'}`}>Monthly</button>
+                    <button onClick={() => setfilter('week')} className={`px-4 py-2 rounded ${filter === 'week' ? 'bg-[#45ae66] text-white' : 'bg-gray-200'}`}>Weekly</button>
                     <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="border p-2 rounded" />
                     <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} className="border p-2 rounded" />
                   </div>
@@ -122,4 +123,4 @@ const AdminDashboard: React.FC=()=>{
 
 }
 
-export default AdminDashboard
+export default AdminDashboards

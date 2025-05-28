@@ -3,6 +3,7 @@ import User from "./User";
 import Tech from'./Tech'
 import TransactionPage from "./Transactions";
 import RefundRequest from "./RefundRequest.";
+import AdminDashboards from "./AdminDashboard";
 import TechList from './TechList'
 import { useNavigate } from "react-router";
 import Category from './Category'
@@ -65,7 +66,7 @@ const AdminDashboard: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex-grow p-8">
-        {/* {activeTab === "Dashboard" && <DashboardView />} */}
+        {activeTab === "Dashboard" && <AdminDashboards />}
         {activeTab === "User List" && <User/>}
         {activeTab === "Technician List" && 
         <div>

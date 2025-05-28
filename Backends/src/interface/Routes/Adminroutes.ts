@@ -29,6 +29,8 @@ import { Searchinguser } from '../../application/usecase/Admin/SearchUser/search
 import { Searchingtech } from '../../application/usecase/Admin/SearchTech/searchtech'
 import { Searchingcategory } from '../../application/usecase/Admin/SearchCategory/searchcategory'
 import { SearchTransaction } from '../../application/usecase/Admin/SearchBookings/searchbookings'
+import { GetAdminDashboard } from '../../application/usecase/Admin/Dashboard'
+
 const router=express.Router()
 
 const UserRepository=new UserRepositoryImpl()
@@ -60,6 +62,8 @@ const seachuserinadmin= new Searchinguser(UserRepository)
 const seachtechinadmin= new Searchingtech(TechRepository)
 const searchcategorybyadmin= new Searchingcategory(categoryrepository)
 const searchtransactionbybookingId=new SearchTransaction(transactionrepository)
+const admindashboard= new GetAdminDashboard(adminRepository)
+
 
 const adminController= new AdminController(
     loginadmin,
@@ -81,7 +85,8 @@ const adminController= new AdminController(
     seachuserinadmin,
     seachtechinadmin,
     searchcategorybyadmin,
-    searchtransactionbybookingId
+    searchtransactionbybookingId,
+    admindashboard
    
 )
 console.log("adminrouter")
@@ -105,4 +110,5 @@ router.get('/searchuser/:searchterm',authToken,(req,res)=>adminController.search
 router.get('/searchtech/:searchterm',authToken,(req,res)=>adminController.searchingTech(req,res))
 router.get('/searchcategory/:searchterm',authToken,(req,res)=>adminController.searchingCategory(req,res))
 router.get('/searchbooking/:searchterm',authToken,(req,res)=>adminController.searchbookingtransaction(req,res))
+router.get('/api/admindashboard',authToken,(req,res)=>adminController.getDashboard(req,res))
 export {router as adminRouter}
