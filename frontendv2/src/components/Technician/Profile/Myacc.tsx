@@ -70,7 +70,7 @@ const MyProfilePage = () => {
       }
       setLoading(true);
       try {
-        const response = await axiosInstancetech.get(`/fetchtechprofile/${techId}`);
+        const response = await axiosInstancetech.get(`/api/fetchtechprofile/${techId}`);
         if (response.data.tech?.isBlocked) {
           // If technician is blocked, log them out and redirect to login
           localStorage.removeItem('techId');
@@ -87,7 +87,7 @@ const MyProfilePage = () => {
 
     const fetchCategories = async () => {
       try {
-        const res = await axiosInstancetech.get('/fetchcategories');
+        const res = await axiosInstancetech.get('/api/fetchcategories');
         const categories = res.data.category.filter((cat:any) => !cat.isBlocked);  // Filter out blocked categories
         console.log(res.data); // You get { category: [...] }
   
@@ -234,7 +234,7 @@ const MyProfilePage = () => {
       }
 
       const updatedData = { ...editData, profileimgurl: imageurl };
-      await axiosInstancetech.put(`/updatetech/${techId}`, updatedData);
+      await axiosInstancetech.put(`/api/updatetech/${techId}`, updatedData);
       setTechnician(updatedData);
       setIsOpen(false);
       toast.success('Profile updated successfully!'); 

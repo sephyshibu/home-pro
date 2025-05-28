@@ -216,7 +216,7 @@ const User:React.FC=()=>{
 
     const fetchuser=async()=>{
         try {
-            const response=await axiosInstanceadmin.get(`/fetchuser?sortBy=name&order=${sortOrder}&page=${currentPage}`)
+            const response=await axiosInstanceadmin.get(`/api/fetchuser?sortBy=name&order=${sortOrder}&page=${currentPage}`)
             setuser(response.data.users)
             setTotal(response.data.total)
         } catch (error) {
@@ -228,7 +228,7 @@ const User:React.FC=()=>{
   const handleToggle = async (userId: string, isBlocked: boolean) => {
   try {
     const updatedStatus = !isBlocked;
-    await axiosInstanceadmin.patch(`/user/${userId}`, { isBlocked: updatedStatus });
+    await axiosInstanceadmin.patch(`/api/user/${userId}`, { isBlocked: updatedStatus });
 
     // Update the specific user in local state
     setuser((prevUsers) =>

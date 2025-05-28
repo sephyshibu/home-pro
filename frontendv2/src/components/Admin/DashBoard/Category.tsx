@@ -27,7 +27,7 @@ const CategoryList:React.FC=()=>{
 
     const fetchcategory=async()=>{
         try {
-            const response=await axiosInstanceadmin.get(`/fetchcategory?sortBy=name&order=${sortOrder}`)
+            const response=await axiosInstanceadmin.get(`/api/fetchcategory?sortBy=name&order=${sortOrder}`)
             setcategory(response.data.cat)
         }catch (error) {
             console.error('Failed to fetch Category', error);
@@ -38,7 +38,7 @@ const CategoryList:React.FC=()=>{
     const handleToggle=async(catid:string, isBlocked:boolean)=>{
         try {
             const updateStatus=!isBlocked
-            const response=await axiosInstanceadmin.patch(`/category/${catid}`,{isBlocked:updateStatus})
+            const response=await axiosInstanceadmin.patch(`/api/category/${catid}`,{isBlocked:updateStatus})
             console.log(response)
             setcategory((prevCategory)=>
                 prevCategory.map((cat)=>

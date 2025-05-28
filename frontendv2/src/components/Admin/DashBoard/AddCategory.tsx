@@ -56,7 +56,7 @@ const AddCategory:React.FC=()=>{
         try {
             const sanitizedName = addcat.name.trim().toLowerCase();
             const sanitizedDescription = addcat.description.trim();
-            const response=await axiosInstanceadmin.post('/addcategory',{
+            const response=await axiosInstanceadmin.post('/api/addcategory',{
                 name:sanitizedName,
                 description:sanitizedDescription,
                 image:imageurl

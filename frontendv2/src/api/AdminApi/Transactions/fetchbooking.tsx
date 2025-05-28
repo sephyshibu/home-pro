@@ -2,7 +2,7 @@ import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 
 export const fetchbooking=async(transId:string)=>{
     try {
-        const transactions=await axiosInstanceadmin.get(`/fetchtransactionwithBookings/${transId}`)
+        const transactions=await axiosInstanceadmin.get(`/api/fetchtransactionwithBookings/${transId}`)
 
         return transactions.data.result
     } catch (error: any) {

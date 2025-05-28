@@ -64,7 +64,7 @@ const Login:React.FC=()=>{
         
         try {
             const{email,password}=formdata
-            const response=await axiosInstanceadmin.post('/login',{email,password})
+            const response=await axiosInstanceadmin.post('/api/login',{email,password})
             console.log("response", response)
             dispatch(loginAdmin(response.data.admin))
             dispatch(addadmintoken({token:response.data.token}))

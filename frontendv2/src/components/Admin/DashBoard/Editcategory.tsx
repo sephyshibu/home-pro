@@ -27,7 +27,7 @@ const EditCategory: React.FC = () => {
     const fetchCategory = async () => {
       if (!catid) return;
       try {
-        const res = await axiosInstanceadmin.get(`/category/${catid}`);
+        const res = await axiosInstanceadmin.get(`/api/category/${catid}`);
         setFormData(res.data.category);
       } catch (error) {
         toast.error("Failed to load category data");
@@ -57,7 +57,7 @@ const EditCategory: React.FC = () => {
         imageUrl = uploaded;
       }
 
-      await axiosInstanceadmin.patch(`/editcategory/${catid}`, {
+      await axiosInstanceadmin.patch(`/api/editcategory/${catid}`, {
         name: formData.name.trim().toLowerCase(),
         description: formData.description.trim(),
         image: imageUrl

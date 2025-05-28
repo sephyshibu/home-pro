@@ -2,7 +2,7 @@ import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 
 export const fetchrefunndallreq=async()=>{
     try {
-        const transactions=await axiosInstanceadmin.get('/fetchrefundreqall')
+        const transactions=await axiosInstanceadmin.get('/api/fetchrefundreqall')
 
         return transactions.data.Bookings
     } catch (error: any) {

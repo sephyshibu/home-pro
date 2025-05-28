@@ -2,7 +2,7 @@ import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 
 export const searchcategory=async(searchterm:string)=>{
     try {
-        const searching=await axiosInstanceadmin.get(`/searchcategory/${searchterm}`)
+        const searching=await axiosInstanceadmin.get(`/api/searchcategory/${searchterm}`)
         return searching
     } catch (error: any) {
         console.error("Error searching user:", error);

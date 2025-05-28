@@ -64,7 +64,7 @@ const LoginTech:React.FC=()=>{
         
         try {
             const{email,password}=formdata
-            const response=await axiosInstancetech.post('/login',{email,password})
+            const response=await axiosInstancetech.post('/api/login',{email,password})
             dispatch(logintech(response.data.tech))
             dispatch(addtechtoken({token:response.data.token}))
             console.log(response)

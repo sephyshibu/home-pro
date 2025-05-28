@@ -86,7 +86,7 @@ const TechnicianUpcoming: React.FC = () => {
       const handleRequestSession=async(types:"start"|"resume"|"pause"|"end")=>{
           try {
             const bookingId=selectedRequest?._id
-            const result=await axiosInstancetech.post(`/requestsession/${bookingId}`,{types})
+            const result=await axiosInstancetech.post(`/api/requestsession/${bookingId}`,{types})
             console.log(result.data)
           
             toast.success(`${types} request is sent to the user`)

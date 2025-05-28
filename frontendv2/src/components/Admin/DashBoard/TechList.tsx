@@ -200,7 +200,7 @@ const TechList: React.FC = () => {
     setLoading(true);
     try {
       const response = await axiosInstanceadmin.get(
-        `/fetchtech?sortBy=email&order=${sortOrder}&page=${currentPage}`
+        `/api/fetchtech?sortBy=email&order=${sortOrder}&page=${currentPage}`
       );
       setTech(response.data?.tech);
       setTotal(response.data.total);
@@ -214,7 +214,7 @@ const TechList: React.FC = () => {
   const handleToggle = async (techId: string, isBlocked: boolean) => {
     try {
       const updatedStatus = !isBlocked;
-      await axiosInstanceadmin.patch(`/tech/${techId}`, { isBlocked: updatedStatus });
+      await axiosInstanceadmin.patch(`/api/tech/${techId}`, { isBlocked: updatedStatus });
 
       setTech((prevTechs) =>
         prevTechs.map((tech) =>

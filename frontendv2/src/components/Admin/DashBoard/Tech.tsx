@@ -67,7 +67,7 @@ const Tech:React.FC=()=>{
         }
 
         try {
-            const response= await axiosInstanceadmin.post('/addtech',techData)
+            const response= await axiosInstanceadmin.post('/api/addtech',techData)
             toast.success(response.data.message)
             settechdata({ email: "", password: "", phone: "" }); // clear form even on error
             setIsOpen(false)

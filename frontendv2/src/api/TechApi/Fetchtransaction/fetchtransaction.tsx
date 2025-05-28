@@ -3,7 +3,7 @@ import axiosInstancetech from "../../../Axios/TechAxios/axios";
 
 export const fetchtransactiondetails=async(techId:string)=>{
     try {
-        const response=await axiosInstancetech.get(`/fetchtransactiondetails/${techId}`)
+        const response=await axiosInstancetech.get(`/api/fetchtransactiondetails/${techId}`)
         console.log("fetching transaaction",response.data)
         return response.data
     }catch (error: any) {

@@ -62,20 +62,20 @@ const TechController= new techController(
     
 )
 
-router.post('/login',(req,res)=>TechController.login(req,res))
+router.post('/api/login',(req,res)=>TechController.login(req,res))
 router.post('/refresh',(req,res)=>TechController.refreshtokenController(req,res))
 
 
-router.get('/fetchtechprofile/:techId',authToken,(req,res)=>TechController.fetchTechById(req,res))
-router.put('/updatetech/:techId',authToken,(req,res)=>TechController.edittechs(req,res))
-router.get('/fetchcategories',authToken,(req,res)=>TechController.fetchCategory(req,res))
-router.get('/request/:techId',authToken,(req,res)=>TechController.fetchRequestByTech(req,res))
-router.post('/request/:bookingId', authToken,(req,res)=>TechController.bookingrequest(req,res))
-router.get('/upcmingevents/:techId', authToken,(req,res)=>TechController.fetchupcomingevnts(req,res))
-router.post('/password/:techId',authToken,(req,res)=>TechController.passwordChanges(req,res))
-router.post('/rejectbookings/:bookingId',authToken,(req,res)=>TechController.bookingsrejectedbytech(req,res))
-router.post('/requestsession/:bookingId',authToken,(req,res)=>TechController.requestressions(req,res))
-router.get('/fetchbookings/:techId',authToken,(req,res)=>TechController.completeandrejectbookings(req,res))
-router.get('/fetchtransactiondetails/:techId',authToken,(req,res)=>TechController.fetchtransactiontechwallet(req,res))
+router.get('/api/fetchtechprofile/:techId',authToken,(req,res)=>TechController.fetchTechById(req,res))
+router.put('/api/updatetech/:techId',authToken,(req,res)=>TechController.edittechs(req,res))
+router.get('/api/fetchcategories',authToken,(req,res)=>TechController.fetchCategory(req,res))
+router.get('/api/request/:techId',authToken,(req,res)=>TechController.fetchRequestByTech(req,res))
+router.post('/api/request/:bookingId', authToken,(req,res)=>TechController.bookingrequest(req,res))
+router.get('/api/upcmingevents/:techId', authToken,(req,res)=>TechController.fetchupcomingevnts(req,res))
+router.post('/api/password/:techId',authToken,(req,res)=>TechController.passwordChanges(req,res))
+router.post('/api/rejectbookings/:bookingId',authToken,(req,res)=>TechController.bookingsrejectedbytech(req,res))
+router.post('/api/requestsession/:bookingId',authToken,(req,res)=>TechController.requestressions(req,res))
+router.get('/api/fetchbookings/:techId',authToken,(req,res)=>TechController.completeandrejectbookings(req,res))
+router.get('/api/fetchtransactiondetails/:techId',authToken,(req,res)=>TechController.fetchtransactiontechwallet(req,res))
 router.get('/api/tech/stats/:techId',authToken,(req,res)=>TechController.getDashboardTechId(req,res))
 export{router as techRouter}
