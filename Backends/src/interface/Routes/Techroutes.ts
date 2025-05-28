@@ -19,6 +19,7 @@ import { RequestSession } from '../../application/usecase/Sessions/requestSessio
 import { fetchBookingswhichcompletedrejected } from '../../application/usecase/booking/fetchcompletedrejected'
 import { FetchTransactionsinTechWallet } from '../../application/usecase/Wallet/fetchtransactiondetailsintech'
 import { TransactionRepositoryImpl } from '../../infrastructure/repository/TransactionRepositoryImpl'
+import { GetTechDashboardStatsUseCase } from '../../application/usecase/Tech/Dashboard/dashboard'
 const router=express.Router()
 
 const techrepository= new TechRepositoryImpl()
@@ -41,6 +42,7 @@ const requestrejectbytech= new bookingRequestRejectByTech(bookingrepository,wall
 const requestsessionbytech= new RequestSession(bookingrepository)
 const fetchcompleterejectbookings= new fetchBookingswhichcompletedrejected(bookingrepository)
 const fetchtransactionintech= new FetchTransactionsinTechWallet(transactionrespository,bookingrepository)
+const techdashboard=new GetTechDashboardStatsUseCase(techrepository)
 
 const TechController= new techController(
     logintechs,
@@ -55,7 +57,9 @@ const TechController= new techController(
     requestrejectbytech,
     requestsessionbytech,
     fetchcompleterejectbookings,
-    fetchtransactionintech
+    fetchtransactionintech,
+    techdashboard
+    
 )
 
 router.post('/login',(req,res)=>TechController.login(req,res))
@@ -73,4 +77,5 @@ router.post('/rejectbookings/:bookingId',authToken,(req,res)=>TechController.boo
 router.post('/requestsession/:bookingId',authToken,(req,res)=>TechController.requestressions(req,res))
 router.get('/fetchbookings/:techId',authToken,(req,res)=>TechController.completeandrejectbookings(req,res))
 router.get('/fetchtransactiondetails/:techId',authToken,(req,res)=>TechController.fetchtransactiontechwallet(req,res))
+router.get('/api/tech/stats/:techId',authToken,(req,res)=>TechController.getDashboardTechId(req,res))
 export{router as techRouter}

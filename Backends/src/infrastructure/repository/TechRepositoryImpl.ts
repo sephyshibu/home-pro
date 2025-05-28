@@ -1,8 +1,16 @@
 import { ITech } from "../../domain/models/Tech";
+import { BookingModels } from "../db/schemas/BookingModel";
 import { TechModel } from "../db/schemas/techModel";
 import { TechRepository } from "../../domain/repository/Techrepository";
 import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
+
+export interface FilterOptions {
+  fromDate?: string;
+  toDate?: string;
+  filter?: 'week' | 'month';
+}
+
 export class TechRepositoryImpl implements TechRepository{
     async createtech(tech: ITech): Promise<ITech> {
         console.log("tech data", tech)
@@ -120,4 +128,55 @@ export class TechRepositoryImpl implements TechRepository{
         const result=await TechModel.findByIdAndUpdate(techId,{$inc:{noofworks:1}})
         console.log(result)
       }
+
+    async getDashboardStats(techId: string, { fromDate, toDate, filter }: FilterOptions) {
+    const now = new Date();
+
+    // Step 1: Format default date range
+    let start = fromDate ? new Date(fromDate) : new Date(now.getFullYear(), now.getMonth(), 1);
+    let end = toDate ? new Date(toDate) : now;
+
+    if (filter === 'week' && !fromDate) {
+        start = new Date(now);
+        start.setDate(now.getDate() - 7);
+    }
+
+    // Convert dates to 'YYYY-MM-DD' strings to match `booked_date` format
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+    const startStr = formatDate(start);
+    const endStr = formatDate(end);
+
+    // Step 2: Filter bookings
+    const bookings = await BookingModels.find({
+        technicianId: techId,
+        workstatus: 'completed',
+        booked_date: {
+            $gte: startStr,
+            $lte: endStr
+        }
+    });
+
+    // Step 3: Calculate totals
+    const totalOrders = bookings.length;
+    const totalCommission = bookings.reduce((sum, b) => sum + (b.techcommision || 0), 0);
+
+    // Step 4: Group commissions by date
+    const commissionMap: Record<string, number> = {};
+    for (const booking of bookings) {
+        const key = booking.booked_date ?? new Date().toISOString().split('T')[0];
+        commissionMap[key] = (commissionMap[key] || 0) + (booking.techcommision || 0);
+    }
+
+    const graphData = Object.entries(commissionMap)
+        .map(([date, commission]) => ({ date, commission }))
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    return {
+        totalOrders,
+        totalCommission,
+        graphData
+    };
+    }
+
+
 }

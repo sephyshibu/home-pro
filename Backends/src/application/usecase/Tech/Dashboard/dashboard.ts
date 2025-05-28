@@ -1,17 +1,15 @@
-import { BookingRepository } from "../../../../domain/repository/Bookingrepository";
+import { TechRepository } from "../../../../domain/repository/Techrepository";
 
+interface FilterOptions {
+  fromDate?: string;
+  toDate?: string;
+  filter?: 'week' | 'month';
+}
 
-export class TechDashboard{
-    constructor(private _bookingrepository:BookingRepository){}
+export class GetTechDashboardStatsUseCase {
+  constructor(private _techrepository: TechRepository) {}
 
-
-    async techdash(techId:string):Promise<{totalSales:number, totalOrders:number}>{
-        try {
-           return await this._bookingrepository.totalSales(techId)
-        } catch (error) {
-            console.log("errorr", error)
-            return { totalSales: 0, totalOrders: 0 };
-        }
-
-    }
+  async execute(techId: string, filters: FilterOptions) {
+    return await this._techrepository.getDashboardStats(techId, filters);
+  }
 }

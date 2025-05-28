@@ -12,6 +12,7 @@ import { PasswordChange } from "../../application/usecase/Tech/Password/ChangePa
 import { RequestSession } from "../../application/usecase/Sessions/requestSession";
 import { fetchBookingswhichcompletedrejected } from "../../application/usecase/booking/fetchcompletedrejected";
 import { FetchTransactionsinTechWallet } from "../../application/usecase/Wallet/fetchtransactiondetailsintech";
+import { GetTechDashboardStatsUseCase } from "../../application/usecase/Tech/Dashboard/dashboard";
 
 export class techController{
     constructor(
@@ -27,7 +28,8 @@ export class techController{
         private _requestrejectbyTech:bookingRequestRejectByTech,
         private _requestsessions:RequestSession,
         private _fetchbookingwithcompleteandreject:fetchBookingswhichcompletedrejected,
-        private _fetchtransactionintechwallet:FetchTransactionsinTechWallet
+        private _fetchtransactionintechwallet:FetchTransactionsinTechWallet,
+        private _techdashboard:GetTechDashboardStatsUseCase
     ){}
 
     async login(req:Request,res:Response):Promise<void>{
@@ -205,6 +207,28 @@ export class techController{
 
             const result=await this._fetchtransactionintechwallet.transactiondetails(techId)
             res.status(200).json(result);
+        } catch (err) {
+          console.error("❌ Error confirming payment:", err);
+          res.status(500).json({ message: "Internal server error" });
+        }
+    }
+
+    async getDashboardTechId(req:Request,res:Response):Promise<void>{
+        console.log("techhh controller")
+        try {
+            const{techId}=req.params
+            const{fromDate,toDate,filter}=req.query
+            console.log(req.params)
+            console.log(req.query)
+
+
+            const result=await this._techdashboard.execute(techId,{
+                fromDate:fromDate as string,
+                toDate:toDate as string,
+                filter:filter as 'week'|'month'
+            })
+            console.log("final res", result)
+            res.status(200).json({result})
         } catch (err) {
           console.error("❌ Error confirming payment:", err);
           res.status(500).json({ message: "Internal server error" });

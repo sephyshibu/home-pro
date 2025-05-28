@@ -1,5 +1,11 @@
 import { ITech } from "../models/Tech";
 
+export interface FilterOptions {
+  fromDate?: string;
+  toDate?: string;
+  filter?: 'week' | 'month';
+}
+
 export interface TechRepository{
     createtech(tech:ITech):Promise<ITech>
     findById(techid:string):Promise<{ isBlocked: boolean; email: string }|null>
@@ -12,4 +18,12 @@ export interface TechRepository{
     fetchTechwithcategory(techid:string):Promise<ITech|null>
     increasenoofworks(techId:string):Promise<void>
     fetchTechsBySearch(username:string):Promise<ITech[]|null>
+    getDashboardStats(
+    techId: string,
+    filters: FilterOptions
+  ): Promise<{
+    totalOrders: number;
+    totalCommission: number;
+     graphData: { date: string; commission: number }[];
+  }>;
 }
