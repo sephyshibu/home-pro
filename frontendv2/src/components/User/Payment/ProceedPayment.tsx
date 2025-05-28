@@ -218,6 +218,24 @@ const PaymentPage: React.FC = () => {
         }
         if(selectedMethod==="RazorPay"){
             try{
+
+                  const checkRes = await axiosInstanceuser.get("/api/payment-status-check", {
+                    params: {
+                      userId,
+                      techid,
+                      date: bookingdetails.date,
+                    },
+                  });
+
+                  const paymentStatus = checkRes.data.status;
+
+                  if (paymentStatus === "completed") {
+                    toast.error("Payment already completed for this booking.");
+                    return;
+                  } else if (paymentStatus === "pending") {
+                    toast.error("Payment already in progress for this booking.");
+                    return;
+                  }
               
               const res= await axiosInstanceuser.post(`/api/create-order/${userId}`,{
                   amount:technician.consulationFee
@@ -305,6 +323,23 @@ const PaymentPage: React.FC = () => {
           if (selectedMethod=="Wallet"){
             try {
                 if(!userId) return 
+                    const checkRes = await axiosInstanceuser.get("/api/payment-status-check", {
+                    params: {
+                      userId,
+                      techid,
+                      date: bookingdetails.date,
+                    },
+                  });
+
+                  const paymentStatus = checkRes.data.status;
+
+                  if (paymentStatus === "completed") {
+                    toast.error("Payment already completed for this booking.");
+                    return;
+                  } else if (paymentStatus === "pending") {
+                    toast.error("Payment already in progress for this booking.");
+                    return;
+                  }
                     const res= await axiosInstanceuser.post("/api/walletpayment",{
                         userId,
                         techid,

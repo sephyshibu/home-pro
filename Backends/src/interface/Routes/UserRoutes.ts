@@ -48,6 +48,7 @@ import { GetTransactionWithBookings } from '../../application/usecase/Transactio
 import { FetchReviewByTechId } from '../../application/usecase/Review/fetchReview'
 import { ReviewrepositoryImpl } from '../../infrastructure/repository/ReviewRepositoryImpl'
 import { AddReview } from '../../application/usecase/Review/addreview'
+import { CheckPaymentStatus } from '../../application/usecase/booking/paystatus'
 const router=express.Router()
 
 
@@ -100,6 +101,7 @@ const confirmfinalpayment= new FinalPaymentconfirm(bookingrepository,walletRepos
 const gettransactionwithbookings=new GetTransactionWithBookings(transactionrepository, bookingrepository)
 const fetchingreviewbytechfromuser= new FetchReviewByTechId(reviewrepository)
 const addingreviewbyuser= new AddReview(reviewrepository)
+const checkpaystatus= new CheckPaymentStatus(bookingrepository)
 
 const usercontroller= new UserController(
     signupuser,
@@ -137,7 +139,8 @@ const usercontroller= new UserController(
     confirmfinalpayment,
     gettransactionwithbookings,
     fetchingreviewbytechfromuser,
-    addingreviewbyuser
+    addingreviewbyuser,
+    checkpaystatus
   
     
 
@@ -185,6 +188,6 @@ router.post('/api/finalconfirmpayemnts',authToken,(req,res)=>usercontroller.fina
 router.get('/api/fetchtransactionwithBookings/:transId',authToken,(req,res)=>usercontroller.transactionwithBookings(req,res))
 router.get('/api/fetchreview/:techId',authToken,(req,res)=>usercontroller.fetchreviewbytechIdfromUser(req,res))
 router.post('/api/addreview',authToken,(req,res)=>usercontroller.Addingreview(req,res))
-
+router.get('/api/payment-status-check',authToken,(req,res)=>usercontroller.checkPaymentStatus(req,res))
 
 export {router as userRouter}

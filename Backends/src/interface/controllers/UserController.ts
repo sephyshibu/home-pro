@@ -36,7 +36,7 @@ import { FinalPaymentconfirm } from '../../application/usecase/booking/finalconf
 import { GetTransactionWithBookings } from '../../application/usecase/Transactions/TransactionBookingdetails';
 import { FetchReviewByTechId } from '../../application/usecase/Review/fetchReview';
 import { AddReview } from '../../application/usecase/Review/addreview';
-
+import { CheckPaymentStatus } from '../../application/usecase/booking/paystatus';
 
 export class UserController{
     constructor(
@@ -76,7 +76,8 @@ export class UserController{
         private _confirmfinalpayment:FinalPaymentconfirm,
         private _getTransactionwithbookings:GetTransactionWithBookings,
         private _fetchreviewbytech:FetchReviewByTechId,
-        private _addreview:AddReview
+        private _addreview:AddReview,
+        private _checkpay:CheckPaymentStatus
      
     
     ){}
@@ -710,6 +711,27 @@ export class UserController{
               res.status(500).json({ message: "Internal server error" });
             }
     }
+     async checkPaymentStatus(req: Request, res: Response): Promise<void> {
+            try {
+            const { userId, techid, date } = req.query;
+
+            if (!userId || !techid || !date) {
+                res.status(400).json({ message: "Missing parameters" });
+                return;
+            }
+
+            const status = await this._checkpay.execute(
+                userId.toString(),
+                techid.toString(),
+                date.toString()
+            );
+
+            res.status(200).json({ status });
+            } catch (error) {
+            console.error("Check payment error:", error);
+            res.status(500).json({ message: "Failed to check payment status" });
+            }
+        }
 
         
 
