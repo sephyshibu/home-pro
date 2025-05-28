@@ -57,8 +57,13 @@ const Review:React.FC=()=>{
                                         {rev.description}
                                     </td>
                                     <td className="px-4 py-3">
-                                        {rev.points}
+                                    {[...Array(5)].map((_, i) => (
+                                        <span key={i} className={i < rev.points ? 'text-yellow-400' : 'text-gray-300'}>
+                                        ★
+                                        </span>
+                                    ))}
                                     </td>
+
                                 </tr>
                             ))}
                         </tbody>
