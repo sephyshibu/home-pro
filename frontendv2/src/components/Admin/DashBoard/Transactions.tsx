@@ -330,7 +330,7 @@ const TransactionPage: React.FC = () => {
   return (
   <div className="min-h-screen bg-gray-100 text-sm">
     <main className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Platform Earnings : ₹{balance?.amount}</h2>
+      {/* <h2 className="text-xl font-semibold mb-4">Platform Earnings : ₹{balance?.amount}</h2> */}
       <SearchInput
         value={searchterm}
         onChange={handleSearch}

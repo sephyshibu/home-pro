@@ -7,6 +7,7 @@ import MyProfilePage from '../../components/Technician/Profile/Myacc'
 import ChangePasswords from '../../components/Technician/Profile/Passswordchange'
 import MyServicesPage from '../../components/Technician/Profile/Services'
 import WalletPage from '../../components/Technician/Profile/Wallet'
+import Review from '../../components/Technician/Profile/Review'
 import { Toaster } from 'react-hot-toast'
 const TechRouter=()=> {
   return(
@@ -21,6 +22,7 @@ const TechRouter=()=> {
               <Route path='/myprofile/password' element={<ChangePasswords/>}/>
               <Route path='/myprofile/services' element={<MyServicesPage/>}/>
               <Route path='/myprofile/wallet' element={<WalletPage/>}/>
+              <Route path='/myprofile/review' element={<Review/>}/>
         </Route>
            
       </Routes>

@@ -80,6 +80,15 @@ const TechnicianLayout = () => {
             }>
             Wallet
           </NavLink>
+
+           <NavLink 
+            to="/tech/myprofile/review" 
+            className={({ isActive }) => isActive ? 
+              'bg-white text-black px-4 py-2 rounded-full block' : 
+              'px-4 py-2 block'
+            }>
+            Review
+          </NavLink>
         </div>
 
         {/* Content Area */}
