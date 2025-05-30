@@ -4,6 +4,7 @@ import { AdminRepository, FilterOptions } from "../../domain/repository/Adminrep
 import { BookingModels } from "../db/schemas/BookingModel";
 
 
+
 export class AdminRepositoryImpl implements AdminRepository{
 
     async createAdmin(admindata:IAdmin):Promise<IAdmin>{
@@ -18,7 +19,7 @@ export class AdminRepositoryImpl implements AdminRepository{
         const admin=await AdminModel.findOne({email})
         return admin?admin.toObject():null
     }
-    async getDashboardStatus({ fromDate, toDate, filter }: FilterOptions): Promise<{ totalOrders: number; totaladmincommision: number; graphData: { date: string; commission: number; }[]; }> {
+    async getDashboardStatus({ fromDate, toDate, filter }: FilterOptions): Promise<{ totalOrders: number; totaladmincommision: number; graphData: { date: string; commission: number; }[]; bookingdetails:any }> {
         const now=new Date()
         let start = fromDate ? new Date(fromDate) : new Date(now.getFullYear(), now.getMonth(), 1);
         let end = toDate ? new Date(toDate) : now;
@@ -40,6 +41,20 @@ export class AdminRepositoryImpl implements AdminRepository{
                 $lte:endStr
             }
         })
+        .populate({
+            path:"userId",
+            select:"name"
+        })
+        .populate({
+            path:"technicianId",
+            select:"name"
+        })
+        .populate({
+            path:"addressId",
+            select:"addressname"
+        })
+
+        
 
         const totalOrders=bookings.length
         const totaladmincommision=bookings.reduce((sum,b)=>sum+(b.admincommision||0),0)
@@ -55,7 +70,7 @@ export class AdminRepositoryImpl implements AdminRepository{
                             .sort((a,b)=>new Date(a.date).getTime()- new Date(b.date).getTime())
 
         return {
-            totalOrders,totaladmincommision,graphData
+            totalOrders,totaladmincommision,graphData,bookingdetails:bookings
         }
 
 
