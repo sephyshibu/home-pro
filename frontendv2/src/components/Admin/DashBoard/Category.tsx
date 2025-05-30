@@ -86,20 +86,21 @@ const CategoryList:React.FC=()=>{
     return(
         <div className="flex-grow p-8">
         <div className="bg-white rounded-xl shadow p-6 overflow-x-auto">
-          <h2 className="text-2xl font-bold mb-4 text-gray-700">Tech List</h2>
-          {loading ? (
-            <div className="text-center text-lg text-gray-500">Loading...</div>
-          ) : (
-            <>
-            <div className="search-options">
+          <div className="search-options">
               <input
                   type="text"
                   value={searchterm}
                   onChange={handleSearchCategory}
-                  placeholder="enter the tech name"
-                  className="search-input"
+                  placeholder="enter the category name"
+                  className="border border-emerald-700 rounded-xl p-2 shadow-2xl ml-280 block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                   />
             </div>
+          <h2 className="text-2xl font-bold mb-4 text-gray-700">Category List</h2>
+          {loading ? (
+            <div className="text-center text-lg text-gray-500">Loading...</div>
+          ) : (
+            <>
+            
             <table className="min-w-full table-auto text-left">
               <thead>
                 <tr className="text-gray-600 uppercase text-sm leading-normal">

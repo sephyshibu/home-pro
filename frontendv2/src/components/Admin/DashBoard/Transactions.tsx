@@ -335,7 +335,7 @@ const TransactionPage: React.FC = () => {
         value={searchterm}
         onChange={handleSearch}
         placeholder="Enter the last 5 numbers of bookingId"
-        className="w-64"
+       className="border border-emerald-700 rounded-xl p-2 w-80 shadow-2xl ml-280 block mb-2 text-sm font-medium text-gray-900 dark:text-black"
       />
 
       <Table
