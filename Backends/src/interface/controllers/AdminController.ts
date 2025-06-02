@@ -289,6 +289,15 @@ export class AdminController{
         console.log("admin controller")
         try {
             const{fromDate,toDate,filter}=req.query
+            if(fromDate&& toDate){
+                const from=new Date(fromDate as string)
+                const to=new Date(toDate as string)
+
+                if(from>to){
+                     res.status(400).json({message:"Invalid date"})
+                     return
+                }
+            }
 
             const result=await this._admindashboard.execute({fromDate:fromDate as string,toDate:toDate as string,filter:filter as 'week'|'month'})
             res.status(200).json({result})

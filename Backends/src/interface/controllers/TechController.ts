@@ -222,6 +222,14 @@ export class techController{
             console.log(req.params)
             console.log(req.query)
 
+            if(fromDate && toDate){
+                const from=new Date(fromDate as string)
+                const to= new Date(toDate as string)
+                if(from>to){
+                    res.status(400).json({message:"Invalid date"})
+                    return
+                }
+            }
 
             const result=await this._techdashboard.execute(techId,{
                 fromDate:fromDate as string,

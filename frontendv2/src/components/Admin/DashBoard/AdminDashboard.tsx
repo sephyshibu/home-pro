@@ -4,6 +4,7 @@ import {Chart as ChartJS, LineElement,PointElement,LinearScale,Tooltip,Legend, C
 import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 import BookingDetails from "./Booking Details";
 import { pdf } from "@react-pdf/renderer";
+import toast from 'react-hot-toast'
 
 ChartJS.register(LineElement,PointElement,LinearScale,CategoryScale,Tooltip,Legend);
 
@@ -79,8 +80,14 @@ const AdminDashboards: React.FC=()=>{
             setdetails(res.data.result.bookingdetails)
 
 
-        } catch (error) {
-            console.log("error in fretchning admin dashboard",error)
+        } catch (error:any) {
+            if(error.response.status===400){
+                     toast.error(error.response.data.message)
+            }else{
+                 console.log("error in fretchning admin dashboard",error)
+       
+            }
+           
         }
     }
 

@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'chart.js';
 import axiosInstancetech from '../../../Axios/TechAxios/axios';
+import toast from 'react-hot-toast';
 
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
@@ -47,8 +48,14 @@ const TechDashboard: React.FC=() => {
       });
       console.log(res.data.result)
       setStats(res.data.result);
-    } catch (err) {
-      console.error('Error fetching technician stats', err);
+    } catch (err:any) {
+      if(err.response.status===400){
+          toast.error(err.response.data.message)
+      }
+      else{
+          console.error('Error fetching technician stats', err);
+      }
+      
     }
   };
 
