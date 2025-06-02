@@ -132,21 +132,29 @@ export class TechRepositoryImpl implements TechRepository{
     async getDashboardStats(techId: string, { fromDate, toDate, filter }: FilterOptions) {
     const now = new Date();
 
-    // Step 1: Format default date range
-    let start = fromDate ? new Date(fromDate) : new Date(now.getFullYear(), now.getMonth(), 1);
-    let end = toDate ? new Date(toDate) : now;
+    // Step 1: Determine date range
+    let start: Date;
+    let end: Date;
 
-    if (filter === 'week' && !fromDate) {
-        start = new Date(now);
-        start.setDate(now.getDate() - 7);
+    if (fromDate && toDate) {
+        start = new Date(fromDate);
+        end = new Date(toDate);
+    } else if (filter === 'week') {
+        end = now;
+        start = new Date();
+        start.setDate(end.getDate() - 7);
+    } else {
+        // Default to current month
+        start = new Date(now.getFullYear(), now.getMonth(), 1);
+        end = new Date(now.getFullYear(), now.getMonth() + 1, 0); // end of month
     }
 
-    // Convert dates to 'YYYY-MM-DD' strings to match `booked_date` format
+    // Convert to string if booked_date is string; otherwise skip this
     const formatDate = (date: Date) => date.toISOString().split('T')[0];
     const startStr = formatDate(start);
     const endStr = formatDate(end);
 
-    // Step 2: Filter bookings
+    // Step 2: Filter by booked_date
     const bookings = await BookingModels.find({
         technicianId: techId,
         workstatus: 'completed',
@@ -156,14 +164,14 @@ export class TechRepositoryImpl implements TechRepository{
         }
     });
 
-    // Step 3: Calculate totals
+    // Step 3: Calculate stats
     const totalOrders = bookings.length;
     const totalCommission = bookings.reduce((sum, b) => sum + (b.techcommision || 0), 0);
 
-    // Step 4: Group commissions by date
+    // Step 4: Group commissions by booked_date
     const commissionMap: Record<string, number> = {};
     for (const booking of bookings) {
-        const key = booking.booked_date ?? new Date().toISOString().split('T')[0];
+        const key = booking.booked_date ?? formatDate(new Date());
         commissionMap[key] = (commissionMap[key] || 0) + (booking.techcommision || 0);
     }
 
@@ -176,7 +184,7 @@ export class TechRepositoryImpl implements TechRepository{
         totalCommission,
         graphData
     };
-    }
+}
 
 
 }

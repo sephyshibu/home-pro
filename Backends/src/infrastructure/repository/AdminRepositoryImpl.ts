@@ -21,12 +21,21 @@ export class AdminRepositoryImpl implements AdminRepository{
     }
     async getDashboardStatus({ fromDate, toDate, filter }: FilterOptions): Promise<{ totalOrders: number; totaladmincommision: number; graphData: { date: string; commission: number; }[]; bookingdetails:any }> {
         const now=new Date()
-        let start = fromDate ? new Date(fromDate) : new Date(now.getFullYear(), now.getMonth(), 1);
-        let end = toDate ? new Date(toDate) : now;
+        // Step 1: Determine date range
+        let start: Date;
+        let end: Date;
 
-        if (filter === 'week' && !fromDate) {
-        start = new Date(now);
-        start.setDate(now.getDate() - 7);
+         if (fromDate && toDate) {
+        start = new Date(fromDate);
+        end = new Date(toDate);
+        } else if (filter === 'week') {
+            end = now;
+            start = new Date();
+            start.setDate(end.getDate() - 7);
+        } else {
+            // Default to current month
+            start = new Date(now.getFullYear(), now.getMonth(), 1);
+            end = new Date(now.getFullYear(), now.getMonth() + 1, 0); // end of month
         }
 
         // Convert dates to 'YYYY-MM-DD' strings to match `booked_date` format
