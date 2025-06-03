@@ -51,7 +51,7 @@ const InvoicePDF = ({ booking }: { booking: any }) => (
       <View style={styles.section}>
         <View style={styles.labelRow}>
           <Text style={styles.labelText}>Booking ID:</Text>
-          <Text style={styles.valueText}>{booking._id}</Text>
+          <Text style={styles.valueText}>{`BookingID${booking.techIds.slice(0,5)}-${booking._id.slice(-7)}`}</Text>
         </View>
         <View style={styles.labelRow}>
           <Text style={styles.labelText}>Technician:</Text>
