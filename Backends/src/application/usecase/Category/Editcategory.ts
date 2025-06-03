@@ -8,6 +8,7 @@ export class EditCategory{
 
 
     async editCategory(catid:string,data:{ name: string, description: string, image: string }):Promise<{message:string; updatecategory?:ICategory}>{
+        
         const existingcategory=await this._categoryrepository.fetchconecategory(catid)
         if(!existingcategory){
             throw new Error("categor not found")

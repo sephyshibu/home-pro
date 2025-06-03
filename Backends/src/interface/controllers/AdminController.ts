@@ -207,7 +207,8 @@ export class AdminController{
             const result=await this._editcat.editCategory(catid, { name, description, image })
             res.status(200).json({ message: "Category updated", category: result })
         } catch (error:any) {
-            res.status(400).json({ message: error.message });
+            const statuscode=error.statusCode||500
+            res.status(statuscode).json({ message: error.message });
         }
     }
 

@@ -44,6 +44,15 @@ export class categoryRepositoryImpl implements Categoryrepository{
     }
 
     async editcategory(catid: string, update: Partial<ICategory>): Promise<ICategory> {
+       const existing=await CategoryModel.findOne({name:update.name})
+       if(existing){
+        throw {
+            name:"Duplication Category name",
+            message:"Cant edit the name because which is already existed",
+            statusCode:400
+        }
+       }
+
         const updated = await CategoryModel.findByIdAndUpdate(catid, update, { new: true });
         if (!updated) throw new Error("Category update failed. Category not found.");
         return updated;
