@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=${PORT}
+      - MONGODBURL=${MONGODBURL}
+      - NODEMAILER_GMAIL=${NODEMAILER_GMAIL}
+      - NODEMAILER_PASSWORD=${NODEMAILER_PASSWORD}
+      - JWTSECRET=${JWTSECRET}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+     
+    
