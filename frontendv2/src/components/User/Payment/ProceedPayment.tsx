@@ -400,9 +400,7 @@ const PaymentPage: React.FC = () => {
               ))}
             </div>
 
-            <button className="bg-green-600 hover:bg-green-700 text-white py-2 w-full rounded">
-              Payment
-            </button>
+          
           </div>
         </div>
 

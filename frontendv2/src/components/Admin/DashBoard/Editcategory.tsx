@@ -65,9 +65,11 @@ const EditCategory: React.FC = () => {
 
       toast.success("Category updated successfully");
       navigate("/admin/admindashboard");
-    } catch (error) {
+    } catch (error:any) {
       console.error(error);
-      toast.error("Update failed");
+      const errormessage=error.response.data.message||"Update Failed";
+
+      toast.error(errormessage);
     } finally {
       setLoading(false);
     }

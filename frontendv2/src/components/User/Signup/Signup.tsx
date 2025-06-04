@@ -118,7 +118,7 @@ const Signup:React.FC=()=>{
       
         {/* Logo and header */}
         <div className="absolute -top-20 flex flex-col items-center z-10">
-          <img src={logo}alt="HomePro Logo" className="w-80 h-39 mt-34" />
+          <img src={logo}alt="HomePro Logo" className="w-[280px] h-auto mt-12 object-contain" />
 
         </div>
   

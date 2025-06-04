@@ -208,7 +208,7 @@ export class AdminController{
             res.status(200).json({ message: "Category updated", category: result })
         } catch (error:any) {
             const statuscode=error.statusCode||500
-            res.status(statuscode).json({ message: error.message });
+            res.status(statuscode).json({ message: error.message||"Something went wrong" });
         }
     }
 

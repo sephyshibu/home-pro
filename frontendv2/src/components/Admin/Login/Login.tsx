@@ -93,7 +93,7 @@ const Login:React.FC=()=>{
       
         {/* Logo and header */}
         <div className="absolute -top-10 flex flex-col items-center z-10">
-          <img src={logo} alt="HomePro Logo" className="w-80 h-39 mt-34" />
+          <img src={logo} alt="HomePro Logo" className="w-[280px] h-auto mt-12 object-contain" />
          
         </div>
         {/* Main Content */}
@@ -110,7 +110,7 @@ const Login:React.FC=()=>{
   
           {/* Center Login Card */}
           <div className="bg-white rounded-2xl shadow-lg p-20 max-w-full">
-            <h2 className="text-2xl font-bold text-center text-[#0A1D56] mb-6">Admin LOGIN</h2>
+            <h2 className="text-2xl font-bold text-center text-[#0A1D56] mb-6">Admin Login</h2>
             
             <form onSubmit={handleSubmit} className="space-y-5">
               <input
