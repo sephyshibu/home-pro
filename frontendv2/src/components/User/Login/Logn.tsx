@@ -198,9 +198,9 @@ const Login:React.FC=()=>{
               >
                 {loading ? "Logging in..." : "LOGIN"}
               </button>
-
-              <GoogleOAuthProvider clientId={clientId}>
-                <div>
+           
+              <GoogleOAuthProvider clientId={clientId} >
+                <div  className="flex justify-center p-3">
                     <GoogleLogin
                             onSuccess={handleGoogleLogin}
                             onError={()=>{
@@ -209,6 +209,8 @@ const Login:React.FC=()=>{
                         />
                 </div>
               </GoogleOAuthProvider>
+              
+             
   
               <div className="text-center text-sm text-gray-600 mt-3">
                 <a href="/forgetpassword" onClick={handleforget} className="hover:underline">Forgot Password?</a><br />
