@@ -32,10 +32,7 @@ interface Review {
 }
 
 
-interface Category{
-  _id:string,
-  name:string
-}
+
 
 const TechnicianProfile:React.FC=()=> {
   const location=useLocation()

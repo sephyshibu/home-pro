@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { walletdetails } from '../../../api/UserApi/Wallet/fetchWallet';
 import axiosInstanceuser from "../../../Axios/UserAxios/axios";

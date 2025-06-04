@@ -4,7 +4,7 @@ import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-geosearch/dist/geosearch.css';
 import "leaflet-control-geocoder"
-import L from "leaflet";
+
 
 const GeoSearch = () => {
   const map = useMap();

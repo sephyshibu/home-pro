@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router'
+import {Routes, Route } from 'react-router'
 import LoginTech from '../../components/Technician/Login/login'
 import Dashboard from '../../components/Technician/Dashboard/Dashboard'
 import TechnicianLayout from '../../components/Technician/Layouts/TechLayout'

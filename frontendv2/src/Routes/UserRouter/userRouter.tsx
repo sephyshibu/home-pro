@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes,Route,Navigate } from 'react-router'
+import {Routes,Route,Navigate } from 'react-router'
 import '../../App.css'
 import "leaflet/dist/leaflet.css";
 import 'leaflet-geosearch/dist/geosearch.css';

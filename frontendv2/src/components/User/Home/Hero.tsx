@@ -1,10 +1,10 @@
 import React from 'react';
 import doorTech from '../../../../public/images/one.png';
 import toiletTech from '../../../../public/images/two.png'; // Add your second image here
-import { useNavigate } from 'react-router';
+
 
 const Hero: React.FC = () => {
-  const navigate=useNavigate()
+
 
 
   return (

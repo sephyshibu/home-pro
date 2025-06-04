@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from 'react';
+import React, { useEffect, useState } from 'react';
 import ChatBox from '../ChatBox';
 import { useNavigate } from 'react-router';
 import {fetchupcomingevents } from '../../../api/TechApi/Upcomingevents/upcomingevents';

@@ -1,5 +1,5 @@
 import axios,{AxiosError,type InternalAxiosRequestConfig} from 'axios';
-import { persistor, store } from '../../app/store';
+import {  store } from '../../app/store';
 import { cleanUser } from '../../features/UserSlice';
 import { addtoken,cleartoken } from '../../features/tokenSlice';
 import {toast} from 'react-toastify'

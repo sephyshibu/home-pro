@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {Pencil, Trash2 } from "lucide-react";
-import { useLocation, useSearchParams } from "react-router";
+
+import { useSearchParams } from "react-router";
 import { fetchTechById } from "../../../api/UserApi/fetchtechbyid";
 import { fetchaddress } from "../../../api/UserApi/Address/fetchaddress";
 import { addaddress } from "../../../api/UserApi/Address/addaddress";
@@ -10,7 +10,7 @@ import { MapContainer,TileLayer,Marker,useMapEvents } from "react-leaflet";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-geosearch/dist/geosearch.css';
 import GeoSearch from './GeoSearch'
-import L from "leaflet";
+
 import "leaflet-control-geocoder"
 import { NavLink } from "react-router";
 import { useNavigate } from "react-router";
@@ -55,7 +55,7 @@ const PaymentPage: React.FC = () => {
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const location=useLocation()
+ 
   const navigate=useNavigate()
   const userId=localStorage.getItem("userId")
   const[technician,settechnician]=useState<Technician>({
@@ -180,7 +180,7 @@ const PaymentPage: React.FC = () => {
         if (!userId) return;
        if(!validateForm()) return
         try {
-          const res = await addaddress(userId, form);
+          await addaddress(userId, form);
           toast.success("Address added successfully");
           setIsModalOpen(false);
           setForm({

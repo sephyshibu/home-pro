@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { cleartoken } from "../../../features/TokenTechSlice";
 import { logouttech } from "../../../features/TechSlice";
 import logo from '../../../../public/images/Resized/Logo Portrait.png'
-import { persistor } from "../../../app/store";
+
 const tabs = ["Upcoming Events", "Request", "Dashboard"];
 
 const AdminDashboard: React.FC = () => {

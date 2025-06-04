@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { fetchrequest } from '../../../api/TechApi/RequestFetch/requestfetch';
 import { aceptRequest } from '../../../api/TechApi/AcceptRequest/acceptrequest';
 import toast from 'react-hot-toast';
-import { Dialog,DialogPanel,DialogTitle } from '@headlessui/react';
+import { Dialog} from '@headlessui/react';
 import { rejectRequest } from '../../../api/TechApi/RejectRequest/rejectrequest';
 interface Request {
     _id:string,

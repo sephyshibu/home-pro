@@ -1,6 +1,6 @@
 import { Outlet, NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { persistor } from '../../../app/store'
+
 import { cleartoken } from '../../../features/TokenTechSlice'
 import { logouttech } from '../../../features/TechSlice'
 import { useDispatch } from 'react-redux'

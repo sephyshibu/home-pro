@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+
 import { fetchcategory } from '../../../api/UserApi/fetchcategory';
-import { ReviewDetails } from '../../../api/UserApi/Review/fetchreview';
+
 import { useNavigate } from 'react-router-dom';
 import { NavLink ,useSearchParams} from 'react-router-dom';
 import { fetchTechnicianbasedonavailableSlot } from '../../../api/UserApi/fetchtechnician';

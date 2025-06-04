@@ -164,7 +164,7 @@ const AddressPage: React.FC = () => {
 
     if(editMode && selectedAddress){
       try {
-        const editaddress=await editAddress(selectedAddress._id, form)
+        await editAddress(selectedAddress._id, form)
         const updatedAddresses = addresses.map((addr) =>
           addr._id === selectedAddress._id ? { ...addr, ...form } : addr
         );

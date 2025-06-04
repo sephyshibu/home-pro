@@ -1,6 +1,6 @@
 // components/ChatBox.tsx
 import React, { useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+
 import socket from '../../utils/socket';
 interface Message {
   senderId: string;

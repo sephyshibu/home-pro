@@ -1,5 +1,5 @@
 import axios,{AxiosError,type InternalAxiosRequestConfig} from 'axios';
-import { persistor, store } from '../../app/store';
+import { store } from '../../app/store';
 import { cleanAdmin } from '../../features/AdminSlice';
 import { addadmintoken,cleartoken } from '../../features/AdmintokenSlice';
 import toast from 'react-hot-toast';

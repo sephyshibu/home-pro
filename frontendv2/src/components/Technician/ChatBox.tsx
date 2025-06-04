@@ -1,6 +1,6 @@
 // components/ChatBox.tsx
 import React, { useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+
 import socket from '../../utils/socket';
 interface Message {
   senderId: string;
@@ -23,7 +23,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ bookingId, userId, techId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [unreadMap, setUnreadMap] = useState<{ [bookingId: string]: number }>({});
+  // const [unreadMap, setUnreadMap] = useState<{ [bookingId: string]: number }>({});
 
   useEffect(() => {
     socket.emit('join-room', bookingId);

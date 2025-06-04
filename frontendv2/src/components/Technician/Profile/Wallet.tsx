@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { fetchtransactiondetails } from '../../../api/TechApi/Fetchtransaction/fetchtransaction';
-import axiosInstancetech from "../../../Axios/TechAxios/axios";
+
 
 interface Transaction{
     _id:string,

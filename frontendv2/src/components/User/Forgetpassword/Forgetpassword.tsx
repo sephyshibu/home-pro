@@ -14,7 +14,7 @@ const ForgetPassword: React.FC = () => {
     const [formdata,setformdata]=useState<foregtform>({
         email:""
     })
-    const[loading,setloading]=useState(false)
+    // const[loading,setloading]=useState(false)
     const[error,seterror]=useState<Partial<foregtform>>({})
 
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -27,7 +27,7 @@ const ForgetPassword: React.FC = () => {
     const handleSubmit=async(e:React.FormEvent)=>{
             e.preventDefault()
             seterror({})
-            setloading(true)
+            // setloading(true)
     
             let formErrors:any={}
             let isValid=true
@@ -62,9 +62,7 @@ const ForgetPassword: React.FC = () => {
                 console.error("signup errror",error)
                 seterror(error.response?.data?.message ||"Something went wrong")   
             }
-            finally {
-                setloading(false);
-              }
+            
             }
     
     

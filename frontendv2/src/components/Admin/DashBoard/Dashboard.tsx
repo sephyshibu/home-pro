@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 import Category from './Category'
 import { useDispatch } from "react-redux";
 import AddCategory from './AddCategory'
-import { persistor } from "../../../app/store";
+
 import { cleartoken } from "../../../features/AdmintokenSlice";
 import { logoutadmin } from "../../../features/AdminSlice";
 import logo from '../../../../public/images/Resized/Logo Landscape.png'

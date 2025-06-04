@@ -56,7 +56,7 @@ const ProfilePage: React.FC = () => {
   const handleSave = async () => {
     if (!validateForm()) return;
     try {
-      const response = await axiosInstanceuser.put(`/api/updateuser/${userId}`, editData);
+      await axiosInstanceuser.put(`/api/updateuser/${userId}`, editData);
       setUser(editData); // Update the local state with new data
       setIsOpen(false);
     } catch (error) {

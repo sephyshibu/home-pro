@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { logoutuser } from '../../../features/UserSlice'
 import { cleartoken } from '../../../features/tokenSlice'
 import { useDispatch } from 'react-redux'
-import {persistor} from '../../../app/store'
+
 const UserLayout: React.FC = () => {
   const navigate=useNavigate()
   const dispatch=useDispatch()

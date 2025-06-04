@@ -1,5 +1,5 @@
 import React ,{useState,useEffect}from 'react';
-import {persistor} from '../../../app/store'
+
 import { useNavigate } from 'react-router';
 import logo from '../../../../public/images/Resized/Logo Landscape white-01-01.png'
 import socket from '../../../utils/socket';
@@ -64,7 +64,7 @@ const Header: React.FC = () => {
       navigate('/myaccount')
     }
 
-     const handleChatRedirect = (bookingId: string) => {
+     const handleChatRedirect = () => {
     navigate('/myaccount/services')
     setShowDropdown(false);
   };
@@ -102,11 +102,11 @@ const Header: React.FC = () => {
                     {unreadCounts.length === 0 ? (
                       <div className="p-4 text-center text-sm">No unread messages</div>
                     ) : (
-                      unreadCounts.map(({ bookingId, count, technicianName }) => (
+                      unreadCounts.map(({ bookingId, technicianName }) => (
                         <div
                           key={bookingId}
                           className="p-3 hover:bg-gray-100 cursor-pointer border-b"
-                          onClick={() => handleChatRedirect(bookingId)}
+                          onClick={() => handleChatRedirect()}
                         >
                          {technicianName} -TechName
                         </div>

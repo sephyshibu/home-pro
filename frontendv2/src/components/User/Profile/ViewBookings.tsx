@@ -1,7 +1,6 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState} from "react";
 import { useLocation } from "react-router";
-import { fetchTechById } from "../../../api/UserApi/fetchtechbyid";
-import { BookingDetails } from "../../../api/UserApi/Service/fetchbooking";
+
 import { useNavigate } from "react-router";
 import { NavLink } from "react-router";
 import ChatBox from '../ChatBox';
@@ -10,7 +9,7 @@ import {persistor} from '../../../app/store'
 import axiosInstanceuser from "../../../Axios/UserAxios/axios";
 import { Dialog,DialogPanel,DialogTitle } from "@headlessui/react";
 import { acceptsessionrequest } from "../../../api/UserApi/AcceptSession/acceptsession";
-import { rejectsessionrequest } from "../../../api/UserApi/RequestSession/requestsession";
+
 import { fetchSessionRequests } from "../../../api/UserApi/Fetchsession/fetchsession";
 
 import { toast } from "react-toastify";
@@ -41,12 +40,6 @@ interface SessionRequest {
   types: string;
   status: 'pending' | 'accepted' | 'rejected';
 }
-interface WorkTime{
-  _id:string,
-  start:number,
-  end:number
-}
-
 
 const ViewBookingsProfile:React.FC=()=> {
   const location=useLocation()
@@ -60,9 +53,9 @@ const ViewBookingsProfile:React.FC=()=> {
   const[totalminutes,settotalminutes]=useState<string|null>(null)
   const[rateperminute,setrateperminute]=useState<string|null>(null)
   
-  const [error, setError] = useState<string>("");
-  const[technician,settechnician]=useState<viewBookings>(bookingdetails)
-  const techId = technician._id;
+  const [_error, setError] = useState<string>("");
+  const[technician,_settechnician]=useState<viewBookings>(bookingdetails)
+  
 
    
       
