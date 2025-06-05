@@ -19,7 +19,7 @@ export class App{
 
     private setMiddleware():void{
         this.app.use(cors({
-            origin: ['http://localhost:5173', 'http://localhost:5174','http://localhost:5175'],
+            origin: ['http://localhost:5173', 'http://localhost:5174','http://localhost:5175','https://www.home-pro.sephy.live'],
             credentials:true
         }))
         this.app.use(express.json())
