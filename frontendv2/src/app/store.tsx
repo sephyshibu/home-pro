@@ -37,7 +37,7 @@ interface TokenState {
 const persistConfig={
     key:'root',
     storage,
-    blackList:['usertoken','techtoken','admintoken']
+    blacklist:['usertoken','techtoken','admintoken']
 }
 
 const userPersistConfig = {
