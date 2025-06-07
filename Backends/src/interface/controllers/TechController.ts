@@ -1,4 +1,6 @@
 import { Request,Response } from "express";
+import { HTTPStatusCode } from "../../domain/enums/HttpStatusCode";
+import { TechMessages } from "../../domain/shared/Techmessage/techmessage";
 import { LoginTech } from "../../application/usecase/Tech/LoginTech";
 import { RefreshToken } from "../../application/usecase/Tech/RefreshToken";
 import { GetTechById } from "../../application/usecase/Tech/MyProfile/TechDetails";
@@ -44,10 +46,10 @@ export class techController{
                 secure:false,
                 maxAge:7*24*60*60*1000,
             })
-            res.status(200).json({message:"Login Success", tech:result.tech,token:result.accesstoken})
+            res.status(HTTPStatusCode.OK).json({message:TechMessages.LOGIN_SUCCESS, tech:result.tech,token:result.accesstoken})
         } 
         catch (err:any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
           }
     }
 
@@ -57,9 +59,9 @@ export class techController{
             console.log("refreshtokencontrollertech",token)
             const newaccesstoken=await this._refreshtoken.refresh(token);
              console.log("in refresh token controller tech with new access tokern ",newaccesstoken)
-            res.status(200).json({ token: newaccesstoken });
+            res.status(HTTPStatusCode.OK).json({ token: newaccesstoken });
         } catch (err: any) {
-          res.status(400).json({ message: err.message });
+          res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
     }
 
@@ -67,9 +69,9 @@ export class techController{
         try {
             const{techId}=req.params
            const tech= await this._gettechbyid.gettechbyid(techId)
-           res.status(200).json({tech})
+           res.status(HTTPStatusCode.OK).json({tech})
         } catch (err: any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
           }
     }
 
@@ -98,18 +100,18 @@ export class techController{
                 consulationFee,
                 workphotos})
             
-                res.status(200).json({message:"tech updated",tech:result})
+                res.status(HTTPStatusCode.OK).json({message:TechMessages.EDIT_TECH_SUCCESS,tech:result})
             } catch (error:any) {
-                res.status(400).json({ message: error.message });
+                res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
             }
     }
 
     async fetchCategory(req:Request,res:Response):Promise<void>{
         try {
             const category=await this._fetchcat.fetch()
-            res.status(200).json({category})
+            res.status(HTTPStatusCode.OK).json({category})
         } catch (error:any) {
-            res.status(500).json({ message: error.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }
     }
 
@@ -118,9 +120,9 @@ export class techController{
             const{techId}=req.params
             const bokings=await this._fetchbookingbytechbeforeaccept.fetchBookingDetailsRequest(techId)
             console.log("contoller", bokings)
-            res.status(200).json({bokings})
+            res.status(HTTPStatusCode.OK).json({bokings})
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
             
         }
     }
@@ -130,9 +132,9 @@ export class techController{
             const{bookingId}=req.params
             const result=await this._requestacceptbytech.bookingreacceptbytech(bookingId)
             console.log("controller",result)
-            res.status(200).json({result})
+            res.status(HTTPStatusCode.OK).json({result})
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
             
         }
     }
@@ -144,9 +146,9 @@ export class techController{
 
             const result=await this._requestrejectbyTech.bookingreacceptbytech(bookingId,reason)
             console.log(result)
-            res.status(200).json({result})
+            res.status(HTTPStatusCode.OK).json({result})
         }  catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
             
         }
 
@@ -157,10 +159,10 @@ export class techController{
             const{techId}=req.params
             const booking=await this._upcoming.fetchupcoming(techId)
             console.log("controller", booking)
-            res.status(200).json({booking})
+            res.status(HTTPStatusCode.OK).json({booking})
 
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
             
         }
     }
@@ -172,9 +174,9 @@ export class techController{
             const{password}=req.body
             console.log(req.body)
             const result=await this._passwordhcange.editpassword(techId, password)
-            res.status(200).json({message:result.message})
+            res.status(HTTPStatusCode.OK).json({message:result.message})
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
             
         }
     }
@@ -184,9 +186,9 @@ export class techController{
             const {types}=req.body
 
             const result=await this._requestsessions.requestsession(bookingId, types)
-            res.status(200).json(result)
+            res.status(HTTPStatusCode.OK).json(result)
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
             
         }
     }
@@ -195,9 +197,9 @@ export class techController{
         try {
             const{techId}=req.params
             const result=await this._fetchbookingwithcompleteandreject.fetchBookingscommpletereject(techId)
-            res.status(200).json({booking:result})
+            res.status(HTTPStatusCode.OK).json({booking:result})
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
             
         }
     }
@@ -207,10 +209,10 @@ export class techController{
             const{techId}=req.params
 
             const result=await this._fetchtransactionintechwallet.transactiondetails(techId)
-            res.status(200).json(result);
+            res.status(HTTPStatusCode.OK).json(result);
         } catch (err) {
           console.error("❌ Error confirming payment:", err);
-          res.status(500).json({ message: "Internal server error" });
+          res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: TechMessages.INTERNAL_SERVER_ERROR });
         }
     }
 
@@ -226,7 +228,7 @@ export class techController{
                 const from=new Date(fromDate as string)
                 const to= new Date(toDate as string)
                 if(from>to){
-                    res.status(400).json({message:"Invalid date"})
+                    res.status(HTTPStatusCode.BAD_REQUEST).json({message:TechMessages.INVALID_DATE_RANGE})
                     return
                 }
             }
@@ -237,10 +239,10 @@ export class techController{
                 filter:filter as 'week'|'month'
             })
             console.log("final res", result)
-            res.status(200).json({result})
+            res.status(HTTPStatusCode.OK).json({result})
         } catch (err) {
           console.error("❌ Error dashboard:", err);
-          res.status(500).json({ message: "Internal server error" });
+          res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: TechMessages.INTERNAL_SERVER_ERROR });
         }
     }
 
@@ -249,10 +251,10 @@ export class techController{
             const {techId}=req.params
             const result=await this._fetchreview.fetchreviewtechId(techId)
             console.log("controller",result)
-            res.status(200).json(result)
+            res.status(HTTPStatusCode.OK).json(result)
         }  catch (err) {
           console.error("❌ Error in review fetch:", err);
-          res.status(500).json({ message: "Internal server error" });
+          res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: TechMessages.INTERNAL_SERVER_ERROR });
         }
     }
 

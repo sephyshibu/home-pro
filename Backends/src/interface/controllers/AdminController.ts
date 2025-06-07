@@ -1,4 +1,6 @@
 import { Request,Response } from "express";
+import { HTTPStatusCode } from "../../domain/enums/HttpStatusCode";
+import { AdminMessages } from "../../domain/shared/Adminmessage/adminmessage";
 import {Login} from '../../application/usecase/Admin/LoginAdmin'
 import { RefreshToken } from "../../application/usecase/Admin/RefreshToken";
 import { fetchUser } from "../../application/usecase/Admin/FetchUser";
@@ -59,10 +61,10 @@ export class AdminController{
                 secure:false,
                 maxAge:7*24*60*60*1000,
             })
-            res.status(200).json({message:"Login Success", admin:result.admin,token:result.accesstoken})
+            res.status(HTTPStatusCode.OK).json({message:AdminMessages.AUTH.LOGIN_SUCCESS, admin:result.admin,token:result.accesstoken})
         }
         catch (err:any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
           }
     }
 
@@ -72,9 +74,9 @@ export class AdminController{
             const order=req.query.order as 'asc'|'desc'||'asc'
             const page = parseInt(req.query.page as string) || 1;
             const { users, total } =await this._fetchalluser.fetch(sortBy,order,page)
-            res.status(200).json({users,total})
+            res.status(HTTPStatusCode.OK).json({users,total})
         }catch (error: any) {
-            res.status(500).json({ message: error.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
           }
     }
 
@@ -84,9 +86,9 @@ export class AdminController{
             const order=req.query.order as 'asc'|'desc'||'asc'
             const page=parseInt(req.query.page as string)|| 1;
             const {tech,total}=await this._fetchalltech.fetch(sortBy,order,page)
-            res.status(200).json({tech,total})
+            res.status(HTTPStatusCode.OK).json({tech,total})
         } catch (error:any) {
-            res.status(500).json({ message: error.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }
     }
 
@@ -96,9 +98,9 @@ export class AdminController{
             const order=req.query.order as 'asc'|'desc'||'asc'
        
             const cat=await this._fetchallCategory.fetch(sortBy,order)
-            res.status(200).json({cat})
+            res.status(HTTPStatusCode.OK).json({cat})
         } catch (error:any) {
-            res.status(500).json({ message: error.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }
     }
     async fetchTransaction(req:Request,res:Response):Promise<void>{
@@ -108,9 +110,9 @@ export class AdminController{
         try {
             const {transactions,totaladmincommision}=await this._gettransactiondetails.gettransaction(currentPage)
             console.log("controller transaction",transactions)
-            res.status(200).json({transactions,totaladmincommision}) 
+            res.status(HTTPStatusCode.OK).json({transactions,totaladmincommision}) 
         } catch (error:any) {
-            res.status(500).json({ message: error.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }
     }
 
@@ -122,9 +124,9 @@ export class AdminController{
              console.log("refreshtokencontrolleradmin",token)
             const newaccesstoken=await this._refreshtoken.refresh(token);
              console.log("in refresh token controller admin with new access tokern ",newaccesstoken)
-            res.status(200).json({ token: newaccesstoken });
+            res.status(HTTPStatusCode.OK).json({ token: newaccesstoken });
         } catch (err: any) {
-          res.status(400).json({ message: err.message });
+          res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
     }
 
@@ -134,9 +136,9 @@ export class AdminController{
             const{isBlocked}=req.body
             console.log(userid,isBlocked)
             const updateduser=await this._blockunblock.blockunblock(userid,isBlocked)
-            res.status(200).json({message:"User Updated Successfully",user:updateduser})
+            res.status(HTTPStatusCode.OK).json({message:AdminMessages.USER.UPDATED,user:updateduser})
         }  catch (error: any) {
-            res.status(400).json({ message: error.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
         }
     }
 
@@ -146,9 +148,9 @@ export class AdminController{
             const{isBlocked}=req.body
             console.log("catid", catid,isBlocked)
             const updatecategory=await this._BlockUnblockCat.blockunblockcat(catid, isBlocked)
-            res.status(200).json({message:"category Updated Successfully",cat:updatecategory})
+            res.status(HTTPStatusCode.OK).json({message:AdminMessages.CATEGORY.UPDATED,cat:updatecategory})
         }  catch (error: any) {
-            res.status(400).json({ message: error.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
         }
     }
 
@@ -158,9 +160,9 @@ export class AdminController{
             const{isBlocked}=req.body
             console.log("techid", techid,isBlocked)
             const updatetech=await this._blockunblocktech.blockunblocktech(techid, isBlocked)
-            res.status(200).json({message:"tech Updated Successfully",tech:updatetech})
+            res.status(HTTPStatusCode.OK).json({message:AdminMessages.TECH.UPDATED,tech:updatetech})
         }  catch (error: any) {
-            res.status(400).json({ message: error.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
         }
     }
    
@@ -170,11 +172,11 @@ export class AdminController{
             try {
                 const{email,password, phone}=req.body
                 const result=await this._signuptechs.addtech(email,password,phone)
-                res.status(200).json(result)
+                res.status(HTTPStatusCode.OK).json(result)
             } 
             catch (err:any) {
                 console.error("Signup Tech Error:", err.message);
-                res.status(400).json({ message: err.message });
+                res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
               }
         }
 
@@ -182,11 +184,11 @@ export class AdminController{
         try {
             const{name, description, image}=req.body
             const result=await this._addcategory.addCategory(name,description, image)
-            res.status(200).json(result)
+            res.status(HTTPStatusCode.OK).json(result)
             } 
             catch (err:any) {
                 console.error("Signup Tech Error:", err.message);
-                res.status(400).json({ message: err.message });
+                res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
               }
     }
 
@@ -194,9 +196,9 @@ export class AdminController{
         try {
           const { catid } = req.params;
           const category = await this._getCategoryById.getcategorybyId(catid);
-          res.status(200).json({ category });
+          res.status(HTTPStatusCode.OK).json({ category });
         } catch (err: any) {
-          res.status(400).json({ message: err.message });
+          res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
       }
 
@@ -205,9 +207,9 @@ export class AdminController{
             const{catid}=req.params
             const{ name, description, image}=req.body
             const result=await this._editcat.editCategory(catid, { name, description, image })
-            res.status(200).json({ message: "Category updated", category: result })
+            res.status(HTTPStatusCode.OK).json({ message: AdminMessages.CATEGORY.UPDATED, category: result })
         } catch (error:any) {
-            const statuscode=error.statusCode||500
+            const statuscode=error.statusCode||HTTPStatusCode.INTERNAL_SERVER_ERROR
             res.status(statuscode).json({ message: error.message||"Something went wrong" });
         }
     }
@@ -216,19 +218,19 @@ export class AdminController{
         try {
             const {transId}=req.params
             const result=await this._gettransactionwithBookings.execute(transId)
-            res.status(200).json({result})
+            res.status(HTTPStatusCode.OK).json({result})
         } catch (error:any) {
-            res.status(400).json({ message: error.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
         }
     }
     async fetchingrequestrefund(req:Request,res:Response):Promise<void>{
         try {
             const result=await this._fetchrefundrequest.fetchrefundreq()
             console.log("controller", result)
-            res.status(200).json({message:"success", Bookings:result})
+            res.status(HTTPStatusCode.OK).json({message:"success", Bookings:result})
         } catch (error:any) {
             console.error("Error in fetchingrequestrefund:", error);
-            res.status(500).json({ message: "Internal Server Error", error: error.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
         }
     }
 
@@ -236,11 +238,11 @@ export class AdminController{
             try {
                 const{bookingId}=req.params
                 const result =await this._refundaccept.processrefund(bookingId)
-                res.status(200).json({message:"refunded accepted"})
+                res.status(HTTPStatusCode.OK).json({message:AdminMessages.REFUND.ACCEPTED})
                 
             } catch (error:any) {
                 console.error("Error in refund accepted:", error);
-                res.status(500).json({ message: "Internal Server Error", error: error.message });
+                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
             }
     }
 
@@ -248,30 +250,30 @@ export class AdminController{
         try {
             const{searchterm}=req.params
             const user=await this._searchuser.searchinguser(searchterm)
-            res.status(200).json({user})
+            res.status(HTTPStatusCode.OK).json({user})
         } catch (error:any) {
                 console.error("Error in fetch user by search:", error);
-                res.status(500).json({ message: "Internal Server Error", error: error.message });
+                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
             }
     }
     async searchingTech(req:Request,res:Response):Promise<void>{
         try {
             const{searchterm}=req.params
             const tech=await this._searchtech.searchingtech(searchterm)
-            res.status(200).json({tech})
+            res.status(HTTPStatusCode.OK).json({tech})
         } catch (error:any) {
                 console.error("Error in fetch tech by search:", error);
-                res.status(500).json({ message: "Internal Server Error", error: error.message });
+                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
             }
     }
     async searchingCategory(req:Request,res:Response):Promise<void>{
         try {
             const{searchterm}=req.params
             const cat=await this._searchcategory.searchingcategory(searchterm)
-            res.status(200).json({cat})
+            res.status(HTTPStatusCode.OK).json({cat})
         } catch (error:any) {
                 console.error("Error in fetch tech by search:", error);
-                res.status(500).json({ message: "Internal Server Error", error: error.message });
+                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
             }
     }
 
@@ -279,10 +281,10 @@ export class AdminController{
         try {
             const {searchterm}=req.params
             const transaction=await this._searchbooking.SearchTransactionbybookingId(searchterm)
-            res.status(200).json({transaction})
+            res.status(HTTPStatusCode.OK).json({transaction})
         }catch (error:any) {
                 console.error("Error in fetch tech by search:", error);
-                res.status(500).json({ message: "Internal Server Error", error: error.message });
+                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
             }
     }
 
@@ -295,16 +297,16 @@ export class AdminController{
                 const to=new Date(toDate as string)
 
                 if(from>to){
-                     res.status(400).json({message:"Invalid date"})
+                     res.status(HTTPStatusCode.BAD_REQUEST).json({message:"Invalid date"})
                      return
                 }
             }
 
             const result=await this._admindashboard.execute({fromDate:fromDate as string,toDate:toDate as string,filter:filter as 'week'|'month'})
-            res.status(200).json({result})
+            res.status(HTTPStatusCode.OK).json({result})
         }catch (err) {
           console.error("❌ Error dashboard:", err);
-          res.status(500).json({ message: "Internal server error" });
+          res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR });
         }
     }
     

@@ -1,4 +1,6 @@
 import {Request,response,Response} from 'express'
+import { HTTPStatusCode } from '../../domain/enums/HttpStatusCode';
+import { userMessage } from '../../domain/shared/Usermessage/usermessage';
 import { Signup } from '../../application/usecase/User/Registor'
 import { CheckEmail } from '../../application/usecase/User/Checkemail';
 import { GoogleLogin } from '../../application/usecase/User/GoogleLogin';
@@ -88,10 +90,10 @@ export class UserController{
             const{name, email, password,phone}=req.body;
           
             const result=await this._signupuser.adduser(name,email,password,phone);
-            res.status(201).json(result)
+            res.status(HTTPStatusCode.CREATED).json(result)
         }
         catch (err:any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
           }
     }
 
@@ -99,9 +101,9 @@ export class UserController{
         try {
             const {email}=req.body
             const result=await this._checkemailuser.execute(email)
-            res.status(200).json(result)
+            res.status(HTTPStatusCode.OK).json(result)
         } catch (error:any) {
-            res.status(400).json({ message: error.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
         }
     }
 
@@ -116,10 +118,10 @@ export class UserController{
                 secure:false,
                 maxAge:7*24*60*60*1000,
             })
-            res.status(200).json({message:"Login Success", user:result.user,token:result.accesstoken})
+            res.status(HTTPStatusCode.OK).json({message:userMessage.LOGIN_SUCCESS, user:result.user,token:result.accesstoken})
 
         }catch (err: any) {
-      res.status(err.statusCode || 500).json({ message: err.message });
+      res.status(err.statusCode || HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
     }
     }
 
@@ -131,9 +133,9 @@ export class UserController{
                 const{otp, details}=req.body;
                 console.log(otp,details)
                 const result=await this._verifyotp.verify(otp,details)
-                res.status(200).json({message:result})
+                res.status(HTTPStatusCode.OK).json({message:result})
             } catch (err: any) {
-                res.status(400).json({ message: err.message });
+                res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
               }
     }
 
@@ -142,9 +144,9 @@ export class UserController{
             const {otp,details}=req.body
             console.log(otp,details)
             const result=await this._forgetpasswordverifyOTP.verify(otp,details)
-            res.status(200).json({message:result})
+            res.status(HTTPStatusCode.OK).json({message:result})
             } catch (err: any) {
-                res.status(400).json({ message: err.message });
+                res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
               }
 
         
@@ -155,9 +157,9 @@ export class UserController{
             const{password,email}=req.body
             console.log(password,email)
             const result=await this._changePassword.changepass(password,email)
-            res.status(200).json({message:result})
+            res.status(HTTPStatusCode.OK).json({message:result})
         } catch (err: any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
           }
     }
 
@@ -165,9 +167,9 @@ export class UserController{
         try {
             const {details}=req.body
             const result=await this._forgtepasswordresendOtp.resend(details)
-            res.status(200).json({ message: result });
+            res.status(HTTPStatusCode.OK).json({ message: result });
         } catch (err: any) {
-          res.status(400).json({ message: err.message });
+          res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
 
       
@@ -178,9 +180,9 @@ export class UserController{
         try {
             const{details}=req.body
             const result=await this._resendOTP.resend(details)
-            res.status(200).json({ message: result });
+            res.status(HTTPStatusCode.OK).json({ message: result });
         } catch (err: any) {
-          res.status(400).json({ message: err.message });
+          res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
     }
 
@@ -189,9 +191,9 @@ export class UserController{
             console.log("google")
             const{email, sub, name}=req.body
             const result=await this._googleLogin.GoogleLogin(email, sub, name);
-            res.status(200).json({ message: "Google Login Successful", user: result.user, token: result.token });
+            res.status(HTTPStatusCode.OK).json({ message: userMessage.GOOGLE_LOGIN_SUCCESS, user: result.user, token: result.token });
         } catch (err: any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
             }
     }
 
@@ -201,18 +203,18 @@ export class UserController{
             console.log("refreshtokencontroller",token)
             const newaccesstoken=await this._refreshtoken.refresh(token);
             console.log("in refresh token controller with new access tokern ",newaccesstoken)
-            res.status(200).json({ token: newaccesstoken });
+            res.status(HTTPStatusCode.OK).json({ token: newaccesstoken });
         } catch (err: any) {
-          res.status(400).json({ message: err.message });
+          res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
     }
 
     async fetchCategory(req:Request,res:Response):Promise<void>{
         try {
             const category=await this._fetchcat.fetch()
-            res.status(200).json({category})
+            res.status(HTTPStatusCode.OK).json({category})
         } catch (error:any) {
-            res.status(500).json({ message: error.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }
     }
 
@@ -222,9 +224,9 @@ export class UserController{
             const {userId}=req.params
             console.log("usder Id", userId)
             const user=await this._getuserById.getuserById(userId)
-            res.status(200).json({user})
+            res.status(HTTPStatusCode.OK).json({user})
         } catch (err: any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
           }
     }
 
@@ -233,9 +235,9 @@ export class UserController{
             const{userId}=req.params
             const{name, email, phone}=req.body
             const result=await this._editprofile.editprofile(userId,{name,email, phone})
-            res.status(200).json({message:"user updated",user:result})
+            res.status(HTTPStatusCode.OK).json({message:userMessage.USER_UPDATED,user:result})
         } catch (error:any) {
-            res.status(400).json({ message: error.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
         }
     }
 
@@ -245,34 +247,34 @@ export class UserController{
             const{pincode,date,categoryId}=req.query
             console.log(pincode,date,categoryId)
             if(!pincode|| !date ||!categoryId){
-                 res.status(400).json({message:"Missing required fields"})
+                 res.status(HTTPStatusCode.BAD_REQUEST).json({message:userMessage.MISSING_FIELDS})
                  return
             }
 
             const technicians=await this._fetchtechonavailable.fetchTechBasedOnAvailble(pincode as string,date as string,categoryId as string)
             console.log(technicians)
             if (!technicians || technicians.length === 0) {
-                 res.status(404).json({ message: "No technicians available" });
+                 res.status(HTTPStatusCode.NOT_FOUND).json({ message: userMessage.TECHNICIAN_NOT_AVAILABLE });
                  return
               }
           
-               res.status(200).json({ technicians });
+               res.status(HTTPStatusCode.OK).json({ technicians });
         } catch (error: any) {
 
             if (error.message === "technician not found") {
-                res.status(404).json({ message: "No technicians available for the selected slot." });
+                res.status(HTTPStatusCode.NOT_FOUND).json({ message: userMessage.TECHNICIAN_NOT_AVAILABLE });
               }
               else if (error.message==="date is not valid date"){
-                res.status(400).json({message:"Date is not valid date"})
+                res.status(HTTPStatusCode.BAD_REQUEST).json({message:userMessage.TECHNICIAN_SLOT_INVALID})
               }
               else if(error.message="User ID is required in headers"){
-                res.status(400).json({message:"please login in "})
+                res.status(HTTPStatusCode.BAD_REQUEST).json({message:userMessage.UNAUTHORIZED})
               }
                else {
-                res.status(500).json({ message: "Internal server error" });
+                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
               }
             console.error("Error fetching technicians:", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
           }
     }
 
@@ -280,9 +282,9 @@ export class UserController{
         try {
           const { catid } = req.params;
           const category = await this._getcatbyId.getcategorybyId(catid);
-          res.status(200).json({ category });
+          res.status(HTTPStatusCode.OK).json({ category });
         } catch (err: any) {
-          res.status(400).json({ message: err.message });
+          res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
       }
     async fetctechwithcat(req:Request, res:Response){
@@ -292,9 +294,9 @@ export class UserController{
             console.log("techid",techid)
             const technian=await this._fetchtechwithcategory.fetchtechwithcategory(techid)
             console.log(technian)
-            res.status(200).json({technian})
+            res.status(HTTPStatusCode.OK).json({technian})
         } catch (err:any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
     }
     async addUserAddress(req: Request, res: Response): Promise<void> {
@@ -315,11 +317,11 @@ export class UserController{
                 pincode
             );
             console.log("adff",result)
-            res.status(201).json({message:"added Successfully"});
+            res.status(HTTPStatusCode.CREATED).json({message:userMessage.ADDRESS_ADDED});
         }catch (err: any) {
             console.error("Error adding address:", err);
             const errorMessage = err?.message || "An unexpected error occurred";
-            res.status(400).json({ message: errorMessage });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: errorMessage });
         }
     }
     async editUserAddress(req: Request, res: Response): Promise<void> {
@@ -337,11 +339,11 @@ export class UserController{
                 country,
                 pincode
             });
-            res.status(200).json(result);
+            res.status(HTTPStatusCode.OK).json(result);
         }catch (err: any) {
             console.error("Error adding address:", err);
             const errorMessage = err?.message || "An unexpected error occurred";
-            res.status(400).json({ message: errorMessage });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: errorMessage });
         }
     }
     async deleteUserAddress(req: Request, res: Response): Promise<void> {
@@ -351,13 +353,13 @@ export class UserController{
             const deleted = await this._deleteaddress.deleteaddressbyId(addressId);
     
             if (!deleted) {
-                res.status(404).json({ message: "Address not found or already deleted" });
+                res.status(HTTPStatusCode.NOT_FOUND).json({ message: userMessage.ADDRESS_NOT_FOUND });
                 return;
             }
     
-            res.status(200).json({ message: "Address deleted successfully" });
+            res.status(HTTPStatusCode.OK).json({ message: userMessage.ADDRESS_DELETED });
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
         }
     }
     async getUserAddresses(req: Request, res: Response): Promise<void> {
@@ -366,9 +368,9 @@ export class UserController{
             
             const addresses = await this._getaddressbyid.getaddressbyId(userId);
 
-            res.status(200).json({ addresses });
+            res.status(HTTPStatusCode.OK).json({ addresses });
         } catch (err: any) {
-            res.status(400).json({ message: err.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
         }
     }
     async createOrder(req: Request, res: Response): Promise<void> {
@@ -384,12 +386,12 @@ export class UserController{
           if (!order || !order.id) {
             throw new Error("Failed to create Razorpay order.");
           }
-          res.status(200).json({ id: order.id,
+          res.status(HTTPStatusCode.OK).json({ id: order.id,
             amount: order.amount,
             currency: order.currency,
          });
         } catch (err: any) {
-          res.status(500).json({ message: err.message });
+          res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
         }
       }
     async confirmpay(req:Request,res:Response):Promise<void>{
@@ -418,21 +420,21 @@ export class UserController{
               } ,
               razorpay_payment_id,
               "completed")
-              res.status(200).json(result.booking);
+              res.status(HTTPStatusCode.OK).json(result.booking);
               return
             } catch (error: any) {
-                if (error.message === "Payment already completed for this booking.") {
-                 res.status(400).json({ message: error.message });
+                if (error.message === userMessage.PAYMENT_ALREADY_COMPLETED) {
+                 res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
                  return
                 }
 
-                if (error.message === "Payment already in progress for this booking.") {
+                if (error.message === userMessage.PAYMENT_ALREADY_IN_PROGRESS) {
                  res.status(409).json({ message: error.message });
                  return
                 }
 
                 console.error("Unexpected payment error:", error);
-                res.status(500).json({ message: "Payment failed", retry: true });
+                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.PAYMENT_FAILED_RETRY, retry: true });
                 return
             }
     }
@@ -446,7 +448,7 @@ export class UserController{
           }: { userId: string; bookingId: string; razorpay_payment_id: string } = req.body;
       
           if (!userId || !bookingId || !razorpay_payment_id) {
-            res.status(400).json({ message: "Missing required fields" });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: userMessage.MISSING_FIELDS });
             return;
           }
           const result = await this._retrypaymet.retryconfirmPayment(
@@ -458,10 +460,10 @@ export class UserController{
             "completed"
           );
       
-          res.status(200).json({ success: true, booking: result.booking });
+          res.status(HTTPStatusCode.OK).json({ success: true, booking: result.booking });
         } catch (err) {
           console.error("❌ Error confirming payment:", err);
-          res.status(500).json({ message: "Internal server error" });
+          res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
         }
       }
       
@@ -473,9 +475,9 @@ export class UserController{
             const{userId}=req.query
             const booking=await this._fetchbookByUserid.fetchBookingdetails(userId as string,page)
   
-            res.status(200).json(booking)
+            res.status(HTTPStatusCode.OK).json(booking)
         } catch (err: any) {
-            res.status(500).json({ message: err.message });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
             
         }
     }
@@ -486,13 +488,13 @@ export class UserController{
             const{password,oldpassword}=req.body
             console.log(req.body)
             const result=await this._passwordchnaging.editpassword(userId, oldpassword,password)
-            res.status(200).json({message:result.message})
+            res.status(HTTPStatusCode.OK).json({message:result.message})
         } catch (err: any) {
-             if (err.message === "Old password is incorrect") {
-                res.status(404).json({ message: "Old password is incorrect" });
+             if (err.message === userMessage.OLD_PASSWORD_INCORRECT) {
+                res.status(HTTPStatusCode.NOT_FOUND).json({ message: userMessage.OLD_PASSWORD_INCORRECT });
               }
               else{
-                    res.status(500).json({ message: err.message });
+                    res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
               }
             
             
@@ -502,9 +504,9 @@ export class UserController{
         try {
             const {transId}=req.params
             const result=await this._getTransactionwithbookings.execute(transId)
-            res.status(200).json({result})
+            res.status(HTTPStatusCode.OK).json({result})
         } catch (error:any) {
-            res.status(400).json({ message: error.message });
+            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
         }
     }
     async Failedpayment(req:Request,res:Response){
@@ -532,10 +534,10 @@ export class UserController{
               
             });
         
-            res.status(201).json({ success: true, booking });
+            res.status(HTTPStatusCode.CREATED).json({ success: true, booking });
           } catch (error) {
             console.error("Failed to log payment failure:", error);
-            res.status(500).json({ success: false, message: "Internal Server Error" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ success: false, message:userMessage.INTERNAL_ERROR });
           }
 
     }
@@ -546,10 +548,10 @@ export class UserController{
           
             console.log("userremat=rk",userremark)
             const result=await this._updateusercancelreasons.updateusercanel(bookingId,userremark)
-            res.status(200).json({message:"Update Cancel reason",updatebooker:result.updatebooker})
+            res.status(HTTPStatusCode.OK).json({message:userMessage.UPDATE_CANCEL_REASON_SUCCESS,updatebooker:result.updatebooker})
         } catch (error) {
             console.error("Error updating cancel reason", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
         }
 
     }
@@ -561,10 +563,10 @@ export class UserController{
           
            
             const result=await this._getwalletbalance.fetchwalletbalance(userId)
-            res.status(200).json({message:"Balance",balance:result.balance})
+            res.status(HTTPStatusCode.OK).json({message:userMessage.BALANCE,balance:result.balance})
         } catch (error) {
             console.error("Error in fetching balance", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
         }
     }
 
@@ -574,10 +576,10 @@ export class UserController{
             const{userId}=req.params
             console.log(userId)
             const walletdetail=await this._fetchwalletdetails.fetchwalletdetails(userId)
-            res.status(200).json({walletdetail})
+            res.status(HTTPStatusCode.OK).json({walletdetail})
         } catch (error) {
             console.error("Error fetching wallet", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
         }
     }
 
@@ -610,17 +612,17 @@ export class UserController{
               } ,
             
               "completed")
-              res.status(200).json({message:"success",result});
+              res.status(HTTPStatusCode.OK).json({message:userMessage.SUCCESS,result});
             } catch (error:any) {
                 if (error.message === "wallet not found") {
-                    res.status(404).json({ message: "No wallet available for the selected slot." });
+                    res.status(HTTPStatusCode.NOT_FOUND).json({ message: userMessage.NO_WALLET_AVAILABLE });
                   }
-                if(error.message==="insufficeint Balance"){
-                    res.status(400).json({message:"insufficeint Balance"})
+                if(error.message===userMessage.INSUFFICIENT_BALANCE){
+                    res.status(HTTPStatusCode.BAD_REQUEST).json({message:userMessage.INSUFFICIENT_BALANCE})
 
                 }
                 else {
-                    res.status(500).json({ message: "Internal server error" });
+                    res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
                   }
 
              
@@ -631,10 +633,10 @@ export class UserController{
         try {
             const{bookingId}=req.params
             const response=await this._fetchsession.fetchpendingsession(bookingId)
-            res.status(200).json(response)
+            res.status(HTTPStatusCode.OK).json(response)
         }  catch (error) {
             console.error("Error fetching pending session", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
         }
     }
 
@@ -643,10 +645,10 @@ export class UserController{
             const{bookingId}=req.params
             const{requestId,status}=req.body
             const response=await this._acceptsessionrequest.acceptsession(bookingId,requestId,status)
-            res.status(200).json(response)
+            res.status(HTTPStatusCode.OK).json(response)
         }  catch (error) {
             console.error("Error accepting session", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
         }
     }
 
@@ -654,10 +656,10 @@ export class UserController{
         try {
             const{bookingId}=req.params
             const result=await this._finalamount.finalpayment(bookingId)
-            res.status(200).json(result)
+            res.status(HTTPStatusCode.OK).json(result)
         } catch (error) {
             console.error("Error accepting session", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message:userMessage.INTERNAL_ERROR });
         }
     }
 
@@ -671,14 +673,14 @@ export class UserController{
               }: { bookingId: string; razorpay_payment_id: string } = req.body;
               console.log("req body", req.body)
               if ( !bookingId || !razorpay_payment_id) {
-                res.status(400).json({ message: "Missing required fields" });
+                res.status(HTTPStatusCode.BAD_REQUEST).json({ message:userMessage.MISSING_FIELDS });
                 return;
               }
               const result=await this._confirmfinalpayment.makefinalpaymentconfirm(bookingId,razorpay_payment_id,"completed")
-              res.status(200).json({ success: true, booking: result.booking });
+              res.status(HTTPStatusCode.OK).json({ success: true, booking: result.booking });
             } catch (err) {
               console.error("❌ Error confirming payment:", err);
-              res.status(500).json({ message: "Internal server error" });
+              res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
             }
         }
 
@@ -687,16 +689,16 @@ export class UserController{
             const {techId}=req.params
             console.log("controller in user review techId", techId)
             if(!techId){
-                res.status(400).json({message:"tech Id is missing"})
+                res.status(HTTPStatusCode.BAD_REQUEST).json({message:userMessage.MISSING_TECH_ID})
                 return
             }
 
             const result=await this._fetchreviewbytech.fetchreviewtechId(techId)
-            res.status(200).json({reviews:result})
+            res.status(HTTPStatusCode.OK).json({reviews:result})
 
         } catch (err) {
               console.error("❌ Error in fetching review:", err);
-              res.status(500).json({ message: "Internal server error" });
+              res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: userMessage.INTERNAL_ERROR });
             }
     }
 
@@ -705,10 +707,10 @@ export class UserController{
             const{userId,techId, description, points}=req.body
             console.log("adding review", req.body)
             const response=await this._addreview.addreview(userId,techId,description,points)
-            res.status(200).json(response)
+            res.status(HTTPStatusCode.OK).json(response)
         } catch (err) {
               console.error("❌ Error in adding review:", err);
-              res.status(500).json({ message: "Internal server error" });
+              res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message:userMessage.INTERNAL_ERROR });
             }
     }
      async checkPaymentStatus(req: Request, res: Response): Promise<void> {
@@ -716,7 +718,7 @@ export class UserController{
             const { userId, techid, date } = req.query;
 
             if (!userId || !techid || !date) {
-                res.status(400).json({ message: "Missing parameters" });
+                res.status(HTTPStatusCode.BAD_REQUEST).json({ message:userMessage.MISSING_PARAMETERS});
                 return;
             }
 
@@ -726,10 +728,10 @@ export class UserController{
                 date.toString()
             );
 
-            res.status(200).json({ status });
+            res.status(HTTPStatusCode.OK).json({ status });
             } catch (error) {
             console.error("Check payment error:", error);
-            res.status(500).json({ message: "Failed to check payment status" });
+            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: "Failed to check payment status" });
             }
         }
 
