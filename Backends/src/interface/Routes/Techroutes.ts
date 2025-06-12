@@ -1,5 +1,13 @@
 import express from 'express'
 import { techController } from '../controllers/TechController'
+import { TechAuthController } from '../controllers/TechAuthController'
+import { TechProfileController } from '../controllers/TechProfileController'
+import { TechBookingController } from '../controllers/TechBookingController'
+
+
+
+
+
 import { LoginTech } from '../../application/usecase/Tech/LoginTech'
 import { RefreshToken } from '../../application/usecase/Tech/RefreshToken'
 import { TechRepositoryImpl } from '../../infrastructure/repository/TechRepositoryImpl'
@@ -49,39 +57,56 @@ const fetchtransactionintech= new FetchTransactionsinTechWallet(transactionrespo
 const techdashboard=new GetTechDashboardStatsUseCase(techrepository)
 const fetchreviews= new FetchReviewByTechId(reviewrepository)
 
-const TechController= new techController(
+
+const techAuthController=new TechAuthController(
     logintechs,
     refreshtoken,
-    fetchTechById,
+)
+
+const techprofileController= new TechProfileController(
+     fetchTechById,
     editprofile,
     fetchCategories,
+    passchnage,
+)
+
+const techbookingcontroller= new TechBookingController(
     fetchbookingbeforeacceptbytech,
     requestacceptbytech,
     fetchupcmingevets,
-    passchnage,
+    
     requestrejectbytech,
     requestsessionbytech,
     fetchcompleterejectbookings,
+)
+const TechController= new techController(
+
+   
+    
     fetchtransactionintech,
     techdashboard,
     fetchreviews
     
 )
 
-router.post(TechRoutes.LOGIN,(req,res)=>TechController.login(req,res))
-router.post(TechRoutes.REFRESH,(req,res)=>TechController.refreshtokenController(req,res))
+router.post(TechRoutes.LOGIN,(req,res)=>techAuthController.login(req,res))
+router.post(TechRoutes.REFRESH,(req,res)=>techAuthController.refreshtokenController(req,res))
 
 
-router.get(TechRoutes.FETCHPROFILE,authToken,(req,res)=>TechController.fetchTechById(req,res))
-router.put(TechRoutes.UPDATEPROFILE,authToken,(req,res)=>TechController.edittechs(req,res))
-router.get(TechRoutes.FETCHCATEGORY,authToken,(req,res)=>TechController.fetchCategory(req,res))
-router.get(TechRoutes.FETCHTECHREQUEST,authToken,(req,res)=>TechController.fetchRequestByTech(req,res))
-router.post(TechRoutes.FETCHBOOKINGREQUEST, authToken,(req,res)=>TechController.bookingrequest(req,res))
-router.get(TechRoutes.UPCOMING_EVENTS, authToken,(req,res)=>TechController.fetchupcomingevnts(req,res))
-router.post(TechRoutes.PASSWORD,authToken,(req,res)=>TechController.passwordChanges(req,res))
-router.post(TechRoutes.REJECT_BOOKINGS,authToken,(req,res)=>TechController.bookingsrejectedbytech(req,res))
-router.post(TechRoutes.REQUEST_SESSIONS,authToken,(req,res)=>TechController.requestressions(req,res))
-router.get(TechRoutes.FETCH_BOOKINGS,authToken,(req,res)=>TechController.completeandrejectbookings(req,res))
+router.get(TechRoutes.FETCHPROFILE,authToken,(req,res)=>techprofileController.fetchTechById(req,res))
+router.put(TechRoutes.UPDATEPROFILE,authToken,(req,res)=>techprofileController.edittechs(req,res))
+router.get(TechRoutes.FETCHCATEGORY,authToken,(req,res)=>techprofileController.fetchCategory(req,res))
+router.post(TechRoutes.PASSWORD,authToken,(req,res)=>techprofileController.passwordChanges(req,res))
+
+
+router.get(TechRoutes.FETCHTECHREQUEST,authToken,(req,res)=>techbookingcontroller.fetchRequestByTech(req,res))
+router.post(TechRoutes.FETCHBOOKINGREQUEST, authToken,(req,res)=>techbookingcontroller.bookingrequest(req,res))
+router.get(TechRoutes.UPCOMING_EVENTS, authToken,(req,res)=>techbookingcontroller.fetchupcomingevnts(req,res))
+router.post(TechRoutes.REJECT_BOOKINGS,authToken,(req,res)=>techbookingcontroller.bookingsrejectedbytech(req,res))
+router.post(TechRoutes.REQUEST_SESSIONS,authToken,(req,res)=>techbookingcontroller.requestressions(req,res))
+router.get(TechRoutes.FETCH_BOOKINGS,authToken,(req,res)=>techbookingcontroller.completeandrejectbookings(req,res))
+
+
 router.get(TechRoutes.FETCH_TRANSACTIONS,authToken,(req,res)=>TechController.fetchtransactiontechwallet(req,res))
 router.get(TechRoutes.GETSTATSTECH,authToken,(req,res)=>TechController.getDashboardTechId(req,res))
 router.get(TechRoutes.FETCH_REVIEW,(req,res)=>TechController.fetchreview(req,res))
