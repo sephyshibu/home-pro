@@ -1,5 +1,15 @@
 import express from 'express'
 import { UserController } from '../controllers/UserController'
+import { AuthController } from '../controllers/AuthController'
+import { ProfileController } from '../controllers/ProfileController'
+import { TechControllers } from '../controllers/TechControllers'
+import { CategoryController } from '../controllers/CategoryController'
+import { AddressController } from '../controllers/AddressController'
+import {BookingController} from '../controllers/BookingControllers'
+import { WalletController } from '../controllers/WalletController'
+import { TransactionController } from '../controllers/TransactionController'
+import { ReviewCOntroller } from '../controllers/ReviewController'
+
 import { Signup } from '../../application/usecase/User/Registor'
 import { CheckEmail } from '../../application/usecase/User/Checkemail'
 import { UserRepositoryImpl } from '../../infrastructure/repository/UserRepositoryImpl'
@@ -104,7 +114,7 @@ const fetchingreviewbytechfromuser= new FetchReviewByTechId(reviewrepository)
 const addingreviewbyuser= new AddReview(reviewrepository)
 const checkpaystatus= new CheckPaymentStatus(bookingrepository)
 
-const usercontroller= new UserController(
+const authcontroller=new AuthController(
     signupuser,
     checkemailUser,
     loginuser,
@@ -116,79 +126,114 @@ const usercontroller= new UserController(
     forgetpassresendotp,
     chnagepassword,
     fetchcategories,
+)
+
+const profilecontroller= new ProfileController(
     getuserById,editprofile,
-    fetchtechonavailble,
-    getcategoryid,
-    fetchtechwithcat,
-    addaddressed,
+)
+
+const techcontrollers=new TechControllers(
+     fetchtechonavailble,
+      fetchtechwithcat,
+)
+
+const categorycontroller=new CategoryController(
+     getcategoryid,
+)
+
+const addresscontroller= new AddressController(
+     addaddressed,
     editaddress,
     getaddressed,
     deleteaddress,
+)
+
+const bookingcontroller= new BookingController(
     createBookingUseCase,
     confirmPayment,
     fetchbook,
-    passchange,
     handlefailpayment,
     retrypaymet,
     usercancelupdate,
-    walletdetails,
-    walletbalce,
     walletpayconsultationFee,
     fetchingpendingsession,
     acceptingsession,
     finalamounttopay,
     confirmfinalpayment,
+    checkpaystatus
+)
+
+const walletcontroller= new WalletController(
+     walletdetails,
+    walletbalce,
+)
+
+const transactioncontroller=new TransactionController(
+      
     gettransactionwithbookings,
+)
+const reviewcontroller= new ReviewCOntroller(
     fetchingreviewbytechfromuser,
     addingreviewbyuser,
-    checkpaystatus
-  
-    
-
+)
+const usercontroller= new UserController(
+    passchange
 )
 
 
-router.post(UserRoutes.SIGNUP,(req,res)=>usercontroller.signup(req,res))
-router.post(UserRoutes.LOGIN,(req,res)=>usercontroller.login(req,res))
-router.post(UserRoutes.REFRESH,(req,res)=>usercontroller.refreshtokenController(req,res))
-router.post(UserRoutes.VERIFYOTP,(req, res)=>usercontroller.verifyotpcontroller(req,res))
-router.post(UserRoutes.RESENDOTP,(req,res)=>usercontroller.resendotpcontroller(req,res))
-router.post(UserRoutes.GOOGLELOGIN, (req, res) => usercontroller.googleLoginController(req, res));
-router.post(UserRoutes.CHECKEMAIL,(req,res)=>usercontroller.checkEmail(req,res))
-router.post(UserRoutes.CHANGEPASSWORD,(req,res)=>usercontroller.changepassword(req,res))
-router.post(UserRoutes.FORGETPASSWORDVERIFYOTP,(req,res)=>usercontroller.forgetpasswordVerifyOTP(req,res))
-router.post(UserRoutes.FORGETRESENDOTP,(req,res)=>usercontroller.forgetpasswordresnedOTP(req,res))
-router.get(UserRoutes.FETCHCATEGORY,(req,res)=>usercontroller.fetchCategory(req,res))
+router.post(UserRoutes.SIGNUP,(req,res)=>authcontroller.signup(req,res))
+router.post(UserRoutes.LOGIN,(req,res)=>authcontroller.login(req,res))
+router.post(UserRoutes.REFRESH,(req,res)=>authcontroller.refreshtokenController(req,res))
+router.post(UserRoutes.VERIFYOTP,(req, res)=>authcontroller.verifyotpcontroller(req,res))
+router.post(UserRoutes.RESENDOTP,(req,res)=>authcontroller.resendotpcontroller(req,res))
+router.post(UserRoutes.GOOGLELOGIN, (req, res) => authcontroller.googleLoginController(req, res));
+router.post(UserRoutes.CHECKEMAIL,(req,res)=>authcontroller.checkEmail(req,res))
+router.post(UserRoutes.CHANGEPASSWORD,(req,res)=>authcontroller.changepassword(req,res))
+router.post(UserRoutes.FORGETPASSWORDVERIFYOTP,(req,res)=>authcontroller.forgetpasswordVerifyOTP(req,res))
+router.post(UserRoutes.FORGETRESENDOTP,(req,res)=>authcontroller.forgetpasswordresnedOTP(req,res))
+router.get(UserRoutes.FETCHCATEGORY,(req,res)=>authcontroller.fetchCategory(req,res))
 
 
 
 // router.use(authToken); 
-router.get(UserRoutes.FETCHUSER,authToken,(req,res)=>usercontroller.fetchUserById(req,res))
-router.put(UserRoutes.UPDATEUSER,authToken,(req,res)=>usercontroller.edituser(req,res))
-router.get(UserRoutes.TECHAVAILABLE,authToken,(req,res)=>usercontroller.fetchTechBasedonavailble(req,res))
-router.get(UserRoutes.FETCHPARTICULARCATEGORY,authToken,(req,res)=>usercontroller.fetchCategoryById(req,res))
-router.get(UserRoutes.FETCHTECH,authToken,(req,res)=>usercontroller.fetctechwithcat(req,res))
-router.post(UserRoutes.ADDADDRESS,authToken,(req,res)=>usercontroller.addUserAddress(req,res))
-router.get(UserRoutes.FETCHADDRESS,authToken,(req,res)=>usercontroller.getUserAddresses(req,res))
-router.put(UserRoutes.EDITADDRESS,authToken, (req,res)=>usercontroller.editUserAddress(req,res))
-router.delete(UserRoutes.DELETEADDRESS,authToken,(Req,res)=>usercontroller.deleteUserAddress(Req,res))
-router.post(UserRoutes.CREATEORDER, authToken, (req, res) => usercontroller.createOrder(req, res));
-router.post(UserRoutes.CONFIRMPAYMENT,authToken,(req,res)=>usercontroller.confirmpay(req,res))
-router.get(UserRoutes.FETCHBOOKINGS, authToken,(req,res)=>usercontroller.fetchbookingsbyuserId(req,res))
+router.get(UserRoutes.FETCHUSER,authToken,(req,res)=>profilecontroller.fetchUserById(req,res))
+router.put(UserRoutes.UPDATEUSER,authToken,(req,res)=>profilecontroller.edituser(req,res))
+
+router.get(UserRoutes.TECHAVAILABLE,authToken,(req,res)=>techcontrollers.fetchTechBasedonavailble(req,res))
+router.get(UserRoutes.FETCHPARTICULARCATEGORY,authToken,(req,res)=>categorycontroller.fetchCategoryById(req,res))
+
+router.get(UserRoutes.FETCHTECH,authToken,(req,res)=>techcontrollers.fetctechwithcat(req,res))
+
+router.post(UserRoutes.ADDADDRESS,authToken,(req,res)=>addresscontroller.addUserAddress(req,res))
+router.get(UserRoutes.FETCHADDRESS,authToken,(req,res)=>addresscontroller.getUserAddresses(req,res))
+router.put(UserRoutes.EDITADDRESS,authToken, (req,res)=>addresscontroller.editUserAddress(req,res))
+router.delete(UserRoutes.DELETEADDRESS,authToken,(Req,res)=>addresscontroller.deleteUserAddress(Req,res))
+
+router.post(UserRoutes.CREATEORDER, authToken, (req, res) => bookingcontroller.createOrder(req, res));
+router.post(UserRoutes.CONFIRMPAYMENT,authToken,(req,res)=>bookingcontroller.confirmpay(req,res))
+router.get(UserRoutes.FETCHBOOKINGS, authToken,(req,res)=>bookingcontroller.fetchbookingsbyuserId(req,res))
+
 router.post(UserRoutes.PASSWORD,authToken,(req,res)=>usercontroller.passwordChanges(req,res))
-router.post(UserRoutes.PAYMENTFAILED,authToken,(req,res)=>usercontroller.Failedpayment(req,res))
-router.post(UserRoutes.CONFIRMPAYMENT_RETRY,authToken,(req,res)=>usercontroller.retryconfirmpayment(req,res))
-router.post(UserRoutes.UPDATECANCELREASON,authToken,(req,res)=>usercontroller.updatecancelreason(req,res))
-router.get(UserRoutes.FETCHWALLET,authToken,(req,res)=>usercontroller.fetchdetailswallet(req,res))
-router.get(UserRoutes.FETCHWALLETBALANCE,authToken,(req,res)=>usercontroller.fetchbalance(req,res))
-router.post(UserRoutes.WALLETPAYMENT,authToken,(req,res)=>usercontroller.walletpaymentconsultationFee(req,res))
-router.post(UserRoutes.ACCEPTSESSIONREQUEST,authToken,(req,res)=>usercontroller.acceptsession(req,res))
-router.get(UserRoutes.FETCHSESSIONS,authToken,(req,res)=>usercontroller.fetchsessionpending(req,res))
-router.post(UserRoutes.FINALPAYMENTPROCESS,authToken,(req,res)=>usercontroller.finalamountbeforeconfirm(req,res))
-router.post(UserRoutes.FINALCONFIRMPAYMENT,authToken,(req,res)=>usercontroller.finalpaymentconfirm(req,res))
-router.get(UserRoutes.FETCHTRANSACTIONS,authToken,(req,res)=>usercontroller.transactionwithBookings(req,res))
-router.get(UserRoutes.FETCHREVIEW,authToken,(req,res)=>usercontroller.fetchreviewbytechIdfromUser(req,res))
-router.post(UserRoutes.ADDREVIEW,authToken,(req,res)=>usercontroller.Addingreview(req,res))
-router.get(UserRoutes.PAYMENT_STATUS_CHECK,authToken,(req,res)=>usercontroller.checkPaymentStatus(req,res))
+
+router.post(UserRoutes.PAYMENTFAILED,authToken,(req,res)=>bookingcontroller.Failedpayment(req,res))
+router.post(UserRoutes.CONFIRMPAYMENT_RETRY,authToken,(req,res)=>bookingcontroller.retryconfirmpayment(req,res))
+router.post(UserRoutes.UPDATECANCELREASON,authToken,(req,res)=>bookingcontroller.updatecancelreason(req,res))
+router.post(UserRoutes.ACCEPTSESSIONREQUEST,authToken,(req,res)=>bookingcontroller.acceptsession(req,res))
+router.get(UserRoutes.FETCHSESSIONS,authToken,(req,res)=>bookingcontroller.fetchsessionpending(req,res))
+router.post(UserRoutes.FINALPAYMENTPROCESS,authToken,(req,res)=>bookingcontroller.finalamountbeforeconfirm(req,res))
+router.post(UserRoutes.FINALCONFIRMPAYMENT,authToken,(req,res)=>bookingcontroller.finalpaymentconfirm(req,res))
+router.post(UserRoutes.WALLETPAYMENT,authToken,(req,res)=>bookingcontroller.walletpaymentconsultationFee(req,res))
+router.get(UserRoutes.PAYMENT_STATUS_CHECK,authToken,(req,res)=>bookingcontroller.checkPaymentStatus(req,res))
+
+
+router.get(UserRoutes.FETCHWALLET,authToken,(req,res)=>walletcontroller.fetchdetailswallet(req,res))
+router.get(UserRoutes.FETCHWALLETBALANCE,authToken,(req,res)=>walletcontroller.fetchbalance(req,res))
+
+
+router.get(UserRoutes.FETCHTRANSACTIONS,authToken,(req,res)=>transactioncontroller.transactionwithBookings(req,res))
+
+router.get(UserRoutes.FETCHREVIEW,authToken,(req,res)=>reviewcontroller.fetchreviewbytechIdfromUser(req,res))
+router.post(UserRoutes.ADDREVIEW,authToken,(req,res)=>reviewcontroller.Addingreview(req,res))
+
 
 export {router as userRouter}
