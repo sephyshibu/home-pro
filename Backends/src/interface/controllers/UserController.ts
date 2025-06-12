@@ -1,4 +1,6 @@
 import {Request,response,Response} from 'express'
+import dotenv from 'dotenv'
+dotenv.config()
 import { HTTPStatusCode } from '../../domain/enums/HttpStatusCode';
 import { userMessage } from '../../domain/shared/Usermessage/usermessage';
 import { Signup } from '../../application/usecase/User/Registor'
@@ -113,10 +115,10 @@ export class UserController{
             const{email,password}=req.body
             console.log(req.body)
             const result=await this._loginuser.login(email, password)
-            res.cookie("refreshtokenuser", result.refreshtoken,{
-                httpOnly:true,
-                secure:false,
-                maxAge:7*24*60*60*1000,
+            res.cookie(process.env.COOKIE_NAME_USER ||"refreshtokenuser", result.refreshtoken,{
+                httpOnly:process.env.COOKIE_HTTPONLY==='true',
+                secure:process.env.COOKIE_SECURE==='false',
+                maxAge:parseInt(process.env.COOKIE_MAXAGE || "604800000"),
             })
             res.status(HTTPStatusCode.OK).json({message:userMessage.LOGIN_SUCCESS, user:result.user,token:result.accesstoken})
 
@@ -199,7 +201,7 @@ export class UserController{
 
     async refreshtokenController(req:Request, res:Response):Promise<void>{
         try {
-            const token=req.cookies?.refreshtokenuser;
+            const token=req.cookies?.[process.env.COOKIE_NAME_USER||"refreshtokenuser"];
             console.log("refreshtokencontroller",token)
             const newaccesstoken=await this._refreshtoken.refresh(token);
             console.log("in refresh token controller with new access tokern ",newaccesstoken)
