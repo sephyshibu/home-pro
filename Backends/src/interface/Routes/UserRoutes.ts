@@ -49,6 +49,7 @@ import { FetchReviewByTechId } from '../../application/usecase/Review/fetchRevie
 import { ReviewrepositoryImpl } from '../../infrastructure/repository/ReviewRepositoryImpl'
 import { AddReview } from '../../application/usecase/Review/addreview'
 import { CheckPaymentStatus } from '../../application/usecase/booking/paystatus'
+import { UserRoutes } from '../../infrastructure/constants/userRouters'
 const router=express.Router()
 
 
@@ -147,47 +148,47 @@ const usercontroller= new UserController(
 )
 
 
-router.post('/api/signup',(req,res)=>usercontroller.signup(req,res))
-router.post('/api/login',(req,res)=>usercontroller.login(req,res))
-router.post('/refresh',(req,res)=>usercontroller.refreshtokenController(req,res))
-router.post('/api/verifyotp',(req, res)=>usercontroller.verifyotpcontroller(req,res))
-router.post('/api/resendotp',(req,res)=>usercontroller.resendotpcontroller(req,res))
-router.post('/api/googlelogin', (req, res) => usercontroller.googleLoginController(req, res));
-router.post('/api/checkemail',(req,res)=>usercontroller.checkEmail(req,res))
-router.post('/api/chnagepasswords',(req,res)=>usercontroller.changepassword(req,res))
-router.post('/api/forgetpassverifyotp',(req,res)=>usercontroller.forgetpasswordVerifyOTP(req,res))
-router.post('/api/forgetpassresendotp',(req,res)=>usercontroller.forgetpasswordresnedOTP(req,res))
-router.get('/api/fetchcategory',(req,res)=>usercontroller.fetchCategory(req,res))
+router.post(UserRoutes.SIGNUP,(req,res)=>usercontroller.signup(req,res))
+router.post(UserRoutes.LOGIN,(req,res)=>usercontroller.login(req,res))
+router.post(UserRoutes.REFRESH,(req,res)=>usercontroller.refreshtokenController(req,res))
+router.post(UserRoutes.VERIFYOTP,(req, res)=>usercontroller.verifyotpcontroller(req,res))
+router.post(UserRoutes.RESENDOTP,(req,res)=>usercontroller.resendotpcontroller(req,res))
+router.post(UserRoutes.GOOGLELOGIN, (req, res) => usercontroller.googleLoginController(req, res));
+router.post(UserRoutes.CHECKEMAIL,(req,res)=>usercontroller.checkEmail(req,res))
+router.post(UserRoutes.CHANGEPASSWORD,(req,res)=>usercontroller.changepassword(req,res))
+router.post(UserRoutes.FORGETPASSWORDVERIFYOTP,(req,res)=>usercontroller.forgetpasswordVerifyOTP(req,res))
+router.post(UserRoutes.FORGETRESENDOTP,(req,res)=>usercontroller.forgetpasswordresnedOTP(req,res))
+router.get(UserRoutes.FETCHCATEGORY,(req,res)=>usercontroller.fetchCategory(req,res))
 
 
 
 // router.use(authToken); 
-router.get('/api/fetchinguser/:userId',authToken,(req,res)=>usercontroller.fetchUserById(req,res))
-router.put('/api/updateuser/:userId',authToken,(req,res)=>usercontroller.edituser(req,res))
-router.get('/api/technicians/available',authToken,(req,res)=>usercontroller.fetchTechBasedonavailble(req,res))
-router.get('/api/fetchparticularcategory/:catid',authToken,(req,res)=>usercontroller.fetchCategoryById(req,res))
-router.get('/api/fetchtech/:techid',authToken,(req,res)=>usercontroller.fetctechwithcat(req,res))
-router.post('/api/addaddress/:userId',authToken,(req,res)=>usercontroller.addUserAddress(req,res))
-router.get('/api/fetchaddress/:userId',authToken,(req,res)=>usercontroller.getUserAddresses(req,res))
-router.put('/api/editaddress/:addressId',authToken, (req,res)=>usercontroller.editUserAddress(req,res))
-router.delete('/api/deleteaddress/:addressId',authToken,(Req,res)=>usercontroller.deleteUserAddress(Req,res))
-router.post('/api/create-order/:userId', authToken, (req, res) => usercontroller.createOrder(req, res));
-router.post('/api/confirm-payment',authToken,(req,res)=>usercontroller.confirmpay(req,res))
-router.get('/api/fetchbookings', authToken,(req,res)=>usercontroller.fetchbookingsbyuserId(req,res))
-router.post('/api/password/:userId',authToken,(req,res)=>usercontroller.passwordChanges(req,res))
-router.post('/api/payment-failed',authToken,(req,res)=>usercontroller.Failedpayment(req,res))
-router.post('/api/confirm-payment-retry',authToken,(req,res)=>usercontroller.retryconfirmpayment(req,res))
-router.post('/api/updatecancelreason/:bookingId',authToken,(req,res)=>usercontroller.updatecancelreason(req,res))
-router.get('/api/fetchwalletdetails/:userId',authToken,(req,res)=>usercontroller.fetchdetailswallet(req,res))
-router.get('/api/fetchwalletbalance/:userId',authToken,(req,res)=>usercontroller.fetchbalance(req,res))
-router.post('/api/walletpayment',authToken,(req,res)=>usercontroller.walletpaymentconsultationFee(req,res))
-router.post('/api/acceptsessionrequest/:bookingId',authToken,(req,res)=>usercontroller.acceptsession(req,res))
-router.get('/api/fetchsessions/:bookingId',authToken,(req,res)=>usercontroller.fetchsessionpending(req,res))
-router.post('/api/finalpaymentprocess/:bookingId',authToken,(req,res)=>usercontroller.finalamountbeforeconfirm(req,res))
-router.post('/api/finalconfirmpayemnts',authToken,(req,res)=>usercontroller.finalpaymentconfirm(req,res))
-router.get('/api/fetchtransactionwithBookings/:transId',authToken,(req,res)=>usercontroller.transactionwithBookings(req,res))
-router.get('/api/fetchreview/:techId',authToken,(req,res)=>usercontroller.fetchreviewbytechIdfromUser(req,res))
-router.post('/api/addreview',authToken,(req,res)=>usercontroller.Addingreview(req,res))
-router.get('/api/payment-status-check',authToken,(req,res)=>usercontroller.checkPaymentStatus(req,res))
+router.get(UserRoutes.FETCHUSER,authToken,(req,res)=>usercontroller.fetchUserById(req,res))
+router.put(UserRoutes.UPDATEUSER,authToken,(req,res)=>usercontroller.edituser(req,res))
+router.get(UserRoutes.TECHAVAILABLE,authToken,(req,res)=>usercontroller.fetchTechBasedonavailble(req,res))
+router.get(UserRoutes.FETCHPARTICULARCATEGORY,authToken,(req,res)=>usercontroller.fetchCategoryById(req,res))
+router.get(UserRoutes.FETCHTECH,authToken,(req,res)=>usercontroller.fetctechwithcat(req,res))
+router.post(UserRoutes.ADDADDRESS,authToken,(req,res)=>usercontroller.addUserAddress(req,res))
+router.get(UserRoutes.FETCHADDRESS,authToken,(req,res)=>usercontroller.getUserAddresses(req,res))
+router.put(UserRoutes.EDITADDRESS,authToken, (req,res)=>usercontroller.editUserAddress(req,res))
+router.delete(UserRoutes.DELETEADDRESS,authToken,(Req,res)=>usercontroller.deleteUserAddress(Req,res))
+router.post(UserRoutes.CREATEORDER, authToken, (req, res) => usercontroller.createOrder(req, res));
+router.post(UserRoutes.CONFIRMPAYMENT,authToken,(req,res)=>usercontroller.confirmpay(req,res))
+router.get(UserRoutes.FETCHBOOKINGS, authToken,(req,res)=>usercontroller.fetchbookingsbyuserId(req,res))
+router.post(UserRoutes.PASSWORD,authToken,(req,res)=>usercontroller.passwordChanges(req,res))
+router.post(UserRoutes.PAYMENTFAILED,authToken,(req,res)=>usercontroller.Failedpayment(req,res))
+router.post(UserRoutes.CONFIRMPAYMENT_RETRY,authToken,(req,res)=>usercontroller.retryconfirmpayment(req,res))
+router.post(UserRoutes.UPDATECANCELREASON,authToken,(req,res)=>usercontroller.updatecancelreason(req,res))
+router.get(UserRoutes.FETCHWALLET,authToken,(req,res)=>usercontroller.fetchdetailswallet(req,res))
+router.get(UserRoutes.FETCHWALLETBALANCE,authToken,(req,res)=>usercontroller.fetchbalance(req,res))
+router.post(UserRoutes.WALLETPAYMENT,authToken,(req,res)=>usercontroller.walletpaymentconsultationFee(req,res))
+router.post(UserRoutes.ACCEPTSESSIONREQUEST,authToken,(req,res)=>usercontroller.acceptsession(req,res))
+router.get(UserRoutes.FETCHSESSIONS,authToken,(req,res)=>usercontroller.fetchsessionpending(req,res))
+router.post(UserRoutes.FINALPAYMENTPROCESS,authToken,(req,res)=>usercontroller.finalamountbeforeconfirm(req,res))
+router.post(UserRoutes.FINALCONFIRMPAYMENT,authToken,(req,res)=>usercontroller.finalpaymentconfirm(req,res))
+router.get(UserRoutes.FETCHTRANSACTIONS,authToken,(req,res)=>usercontroller.transactionwithBookings(req,res))
+router.get(UserRoutes.FETCHREVIEW,authToken,(req,res)=>usercontroller.fetchreviewbytechIdfromUser(req,res))
+router.post(UserRoutes.ADDREVIEW,authToken,(req,res)=>usercontroller.Addingreview(req,res))
+router.get(UserRoutes.PAYMENT_STATUS_CHECK,authToken,(req,res)=>usercontroller.checkPaymentStatus(req,res))
 
 export {router as userRouter}
