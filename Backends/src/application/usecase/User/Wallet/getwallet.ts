@@ -1,8 +1,8 @@
-import { walletRepository } from "../../../../domain/repository/Walletrepository"
+import { IwalletRepository } from "../../../../domain/repository/Walletrepository"
 
 export class FetchWallet {
 
-    constructor(private _walletrepository:walletRepository){}
+    constructor(private _walletrepository:IwalletRepository){}
 
 
     async fetchwalletbalance(id:string){

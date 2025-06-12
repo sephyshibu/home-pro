@@ -1,8 +1,8 @@
 import { IBooking } from "../../../domain/models/Bookings";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class FetchUpcoming{
-    constructor (private _bookingrepository:BookingRepository){}
+    constructor (private _bookingrepository:IBookingRepository){}
 
     async fetchupcoming(techId:string){
         const bookings=await this._bookingrepository.fetchupcomingevents(techId)

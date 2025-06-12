@@ -1,9 +1,9 @@
-import { Addressrepository } from "../../domain/repository/Addressrepository";
+import { IAddressrepository } from "../../domain/repository/Addressrepository";
 import { IAddress } from "../../domain/models/Address";
 import { AddressModel } from "../db/schemas/AddressModel";
 import mongoose from "mongoose";
 
-export class AddressRepositoryImpl implements Addressrepository {
+export class AddressRepositoryImpl implements IAddressrepository {
     async fetchaddress(userId: string): Promise<IAddress[] | null> {
         console.log("userId", userId)
       const addresses = await AddressModel.find({ userId });

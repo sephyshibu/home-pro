@@ -1,8 +1,8 @@
 import { IWallet } from "../../domain/models/Wallet";
-import { walletRepository } from "../../domain/repository/Walletrepository";
+import { IwalletRepository } from "../../domain/repository/Walletrepository";
 import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
-export class walletRepositoryimpl implements walletRepository{
+export class walletRepositoryimpl implements IwalletRepository{
     async createWallet(wallet:Omit<IWallet,"id">):Promise<IWallet>{
         const newWallet=new WalletModel(wallet)
         const saved= await newWallet.save()

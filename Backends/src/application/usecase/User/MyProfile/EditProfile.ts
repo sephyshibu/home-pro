@@ -1,8 +1,8 @@
-import { UserRepository } from "../../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../../domain/repository/Userrepository";
 import { IUser } from "../../../../domain/models/User";
 
 export class EditProfile{
-    constructor(private _userrepository:UserRepository){}
+    constructor(private _userrepository:IUserRepository){}
 
 
     async editprofile(userId:string,data:{name:string, email:string, phone:string}):Promise<{message:string,updateuser?:IUser}>{

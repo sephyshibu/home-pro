@@ -1,8 +1,8 @@
 import { IUser } from "../../../../domain/models/User";
-import { UserRepository } from "../../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../../domain/repository/Userrepository";
 
 export class Searchinguser{
-    constructor(private _userrepository:UserRepository){}
+    constructor(private _userrepository:IUserRepository){}
 
     async searchinguser(username:string):Promise<IUser[]|null>{
         try {

@@ -6,7 +6,7 @@ export interface FilterOptions {
   filter?: 'week' | 'month';
 }
 
-export interface TechRepository{
+export interface ITechRepository{
     createtech(tech:ITech):Promise<ITech>
     findById(techid:string):Promise<{ isBlocked: boolean; email: string }|null>
     findByEmail(email:string):Promise<ITech|null>

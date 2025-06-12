@@ -5,7 +5,7 @@ export interface FilterOptions {
   filter?: 'week' | 'month';
 }
 
-export interface AdminRepository{
+export interface IAdminRepository{
     createAdmin(admin:IAdmin):Promise<IAdmin>
     findByEmail(email:string):Promise<IAdmin|null>
     getDashboardStatus(filters:FilterOptions):Promise<{totalOrders:number, totaladmincommision:number, graphData:{date:string, commission:number}[]}>

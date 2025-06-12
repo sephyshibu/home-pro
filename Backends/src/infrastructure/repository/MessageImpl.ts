@@ -1,9 +1,9 @@
 import { IMessage } from "../../domain/models/Message";
-import { Messagerepository } from "../../domain/repository/Messagerepository";
+import { IMessagerepository } from "../../domain/repository/Messagerepository";
 import { MessageModel } from "../db/schemas/MessageModel";
 import { BookingModels } from "../db/schemas/BookingModel";
 import mongoose from "mongoose";
-export class MessagerepositoryImpl implements Messagerepository{
+export class MessagerepositoryImpl implements IMessagerepository{
 
 
     async findByBookingId(bookingId: string): Promise<IMessage[]> {

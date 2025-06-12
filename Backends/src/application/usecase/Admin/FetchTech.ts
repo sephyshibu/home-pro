@@ -1,7 +1,7 @@
-import { TechRepository } from "../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../domain/repository/Techrepository";
 
 export class fetchtech{
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
     async fetch(sortBy = 'name', order: 'asc' | 'desc' = 'asc',page:number){
         const limit=5

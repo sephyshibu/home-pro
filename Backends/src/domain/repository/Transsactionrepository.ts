@@ -1,5 +1,5 @@
 import { ITransaction } from "../models/Transactions";
-export interface TransactionRepository {
+export interface ITransactionRepository {
     create(transaction: Omit<ITransaction, "id">): Promise<ITransaction>;
     getByOwnerId(ownerId: string): Promise<ITransaction[]>;
     fetchtransaction(page:number, limit:number):Promise<ITransaction[]>

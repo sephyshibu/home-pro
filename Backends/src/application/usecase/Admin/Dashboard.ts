@@ -1,4 +1,4 @@
-import { AdminRepository } from "../../../domain/repository/Adminrepository";
+import { IAdminRepository } from "../../../domain/repository/Adminrepository";
 
 interface FilterOptions{
     fromDate?:string,
@@ -8,7 +8,7 @@ interface FilterOptions{
 }
 
 export class GetAdminDashboard{
-    constructor(private _adminrepository:AdminRepository){}
+    constructor(private _adminrepository:IAdminRepository){}
 
     async execute(filters:FilterOptions){
         return await this._adminrepository.getDashboardStatus(filters)

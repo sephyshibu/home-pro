@@ -1,7 +1,7 @@
-import { Categoryrepository } from "../../../domain/repository/categoryrepository";
+import { ICategoryrepository } from "../../../domain/repository/categoryrepository";
 
 export class GetCategoryById{
-    constructor(private _categoryrepository:Categoryrepository){}
+    constructor(private _categoryrepository:ICategoryrepository){}
 
 
     async getcategorybyId(catid:string){

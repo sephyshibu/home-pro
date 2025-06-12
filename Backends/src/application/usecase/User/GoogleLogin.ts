@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken'
-import { UserRepository } from '../../../domain/repository/Userrepository'
+import { IUserRepository } from '../../../domain/repository/Userrepository'
 import { WalletModel } from '../../../infrastructure/db/schemas/Walletmodel'
 import { IUser } from '../../../domain/models/User'
 
 export class GoogleLogin{
-    constructor(private _userRepository:UserRepository){}
+    constructor(private _userRepository:IUserRepository){}
 
     async GoogleLogin(email:string, sub:string,name:string):Promise<{user:any,token:string}>{
         console.log(email,sub,name)

@@ -1,11 +1,11 @@
 
 import { IMessage } from "../../../domain/models/Message";
 
-import { Messagerepository } from "../../../domain/repository/Messagerepository";
+import { IMessagerepository } from "../../../domain/repository/Messagerepository";
 
 
 export class ChatService{
-    constructor(private _messagerepository:Messagerepository){}
+    constructor(private _messagerepository:IMessagerepository){}
 
     async sendMessage(message: IMessage): Promise<IMessage> {
       const savedmessage=await this._messagerepository.save(message);

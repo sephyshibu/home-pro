@@ -1,8 +1,8 @@
 import { IReview } from "../../../domain/models/Review";
-import { Reviewrepository } from "../../../domain/repository/Reviewrepository";
+import { IReviewrepository } from "../../../domain/repository/Reviewrepository";
 
 export class FetchReviewByTechId{
-    constructor(private _reviewrepository:Reviewrepository){}
+    constructor(private _reviewrepository:IReviewrepository){}
 
     async fetchreviewtechId(techId:string):Promise<IReview[]|null>{
         try {

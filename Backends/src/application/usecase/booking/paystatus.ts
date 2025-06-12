@@ -1,8 +1,8 @@
 
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class CheckPaymentStatus {
-  constructor(private _bookingRepository: BookingRepository) {}
+  constructor(private _bookingRepository: IBookingRepository) {}
 
   async execute(userId: string, technicianId: string, date: string): Promise<"completed" | "pending" | "not_started"> {
     if (!userId || !technicianId || !date) {

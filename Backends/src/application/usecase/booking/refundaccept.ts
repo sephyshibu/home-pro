@@ -1,10 +1,10 @@
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
-import { walletRepository } from "../../../domain/repository/Walletrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IwalletRepository } from "../../../domain/repository/Walletrepository";
 import { TransactionModel } from "../../../infrastructure/db/schemas/TransactionMode";
 import { WalletModel } from "../../../infrastructure/db/schemas/Walletmodel";
 
 export class Refudaccept{
-    constructor(private _bookingrepository:BookingRepository,private _walletrepository:walletRepository){}
+    constructor(private _bookingrepository:IBookingRepository,private _walletrepository:IwalletRepository){}
   
                 
     async processrefund(bookingId:string){

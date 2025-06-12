@@ -1,8 +1,8 @@
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 
 
 export class FetchSession{
-    constructor(private _bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:IBookingRepository){}
 
 
     async fetchpendingsession(bookingId:string){

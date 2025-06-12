@@ -1,12 +1,12 @@
 import { IBooking } from "../../../domain/models/Bookings";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
-import { walletRepository } from "../../../domain/repository/Walletrepository";
-import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IwalletRepository } from "../../../domain/repository/Walletrepository";
+import { ITransactionRepository } from "../../../domain/repository/Transsactionrepository";
 import { ITransaction } from "../../../domain/models/Transactions";
 export class RetryConfirmPayment{
-    constructor(private _bookingrepository:BookingRepository,
-                private _walletrepository:walletRepository,
-                private _transactionrepository: TransactionRepository
+    constructor(private _bookingrepository:IBookingRepository,
+                private _walletrepository:IwalletRepository,
+                private _transactionrepository: ITransactionRepository
 
     ){}
 

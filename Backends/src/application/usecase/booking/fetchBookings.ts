@@ -1,9 +1,9 @@
 import { IBooking } from "../../../domain/models/Bookings";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 
 
 export class FetchBookingbyUserId{
-    constructor(private _bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:IBookingRepository){}
 
     async fetchBookingdetails(userId:string,page:number){
         console.log("dasd",userId)

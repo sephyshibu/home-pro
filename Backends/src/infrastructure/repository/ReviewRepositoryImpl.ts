@@ -1,9 +1,9 @@
 import { IReview } from "../../domain/models/Review";
-import { Reviewrepository } from "../../domain/repository/Reviewrepository";
+import { IReviewrepository } from "../../domain/repository/Reviewrepository";
 import { ReviewModel } from "../db/schemas/ReviewModel";
 import mongoose from "mongoose";
 
-export class ReviewrepositoryImpl implements Reviewrepository{
+export class ReviewrepositoryImpl implements IReviewrepository{
     async fetchreviewbyTechId(techId: string): Promise<IReview[] | null> {
         console.log("review techId", techId)
         try {

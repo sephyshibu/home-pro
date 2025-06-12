@@ -1,8 +1,8 @@
-import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { ITransactionRepository } from "../../../domain/repository/Transsactionrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class GetTransactionWithBookings{
-    constructor(private _transactionrepository:TransactionRepository, private bookingrepository:BookingRepository){}
+    constructor(private _transactionrepository:ITransactionRepository, private bookingrepository:IBookingRepository){}
 
 
     async execute(transactionid:string){

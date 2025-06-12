@@ -1,8 +1,8 @@
 import { ITech } from "../../../../domain/models/Tech";
-import { TechRepository } from "../../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../../domain/repository/Techrepository";
 
 export class Searchingtech{
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
     async searchingtech(techname:string):Promise<ITech[]|null>{
         try {

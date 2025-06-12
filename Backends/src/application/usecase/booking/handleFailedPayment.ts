@@ -1,8 +1,8 @@
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 import { IBooking } from "../../../domain/models/Bookings";
 
 export class HandleFailedPayment {
-    constructor(private _bookingrepository: BookingRepository) {}
+    constructor(private _bookingrepository: IBookingRepository) {}
   
     async execute(data: IBooking): Promise<IBooking> {
       return this._bookingrepository.createFailedPaymentBooking({

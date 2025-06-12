@@ -1,9 +1,9 @@
-import { Categoryrepository } from "../../../domain/repository/categoryrepository";
+import { ICategoryrepository } from "../../../domain/repository/categoryrepository";
 import { ICategory } from "../../../domain/models/Caegory";
 import { Error } from "mongoose";
 
 export class EditCategory{
-    constructor(private _categoryrepository:Categoryrepository){}
+    constructor(private _categoryrepository:ICategoryrepository){}
 
 
 

@@ -1,11 +1,11 @@
 import { IAdmin } from "../../domain/models/Admin";
 import { AdminModel } from "../db/schemas/AdminModel";
-import { AdminRepository, FilterOptions } from "../../domain/repository/Adminrepository";
+import { IAdminRepository, FilterOptions } from "../../domain/repository/Adminrepository";
 import { BookingModels } from "../db/schemas/BookingModel";
 
 
 
-export class AdminRepositoryImpl implements AdminRepository{
+export class AdminRepositoryImpl implements IAdminRepository{
 
     async createAdmin(admindata:IAdmin):Promise<IAdmin>{
         console.log(admindata)

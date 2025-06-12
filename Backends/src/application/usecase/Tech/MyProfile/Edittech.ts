@@ -1,8 +1,8 @@
-import { TechRepository } from "../../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../../domain/repository/Techrepository";
 import { ITech } from "../../../../domain/models/Tech";
 
 export class EditTech{
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
 
     async edittech(techId:string,data: {

@@ -1,9 +1,9 @@
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
-import { walletRepository } from "../../../domain/repository/Walletrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IwalletRepository } from "../../../domain/repository/Walletrepository";
 import { TransactionModel } from "../../../infrastructure/db/schemas/TransactionMode";
 
 export class bookingRequestRejectByTech{
-    constructor(private _bookingrepository:BookingRepository, private _walletrepository:walletRepository){}
+    constructor(private _bookingrepository:IBookingRepository, private _walletrepository:IwalletRepository){}
 
     async bookingreacceptbytech(bookingId:string, reason:string):Promise<{success:boolean}>{
 

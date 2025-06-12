@@ -1,4 +1,4 @@
-import { TechRepository } from "../../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../../domain/repository/Techrepository";
 
 interface FilterOptions {
   fromDate?: string;
@@ -7,7 +7,7 @@ interface FilterOptions {
 }
 
 export class GetTechDashboardStatsUseCase {
-  constructor(private _techrepository: TechRepository) {}
+  constructor(private _techrepository: ITechRepository) {}
 
   async execute(techId: string, filters: FilterOptions) {
     return await this._techrepository.getDashboardStats(techId, filters);

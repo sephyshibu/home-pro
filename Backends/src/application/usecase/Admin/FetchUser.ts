@@ -1,7 +1,7 @@
-import { UserRepository } from "../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../domain/repository/Userrepository";
 
 export class fetchUser{
-    constructor(private _userrepository:UserRepository){}
+    constructor(private _userrepository:IUserRepository){}
 
     async fetch(sortBy = 'name', order: 'asc' | 'desc' = 'asc',page:number){
         const limit=5

@@ -1,9 +1,9 @@
 import { IBooking } from "../../../domain/models/Bookings";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 
 
 export class fetchBookingswhichcompletedrejected{
-    constructor(private _bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:IBookingRepository){}
 
     async fetchBookingscommpletereject(techId:string):Promise<IBooking[]|null>{
         try {

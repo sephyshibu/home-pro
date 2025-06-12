@@ -1,7 +1,7 @@
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class RequestSession{
-    constructor(private _bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:IBookingRepository){}
 
     async requestsession(bookingId: string, type: string) {
     try {

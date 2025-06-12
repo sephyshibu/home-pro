@@ -1,4 +1,4 @@
-import { BookingRepository } from "../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../domain/repository/Bookingrepository";
 import { IBooking } from "../../domain/models/Bookings";
 import {BookingModels} from '../db/schemas/BookingModel';
 import { TechModel } from "../db/schemas/techModel";
@@ -11,7 +11,7 @@ interface TechDashboardSummary {
   totalSales: number;
 
 }
-export class bookingrepositoryImpl implements BookingRepository{
+export class bookingrepositoryImpl implements IBookingRepository{
     async creates(booking: Omit<IBooking, "id">): Promise<IBooking> {
         console.log("impl", booking)
         try{

@@ -1,6 +1,6 @@
 import { IAddress } from "../models/Address";
 
-export interface Addressrepository{
+export interface IAddressrepository{
     fetchaddress(userId:string):Promise<IAddress[]|null>
     addaddress(address:IAddress):Promise<IAddress>
     findByAddressName(userId: string, addressName: string): Promise<IAddress | null>;

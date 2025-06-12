@@ -1,11 +1,11 @@
-import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { ITransactionRepository } from "../../../domain/repository/Transsactionrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 import { ITransaction } from "../../../domain/models/Transactions";
 import { IUser } from "../../../domain/models/User";
 
 
 export class FetchTransactionsinTechWallet {
-    constructor(private _transactionrepository: TransactionRepository, private bookingrepository:BookingRepository) {}
+    constructor(private _transactionrepository: ITransactionRepository, private bookingrepository:IBookingRepository) {}
 
     async transactiondetails(techId: string) {
         console.log("techId",techId)

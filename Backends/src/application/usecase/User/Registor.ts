@@ -1,4 +1,4 @@
-import { UserRepository } from "../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../domain/repository/Userrepository";
 import { IUser } from "../../../domain/models/User";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -8,7 +8,7 @@ import { EmailService } from "../../service/EmailService";
 require('dotenv').config()
 
 export class Signup{
-    constructor(private _userRepository:UserRepository, private _emailservice:EmailService){}
+    constructor(private _userRepository:IUserRepository, private _emailservice:EmailService){}
 
     async adduser(name:string,email:string,password:string,phone:string):Promise<{message:string}>{
         console.log(name,email,password,phone)

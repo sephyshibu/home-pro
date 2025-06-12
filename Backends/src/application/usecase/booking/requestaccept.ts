@@ -1,7 +1,7 @@
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 import { TechModel } from "../../../infrastructure/db/schemas/techModel";
 export class bookingRequestAcceptByTech{
-    constructor(private _bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:IBookingRepository){}
 
     async bookingreacceptbytech(bookingId:string):Promise<{success:boolean}>{
         const booking=await this._bookingrepository.findById(bookingId)

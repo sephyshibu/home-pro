@@ -1,8 +1,8 @@
 import { ITransaction } from "../../../../domain/models/Transactions";
-import { TransactionRepository } from "../../../../domain/repository/Transsactionrepository";
+import { ITransactionRepository } from "../../../../domain/repository/Transsactionrepository";
 
 export class SearchTransaction{
-    constructor(private _transactionrepository:TransactionRepository){}
+    constructor(private _transactionrepository:ITransactionRepository){}
 
     async SearchTransactionbybookingId(bookingId:string):Promise<ITransaction[]|null>{
         try {

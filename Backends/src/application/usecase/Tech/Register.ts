@@ -1,4 +1,4 @@
-import { TechRepository } from "../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../domain/repository/Techrepository";
 import { ITech } from "../../../domain/models/Tech";
 import bcrypt from 'bcryptjs'
 import { WalletModel } from "../../../infrastructure/db/schemas/Walletmodel";
@@ -6,7 +6,7 @@ import { EmailService } from "../../service/EmailService";
 
 
 export class Signuptech{
-    constructor(private _techrepository:TechRepository, private _emailservice:EmailService){}
+    constructor(private _techrepository:ITechRepository, private _emailservice:EmailService){}
 
 
     async addtech(email:string, password:string, phone:string):Promise<{message:string}>{

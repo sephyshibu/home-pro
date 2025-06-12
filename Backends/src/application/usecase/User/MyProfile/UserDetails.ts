@@ -1,7 +1,7 @@
-import { UserRepository } from "../../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../../domain/repository/Userrepository";
 
 export class GetUserById{
-    constructor(private _userrepository:UserRepository){}
+    constructor(private _userrepository:IUserRepository){}
 
 
     async getuserById(userId:string){

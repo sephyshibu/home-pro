@@ -1,8 +1,8 @@
 import { IBooking } from "../../../domain/models/Bookings";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
 
 export class updateusercancelreason{
-    constructor(private _bookrepository:BookingRepository){}
+    constructor(private _bookrepository:IBookingRepository){}
 
     async updateusercanel(bookingId:string,userremark:string):Promise<{message:string;updatebooker:IBooking}>{
         console.log("getting")

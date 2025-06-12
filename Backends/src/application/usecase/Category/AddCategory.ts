@@ -1,9 +1,9 @@
-import { Categoryrepository } from "../../../domain/repository/categoryrepository";
+import { ICategoryrepository } from "../../../domain/repository/categoryrepository";
 import { ICategory } from "../../../domain/models/Caegory";
 
 
 export class AddCategory{
-    constructor(private _categoryrepository:Categoryrepository){}
+    constructor(private _categoryrepository:ICategoryrepository){}
 
 
     async addCategory(name:string, description:string, image:string):Promise<{message:string}>

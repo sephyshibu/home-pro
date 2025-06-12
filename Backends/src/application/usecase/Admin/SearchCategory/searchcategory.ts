@@ -1,8 +1,8 @@
 import { ICategory } from "../../../../domain/models/Caegory";
-import { Categoryrepository } from "../../../../domain/repository/categoryrepository";
+import { ICategoryrepository } from "../../../../domain/repository/categoryrepository";
 
 export class Searchingcategory{
-    constructor(private _categoryrepository:Categoryrepository){}
+    constructor(private _categoryrepository:ICategoryrepository){}
 
     async searchingcategory(name:string):Promise<ICategory[]|null>{
         try {

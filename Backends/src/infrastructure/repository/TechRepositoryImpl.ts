@@ -1,7 +1,7 @@
 import { ITech } from "../../domain/models/Tech";
 import { BookingModels } from "../db/schemas/BookingModel";
 import { TechModel } from "../db/schemas/techModel";
-import { TechRepository } from "../../domain/repository/Techrepository";
+import { ITechRepository } from "../../domain/repository/Techrepository";
 import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
 
@@ -11,7 +11,7 @@ export interface FilterOptions {
   filter?: 'week' | 'month';
 }
 
-export class TechRepositoryImpl implements TechRepository{
+export class TechRepositoryImpl implements ITechRepository{
     async createtech(tech: ITech): Promise<ITech> {
         console.log("tech data", tech)
         console.log("tech sign in")

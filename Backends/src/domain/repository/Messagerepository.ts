@@ -1,6 +1,6 @@
 import { IMessage } from "../models/Message";
 
-export interface Messagerepository{
+export interface IMessagerepository{
     findByBookingId(bookingId:string):Promise<IMessage[]>
     save(message:IMessage):Promise<IMessage>
     markmessageasReadByBooking(bookingId:string):Promise<void>

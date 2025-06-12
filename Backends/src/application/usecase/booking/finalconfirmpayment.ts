@@ -1,11 +1,11 @@
 import { IBooking } from "../../../domain/models/Bookings";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
-import { walletRepository } from "../../../domain/repository/Walletrepository";
-import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IwalletRepository } from "../../../domain/repository/Walletrepository";
+import { ITransactionRepository } from "../../../domain/repository/Transsactionrepository";
 import { calculateTotalWorkMinutes } from "../../../utils/CalculateMinutes";
-import { TechRepository } from "../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../domain/repository/Techrepository";
 export class FinalPaymentconfirm{
-   constructor(private _bookingrepository:BookingRepository, private _walletrepository:walletRepository,  private _transactionrepository:TransactionRepository, private _techrepository:TechRepository){}
+   constructor(private _bookingrepository:IBookingRepository, private _walletrepository:IwalletRepository,  private _transactionrepository:ITransactionRepository, private _techrepository:ITechRepository){}
 
 
    async makefinalpaymentconfirm(bookingId:string,paymentId:string, status:"completed"): Promise<{success:boolean; booking:IBooking}>{

@@ -1,7 +1,7 @@
-import { TechRepository } from "../../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../../domain/repository/Techrepository";
 
 export class fetchTechwithcategory{
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
 
     async fetchtechwithcategory(techid:string){

@@ -1,8 +1,8 @@
-import { TechRepository } from "../../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../../domain/repository/Techrepository";
 
 export class FetchTechBasedOnAvailable {
 
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
 
     async fetchTechBasedOnAvailble(pincode:string, date:string, categoryId:string){

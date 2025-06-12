@@ -1,6 +1,6 @@
-import { TechRepository } from "../../../domain/repository/Techrepository"
+import { ITechRepository } from "../../../domain/repository/Techrepository"
 export class ChecktechStatus{
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
 
     async checkstatus(userid:string):Promise<void>{

@@ -1,8 +1,8 @@
-import { Addressrepository } from "../../../domain/repository/Addressrepository";
+import { IAddressrepository } from "../../../domain/repository/Addressrepository";
 import { IAddress } from "../../../domain/models/Address";
 
 export class AddAddress{
-    constructor(private _addressrepository:Addressrepository){}
+    constructor(private _addressrepository:IAddressrepository){}
 
     async addaddress(userId:string,types: string,addressname:string,street:string,city: string,state: string,country: string, pincode:string,):Promise<{message:string}>{
         console.log("types", types)

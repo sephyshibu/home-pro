@@ -1,10 +1,10 @@
-import { TechRepository } from "../../../domain/repository/Techrepository";
+import { ITechRepository } from "../../../domain/repository/Techrepository";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
 
 export class LoginTech{
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
 
     async logintech(email:string, password:string):Promise<{tech:any, accesstoken:string,refreshtoken:string}>{

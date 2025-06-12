@@ -1,6 +1,6 @@
-import { UserRepository } from "../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../domain/repository/Userrepository";
 export class CheckUserStatus{
-    constructor(private _userrepository:UserRepository){}
+    constructor(private _userrepository:IUserRepository){}
 
 
     async checkstatus(userid:string):Promise<void>{

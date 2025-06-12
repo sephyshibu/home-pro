@@ -1,9 +1,9 @@
-import { TransactionRepository } from "../../domain/repository/Transsactionrepository";
+import { ITransactionRepository } from "../../domain/repository/Transsactionrepository";
 import { ITransaction } from "../../domain/models/Transactions";
 import { TransactionModel } from "../db/schemas/TransactionMode";
 import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
-export class TransactionRepositoryImpl implements TransactionRepository {
+export class TransactionRepositoryImpl implements ITransactionRepository {
     async create(transaction: Omit<ITransaction, "id">): Promise<ITransaction> {
         console.log("efewf")
       const newTx = await TransactionModel.create(transaction);

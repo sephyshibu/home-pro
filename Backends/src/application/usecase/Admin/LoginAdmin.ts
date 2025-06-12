@@ -1,4 +1,4 @@
-import { AdminRepository } from "../../../domain/repository/Adminrepository";
+import { IAdminRepository } from "../../../domain/repository/Adminrepository";
 import { IAdmin } from "../../../domain/models/Admin";
 import { AdminModel } from "../../../infrastructure/db/schemas/AdminModel";
 import { WalletModel } from "../../../infrastructure/db/schemas/Walletmodel";
@@ -6,7 +6,7 @@ import { userModel } from "../../../infrastructure/db/schemas/Usermodel";
 import jwt from 'jsonwebtoken'
 
 export class Login{
-    constructor (private adminrepository:AdminRepository){}
+    constructor (private adminrepository:IAdminRepository){}
 
     async loginadmin(email:string, password:string):Promise<{admin:any, accesstoken:string, refreshtoken:string}>{
         console.log("loginn",email,password)

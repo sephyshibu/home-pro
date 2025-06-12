@@ -1,6 +1,6 @@
 import { IUser } from "../models/User";
 
-export interface UserRepository{
+export interface IUserRepository{
     createUser(user:IUser):Promise<IUser>
     findByEmail(email:string):Promise<IUser|null>
     findByGoogleId(googleId:string):Promise<IUser|null>

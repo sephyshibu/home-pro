@@ -1,8 +1,8 @@
-import { Reviewrepository } from "../../../domain/repository/Reviewrepository";
+import { IReviewrepository } from "../../../domain/repository/Reviewrepository";
 import { IReview } from "../../../domain/models/Review";
 
 export class AddReview{
-    constructor(private _reviewrepository:Reviewrepository){}
+    constructor(private _reviewrepository:IReviewrepository){}
 
     async addreview(userId:string, techId:string,description:string, points:number):Promise<{message:string}>{
         

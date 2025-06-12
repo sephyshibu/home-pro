@@ -1,10 +1,10 @@
-import { TechRepository } from "../../../../domain/repository/Techrepository"
+import { ITechRepository } from "../../../../domain/repository/Techrepository"
 import { ITech } from "../../../../domain/models/Tech"
 import bcrypt from "bcryptjs"
 
 
 export class PasswordChange{
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
 
     async editpassword(techId:string,password:string):Promise<{message:string,updatetech?:ITech}>{

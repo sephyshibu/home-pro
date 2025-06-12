@@ -1,10 +1,10 @@
-import { walletRepository } from "../../../domain/repository/Walletrepository";
+import { IwalletRepository } from "../../../domain/repository/Walletrepository";
 import { IBooking } from "../../../domain/models/Bookings";
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
-import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
+import { ITransactionRepository } from "../../../domain/repository/Transsactionrepository";
 
 export class WalletPayment{
-    constructor(private _bookingrepository:BookingRepository, private _walletrepository:walletRepository,private _transactionrepository:TransactionRepository){}
+    constructor(private _bookingrepository:IBookingRepository, private _walletrepository:IwalletRepository,private _transactionrepository:ITransactionRepository){}
 
     async WalletConsultationPayment(bookingdata:Partial<IBooking>,status:"completed"| "failed"):Promise<{success:boolean,booking:IBooking}>{
             if(!bookingdata.addressId||!bookingdata.userId|| !bookingdata.technicianId){

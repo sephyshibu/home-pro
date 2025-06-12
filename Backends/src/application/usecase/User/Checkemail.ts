@@ -1,11 +1,11 @@
-import { UserRepository } from "../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../domain/repository/Userrepository";
 import { EmailService } from "../../service/EmailService";
 import { generateOTP } from "../../service/OTPGenerator";
 import { otpCache } from "../../../infrastructure/cache/OTPCache";
 
 
 export class CheckEmail{
-  constructor(private _userRepository:UserRepository, private _emailService:EmailService){}
+  constructor(private _userRepository:IUserRepository, private _emailService:EmailService){}
 
   async execute(email:string):Promise<{message:string, email?:string}>{
     const user=await this._userRepository.findByEmail(email)

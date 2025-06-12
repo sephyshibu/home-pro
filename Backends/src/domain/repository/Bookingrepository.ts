@@ -6,7 +6,7 @@ export interface TechDashboardSummary {
 }
 
 
-export interface BookingRepository {
+export interface IBookingRepository {
     creates(booking: IBooking): Promise<IBooking>;
     findBookingByUserTechDate(userId: string, technicianId: string, bookedDate: string): Promise<IBooking | null> 
     update(bookingId: Object, updatedBooking: Partial<IBooking>): Promise<IBooking>;

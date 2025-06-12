@@ -1,11 +1,11 @@
-import { BookingRepository } from "../../../domain/repository/Bookingrepository";
-import { walletRepository } from "../../../domain/repository/Walletrepository";
-import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
+import { IBookingRepository } from "../../../domain/repository/Bookingrepository";
+import { IwalletRepository } from "../../../domain/repository/Walletrepository";
+import { ITransactionRepository } from "../../../domain/repository/Transsactionrepository";
 import { IBooking } from "../../../domain/models/Bookings";
 import { calculateTotalWorkMinutes } from "../../../utils/CalculateMinutes";
 
 export class FinalPayment{
-    constructor(private _bookingrepository:BookingRepository){}
+    constructor(private _bookingrepository:IBookingRepository){}
 
 
     async finalpayment(bookingId:string):Promise<{rateperminute:number,totalminutes:number,totalamount:number}>{

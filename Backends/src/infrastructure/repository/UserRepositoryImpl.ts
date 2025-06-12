@@ -1,8 +1,8 @@
 import { IUser } from "../../domain/models/User";
 import { userModel } from "../db/schemas/Usermodel";
-import { UserRepository } from "../../domain/repository/Userrepository";
+import { IUserRepository } from "../../domain/repository/Userrepository";
 import bcrypt from 'bcryptjs'
-export class UserRepositoryImpl implements UserRepository{
+export class UserRepositoryImpl implements IUserRepository{
     async createUser(userdata:IUser):Promise<IUser>{
         console.log("userdata",userdata)
         console.log("signnnnn")

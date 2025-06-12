@@ -1,9 +1,9 @@
-import { Addressrepository } from "../../../domain/repository/Addressrepository";
+import { IAddressrepository } from "../../../domain/repository/Addressrepository";
 import { IAddress } from "../../../domain/models/Address";
 import { Error } from "mongoose";
 
 export class Editaddress{
-    constructor(private _addressrepository:Addressrepository){}
+    constructor(private _addressrepository:IAddressrepository){}
 
 
 

@@ -1,8 +1,8 @@
-import { UserRepository } from "../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../domain/repository/Userrepository";
 import bcrypt from 'bcryptjs'
 
 export class changepassword{
-    constructor(private _userrepository:UserRepository){}
+    constructor(private _userrepository:IUserRepository){}
 
 
     async changepass(password:string, email:string):Promise<{message:string}>{

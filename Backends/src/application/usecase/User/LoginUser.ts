@@ -1,10 +1,10 @@
-import { UserRepository } from "../../../domain/repository/Userrepository";
+import { IUserRepository } from "../../../domain/repository/Userrepository";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 
 export class LoginUser{
-    constructor(private _userRepository:UserRepository){}
+    constructor(private _userRepository:IUserRepository){}
 
     async login(email:string, password:string):Promise<{user:any,accesstoken:string, refreshtoken:string}>{
         console.log("sdfwf",email, password)

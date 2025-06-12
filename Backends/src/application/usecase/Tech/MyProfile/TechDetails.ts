@@ -1,7 +1,7 @@
-import { TechRepository } from "../../../../domain/repository/Techrepository";
+import {ITechRepository } from "../../../../domain/repository/Techrepository";
 
 export class GetTechById{
-    constructor(private _techrepository:TechRepository){}
+    constructor(private _techrepository:ITechRepository){}
 
     async gettechbyid(techid:string){
         const tech= await this._techrepository.findOneTech(techid)

@@ -1,6 +1,6 @@
 import {ICategory} from '../models/Caegory'
 
-export interface Categoryrepository{
+export interface ICategoryrepository{
     createcategory(category:ICategory):Promise<ICategory>
     findByCategoryId(categoryid:string):Promise<ICategory|null>
     findByname(name:string):Promise<ICategory|null>

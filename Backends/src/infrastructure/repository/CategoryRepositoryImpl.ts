@@ -1,8 +1,8 @@
 import { ICategory } from "../../domain/models/Caegory";
 import { CategoryModel } from "../db/schemas/categoryModel";
-import { Categoryrepository } from "../../domain/repository/categoryrepository";
+import { ICategoryrepository } from "../../domain/repository/categoryrepository";
 
-export class categoryRepositoryImpl implements Categoryrepository{
+export class categoryRepositoryImpl implements ICategoryrepository{
     async createcategory(category: ICategory): Promise<ICategory> {
         const createdcat=await CategoryModel.create(category)
         console.log("created cat", createdcat)

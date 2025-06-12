@@ -1,7 +1,7 @@
-import { Addressrepository } from "../../../domain/repository/Addressrepository";
+import { IAddressrepository } from "../../../domain/repository/Addressrepository";
 
 export class GetAddressById{
-    constructor(private _addressrepository:Addressrepository){}
+    constructor(private _addressrepository:IAddressrepository){}
 
 
     async getaddressbyId(userId:string){

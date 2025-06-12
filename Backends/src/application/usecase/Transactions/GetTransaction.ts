@@ -1,7 +1,7 @@
-import { TransactionRepository } from "../../../domain/repository/Transsactionrepository";
+import { ITransactionRepository } from "../../../domain/repository/Transsactionrepository";
 
 export class Gettransactions{
-    constructor(private _transactionrepository:TransactionRepository){}
+    constructor(private _transactionrepository:ITransactionRepository){}
 
 
     async gettransaction(currentpage:number){
