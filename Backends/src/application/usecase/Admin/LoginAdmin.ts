@@ -1,5 +1,7 @@
 import { IAdminRepository } from "../../../domain/repository/Adminrepository";
 import { IAdmin } from "../../../domain/models/Admin";
+import dotenv from 'dotenv'
+dotenv.config()
 import { AdminModel } from "../../../infrastructure/db/schemas/AdminModel";
 import { WalletModel } from "../../../infrastructure/db/schemas/Walletmodel";
 import { userModel } from "../../../infrastructure/db/schemas/Usermodel";
@@ -10,9 +12,10 @@ export class Login{
 
     async loginadmin(email:string, password:string):Promise<{admin:any, accesstoken:string, refreshtoken:string}>{
         console.log("loginn",email,password)
-        const hardcoreemail="admin@gmail.com"
+        const adminEmail=process.env.ADMIN_EMAIL
+        const adminpassword=process.env.ADMIN_PASSWORD
 
-        if(email===hardcoreemail){
+        if(email===adminEmail){
 
             const admin= await this.adminrepository.findByEmail(email)
 
@@ -29,7 +32,7 @@ export class Login{
                 const refreshtoken=jwt.sign({email: newadmin.email }, process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
                 return {admin:newadmin,accesstoken, refreshtoken}
             }else{
-                if (password !="Adminpassword") {
+                if (password !=adminpassword) {
                     throw new Error("Invalid password for admin.");
                 }
                 console.log(admin.password)
