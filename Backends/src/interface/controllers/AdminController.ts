@@ -15,6 +15,8 @@ import { fetchCategory } from "../../application/usecase/Admin/Fetchcategory";
 import { BlockUnBlockCat } from "../../application/usecase/Admin/BlockUnBlockCategory";
 import { EditCategory } from "../../application/usecase/Category/Editcategory";
 import { GetCategoryById } from "../../application/usecase/Category/GetCategory";
+
+
 import { Gettransactions } from "../../application/usecase/Transactions/GetTransaction";
 import { GetTransactionWithBookings } from "../../application/usecase/Transactions/TransactionBookingdetails";
 import { FetchrefundRequest } from "../../application/usecase/booking/fetchrefundbookings";
@@ -28,8 +30,7 @@ import { GetAdminDashboard } from "../../application/usecase/Admin/Dashboard";
 
 export class AdminController{
     constructor(
-        private _loginadmin:Login,
-        private _refreshtoken:RefreshToken,
+       
         private _fetchalluser:fetchUser,
         private _blockunblock:BlockUnblock,
         private _fetchalltech:fetchtech,
@@ -40,35 +41,15 @@ export class AdminController{
         private _BlockUnblockCat:BlockUnBlockCat,
         private _editcat:EditCategory,
         private _getCategoryById:GetCategoryById,
-        private _gettransactiondetails:Gettransactions,
-        private _gettransactionwithBookings:GetTransactionWithBookings,
-        private _fetchrefundrequest:FetchrefundRequest,
-        private _refundaccept:Refudaccept,
-        private _searchuser:Searchinguser,
-        private _searchtech:Searchingtech,
-        private _searchcategory:Searchingcategory,
-        private _searchbooking:SearchTransaction,
+
+ 
+        
+  
         private _admindashboard:GetAdminDashboard
     ){}
 
 
-    async login(req:Request, res:Response):Promise<void>{
-        console.log("admion Login in Controller")
-
-        try {
-            const{email, password}=req.body
-            const result=await this._loginadmin.loginadmin(email,password);
-            res.cookie(process.env.COOKIE_NAME_ADMIN||"refreshtokenadmin", result.refreshtoken,{
-                httpOnly:process.env.COOKIE_HTTPONLY==='true',
-                secure:process.env.COOKIE_SECURE==='false',
-                maxAge:parseInt(process.env.COOKIE_MAXAGE ||"604800000"),
-            })
-            res.status(HTTPStatusCode.OK).json({message:AdminMessages.AUTH.LOGIN_SUCCESS, admin:result.admin,token:result.accesstoken})
-        }
-        catch (err:any) {
-            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
-          }
-    }
+    
 
     async fetchuser(req:Request,res:Response):Promise<void>{
         try {
@@ -105,33 +86,11 @@ export class AdminController{
             res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
         }
     }
-    async fetchTransaction(req:Request,res:Response):Promise<void>{
-        console.log("fetch transaction")
-        const currentPage=parseInt(req.query.page as string)||1
-       
-        try {
-            const {transactions,totaladmincommision}=await this._gettransactiondetails.gettransaction(currentPage)
-            console.log("controller transaction",transactions)
-            res.status(HTTPStatusCode.OK).json({transactions,totaladmincommision}) 
-        } catch (error:any) {
-            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
-        }
-    }
+    
 
     
 
-    async refreshtokenController(req:Request, res:Response):Promise<void>{
-        try {
-            const token=req.cookies?.[process.env.COOKIE_NAME_ADMIN||"refreshtokenadmin"];
-             console.log("refreshtokencontrolleradmin",token)
-            const newaccesstoken=await this._refreshtoken.refresh(token);
-             console.log("in refresh token controller admin with new access tokern ",newaccesstoken)
-            res.status(HTTPStatusCode.OK).json({ token: newaccesstoken });
-        } catch (err: any) {
-          res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
-        }
-    }
-
+    
     async blockUnblock(req:Request, res:Response):Promise<void>{
         try {
             const{userid}=req.params
@@ -216,80 +175,10 @@ export class AdminController{
         }
     }
 
-    async transactionwithBookings(req:Request,res:Response):Promise<void>{
-        try {
-            const {transId}=req.params
-            const result=await this._gettransactionwithBookings.execute(transId)
-            res.status(HTTPStatusCode.OK).json({result})
-        } catch (error:any) {
-            res.status(HTTPStatusCode.BAD_REQUEST).json({ message: error.message });
-        }
-    }
-    async fetchingrequestrefund(req:Request,res:Response):Promise<void>{
-        try {
-            const result=await this._fetchrefundrequest.fetchrefundreq()
-            console.log("controller", result)
-            res.status(HTTPStatusCode.OK).json({message:"success", Bookings:result})
-        } catch (error:any) {
-            console.error("Error in fetchingrequestrefund:", error);
-            res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
-        }
-    }
+    
+    
 
-    async acceptingrefund(req:Request,res:Response):Promise<void>{
-            try {
-                const{bookingId}=req.params
-                const result =await this._refundaccept.processrefund(bookingId)
-                res.status(HTTPStatusCode.OK).json({message:AdminMessages.REFUND.ACCEPTED})
-                
-            } catch (error:any) {
-                console.error("Error in refund accepted:", error);
-                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
-            }
-    }
-
-    async searchingUsers(req:Request,res:Response):Promise<void>{
-        try {
-            const{searchterm}=req.params
-            const user=await this._searchuser.searchinguser(searchterm)
-            res.status(HTTPStatusCode.OK).json({user})
-        } catch (error:any) {
-                console.error("Error in fetch user by search:", error);
-                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
-            }
-    }
-    async searchingTech(req:Request,res:Response):Promise<void>{
-        try {
-            const{searchterm}=req.params
-            const tech=await this._searchtech.searchingtech(searchterm)
-            res.status(HTTPStatusCode.OK).json({tech})
-        } catch (error:any) {
-                console.error("Error in fetch tech by search:", error);
-                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
-            }
-    }
-    async searchingCategory(req:Request,res:Response):Promise<void>{
-        try {
-            const{searchterm}=req.params
-            const cat=await this._searchcategory.searchingcategory(searchterm)
-            res.status(HTTPStatusCode.OK).json({cat})
-        } catch (error:any) {
-                console.error("Error in fetch tech by search:", error);
-                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
-            }
-    }
-
-    async searchbookingtransaction(req:Request,res:Response):Promise<void>{
-        try {
-            const {searchterm}=req.params
-            const transaction=await this._searchbooking.SearchTransactionbybookingId(searchterm)
-            res.status(HTTPStatusCode.OK).json({transaction})
-        }catch (error:any) {
-                console.error("Error in fetch tech by search:", error);
-                res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({ message: AdminMessages.SERVER.ERROR, error: error.message });
-            }
-    }
-
+    
     async getDashboard(req:Request,res:Response):Promise<void>{
         console.log("admin controller")
         try {

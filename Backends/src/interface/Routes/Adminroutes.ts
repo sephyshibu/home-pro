@@ -1,5 +1,13 @@
 import express from 'express'
 import { AdminController } from '../controllers/AdminController'
+import { AdminAuthController } from '../controllers/AdminAuthController'
+import { AdminTransactionController } from '../controllers/AdminTransactionController'
+import { AdminRefundRequestController } from '../controllers/AdminRefundRequestController'
+import { AdminSearchController } from '../controllers/AdminSearchController'
+
+
+
+
 import { Login } from '../../application/usecase/Admin/LoginAdmin'
 import { AdminRepositoryImpl } from '../../infrastructure/repository/AdminRepositoryImpl'
 import { RefreshToken } from '../../application/usecase/Admin/RefreshToken'
@@ -65,9 +73,31 @@ const searchtransactionbybookingId=new SearchTransaction(transactionrepository)
 const admindashboard= new GetAdminDashboard(adminRepository)
 
 
-const adminController= new AdminController(
-    loginadmin,
+const adminauthcontroller= new AdminAuthController(
+        loginadmin,
     refreshtoken,
+)
+
+const admintransactioncontroller= new AdminTransactionController(
+    gettransaction,
+    gettransactionwithbookings,
+)
+
+const adminrefundrequestcontroller= new AdminRefundRequestController(
+     
+    fetchrefundrequestwithremark,
+    refundaccepted,
+)
+
+const adminsearchcontroller= new AdminSearchController(
+    seachuserinadmin,
+    seachtechinadmin,
+    searchcategorybyadmin,
+    searchtransactionbybookingId,
+)
+
+const adminController= new AdminController(
+
     fetchallUser,
     unblocblock,
     fetchalltech,
@@ -78,21 +108,18 @@ const adminController= new AdminController(
     blockcat,
     editcategory,
     getcategorybyId,
-    gettransaction,
-    gettransactionwithbookings,
-    fetchrefundrequestwithremark,
-    refundaccepted,
-    seachuserinadmin,
-    seachtechinadmin,
-    searchcategorybyadmin,
-    searchtransactionbybookingId,
+
+   
+    
     admindashboard
    
 )
 console.log("adminrouter")
-router.post(AdminRoutes.LOGIN,(req,res)=>adminController.login(req,res))
+router.post(AdminRoutes.LOGIN,(req,res)=>adminauthcontroller.login(req,res))
+router.post(AdminRoutes.REFRESH,(req,res)=>adminauthcontroller.refreshtokenController(req,res))
+
+
 router.get(AdminRoutes.FETCH_USER,authToken,(req,res)=>adminController.fetchuser(req,res))
-router.post(AdminRoutes.REFRESH,(req,res)=>adminController.refreshtokenController(req,res))
 router.post(AdminRoutes.ADD_TECH,authToken,(req,res)=>adminController.signuptech(req,res))
 router.patch(AdminRoutes.BLOCK_UNBLOCK_USER,authToken,(req,res)=>adminController.blockUnblock(req,res))
 router.get(AdminRoutes.FETCH_TECH,authToken,(req,res)=>adminController.fetchtech(req,res))
@@ -102,13 +129,17 @@ router.post(AdminRoutes.ADD_CATEGORY,authToken,(req,res)=>adminController.addcat
 router.patch(AdminRoutes.BLOCK_UNBLOACK_CATEGORY,authToken,(req,res)=>adminController.blockunblockcatagory(req,res))
 router.patch(AdminRoutes.EDIT_CATEGORY,authToken,(req,res)=>adminController.editcategory(req,res))
 router.get(AdminRoutes.FETCH_PARTICULAR_CATEGORY,authToken,(req,res)=>adminController.fetchCategoryById(req,res))
-router.get(AdminRoutes.FETCH_TRANSACTIONS,authToken,(req,res)=>adminController.fetchTransaction(req,res))
-router.get(AdminRoutes.FETCH_TRANSACTION_WITH_BOOKING,authToken,(req,res)=>adminController.transactionwithBookings(req,res))
-router.get(AdminRoutes.FETCH_REFUND_REQUEST_ALL,authToken,(req,res)=>adminController.fetchingrequestrefund(req,res))
-router.post(AdminRoutes.ACCEPT_REFUND,authToken,(req,res)=>adminController.acceptingrefund(req,res))
-router.get(AdminRoutes.SEARCH_USER,authToken,(req,res)=>adminController.searchingUsers(req,res))
-router.get(AdminRoutes.SEARCH_TECH,authToken,(req,res)=>adminController.searchingTech(req,res))
-router.get(AdminRoutes.SEARCH_CATEGORY,authToken,(req,res)=>adminController.searchingCategory(req,res))
-router.get(AdminRoutes.SEARCH_BOOKing,authToken,(req,res)=>adminController.searchbookingtransaction(req,res))
 router.get(AdminRoutes.DASHBOARD,authToken,(req,res)=>adminController.getDashboard(req,res))
+
+router.get(AdminRoutes.FETCH_TRANSACTIONS,authToken,(req,res)=>admintransactioncontroller.fetchTransaction(req,res))
+router.get(AdminRoutes.FETCH_TRANSACTION_WITH_BOOKING,authToken,(req,res)=>admintransactioncontroller.transactionwithBookings(req,res))
+
+router.get(AdminRoutes.FETCH_REFUND_REQUEST_ALL,authToken,(req,res)=>adminrefundrequestcontroller.fetchingrequestrefund(req,res))
+router.post(AdminRoutes.ACCEPT_REFUND,authToken,(req,res)=>adminrefundrequestcontroller.acceptingrefund(req,res))
+
+router.get(AdminRoutes.SEARCH_USER,authToken,(req,res)=>adminsearchcontroller.searchingUsers(req,res))
+router.get(AdminRoutes.SEARCH_TECH,authToken,(req,res)=>adminsearchcontroller.searchingTech(req,res))
+router.get(AdminRoutes.SEARCH_CATEGORY,authToken,(req,res)=>adminsearchcontroller.searchingCategory(req,res))
+router.get(AdminRoutes.SEARCH_BOOKing,authToken,(req,res)=>adminsearchcontroller.searchbookingtransaction(req,res))
+
 export {router as adminRouter}
