@@ -1,4 +1,6 @@
 import { Request,Response } from "express";
+import dotenv from 'dotenv'
+dotenv.config()
 import { HTTPStatusCode } from "../../domain/enums/HttpStatusCode";
 import { TechMessages } from "../../domain/shared/Techmessage/techmessage";
 import { LoginTech } from "../../application/usecase/Tech/LoginTech";
@@ -41,10 +43,10 @@ export class techController{
         try {
             const{email,password}=req.body
             const result=await this._logintech.logintech(email,password)
-            res.cookie("refreshtokentech", result.refreshtoken,{
-                httpOnly:true,
-                secure:false,
-                maxAge:7*24*60*60*1000,
+            res.cookie(process.env.COOKIE_NAME_TECH || "refreshtokentech", result.refreshtoken,{
+                httpOnly:process.env.COOKIE_HTTPONLY==='true',
+                secure:process.env.COOKIE_SECURE==='false',
+                maxAge:parseInt(process.env.COOKIE_MAXAGE ||"604800000"),
             })
             res.status(HTTPStatusCode.OK).json({message:TechMessages.LOGIN_SUCCESS, tech:result.tech,token:result.accesstoken})
         } 
@@ -55,7 +57,7 @@ export class techController{
 
     async refreshtokenController(req:Request, res:Response):Promise<void>{
         try {
-            const token=req.cookies?.refreshtokentech;
+            const token=req.cookies?.[process.env.COOKIE_NAME_TECH||"refreshtokentech"];
             console.log("refreshtokencontrollertech",token)
             const newaccesstoken=await this._refreshtoken.refresh(token);
              console.log("in refresh token controller tech with new access tokern ",newaccesstoken)
