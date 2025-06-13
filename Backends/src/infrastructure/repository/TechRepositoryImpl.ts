@@ -5,9 +5,11 @@ import { ITechRepository } from "../../domain/repository/Techrepository";
 import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
 import { admintechmapper } from "../utils/admintechmapper";
-import { TechProfileDTO } from "../../application/dto/TechDTO";
+import { TechProfilesDTO } from "../../application/dto/TechDTO";
 import { fetchtechavailable } from "../utils/techavailablemapper";
 import { TechAvailableDTO } from "../../application/dto/TechAvailableDTO";
+import { TechProfileDTO } from "../../application/dto/TechProfileDTO";
+import { fetchtechinusermapper } from "../utils/fetchtechinusermapper";
 export interface FilterOptions {
   fromDate?: string;
   toDate?: string;
@@ -33,7 +35,7 @@ export class TechRepositoryImpl implements ITechRepository{
         return tech?tech.toObject():null
     }
 
-    async fetchTech(sortBy='name', order:'asc'|'desc'='asc',skip:number, limit:number): Promise<{tech:TechProfileDTO[],total:number}> {
+    async fetchTech(sortBy='name', order:'asc'|'desc'='asc',skip:number, limit:number): Promise<{tech:TechProfilesDTO[],total:number}> {
         const sortOrder = order === 'asc' ? 1 : -1;
         const [tech,total]=await Promise.all([
             TechModel
@@ -82,9 +84,17 @@ export class TechRepositoryImpl implements ITechRepository{
         return await TechModel.findById(techid)
     }
 
-    async fetchTechwithcategory(techid:string):Promise<ITech|null>{
+    async fetchTechwithcategory(techid:string):Promise<TechProfileDTO|null>{
         console.log("impl")
-        return await TechModel.findById(techid).populate('categoryid',"name description")
+        const technician= await TechModel.findById(techid).populate('categoryid',"name description")
+        
+        if(!technician)
+        {
+            return  null
+        }
+
+        const safetechdetails=fetchtechinusermapper(technician)
+        return safetechdetails
     }
 
     async edittech(techid: string, update: Partial<ITech>): Promise<ITech> {

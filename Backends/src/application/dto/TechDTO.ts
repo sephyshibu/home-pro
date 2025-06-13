@@ -17,7 +17,7 @@ export interface UpdateTechnicianProfileDTO {
   image?: string;
 }
 
-export interface TechProfileDTO{
+export interface TechProfilesDTO{
   _id?:string,
   name?:string,
   email:string,

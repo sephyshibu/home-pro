@@ -1,7 +1,7 @@
 import { ITech } from "../../domain/models/Tech";
-import { TechProfileDTO } from "../../application/dto/TechDTO";
+import { TechProfilesDTO } from "../../application/dto/TechDTO";
 
-export function admintechmapper(tech:ITech):TechProfileDTO{
+export function admintechmapper(tech:ITech):TechProfilesDTO{
     return{
         _id:tech._id?.toString(),
         name:tech.name,
