@@ -1,5 +1,6 @@
 import { ITech } from "../models/Tech";
 import { TechProfileDTO } from "../../application/dto/TechDTO";
+import { TechAvailableDTO } from "../../application/dto/TechAvailableDTO";
 export interface FilterOptions {
   fromDate?: string;
   toDate?: string;
@@ -14,7 +15,7 @@ export interface ITechRepository{
     blockunblock(techid:string, isBlocked:boolean):Promise<ITech>
     findOneTech(techid:string):Promise<ITech|null>
     edittech(techid:string,update:Partial<ITech>):Promise<ITech>
-    fetchTechbasedonavilablity(pincode:string, date:string, categoryId:string):Promise<ITech[]|null>
+    fetchTechbasedonavilablity(pincode:string, date:string, categoryId:string):Promise<TechAvailableDTO[]|null>
     fetchTechwithcategory(techid:string):Promise<ITech|null>
     increasenoofworks(techId:string):Promise<void>
     fetchTechsBySearch(username:string):Promise<ITech[]|null>

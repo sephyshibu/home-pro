@@ -6,7 +6,8 @@ import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
 import { admintechmapper } from "../utils/admintechmapper";
 import { TechProfileDTO } from "../../application/dto/TechDTO";
-
+import { fetchtechavailable } from "../utils/techavailablemapper";
+import { TechAvailableDTO } from "../../application/dto/TechAvailableDTO";
 export interface FilterOptions {
   fromDate?: string;
   toDate?: string;
@@ -106,7 +107,7 @@ export class TechRepositoryImpl implements ITechRepository{
               }
         }
 
-    async fetchTechbasedonavilablity(pincode: string, date: string, categoryId: string): Promise<ITech[] | null> {
+    async fetchTechbasedonavilablity(pincode: string, date: string, categoryId: string): Promise<TechAvailableDTO[] | null> {
         console.log("impl repository",pincode, date, categoryId)
         try {
             const technicians=await TechModel.find({
@@ -120,8 +121,9 @@ export class TechRepositoryImpl implements ITechRepository{
                   }
             })
             console.log("tech", technicians)
+            const safetechavalable=technicians.map(fetchtechavailable)
 
-            return technicians.length>0?technicians:null
+            return technicians.length>0?safetechavalable:null
         } catch (error) {
             console.error("Error fetching available technicians:", error);
             return null;
