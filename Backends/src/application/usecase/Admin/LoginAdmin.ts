@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import { AdminModel } from "../../../infrastructure/db/schemas/AdminModel";
 import { WalletModel } from "../../../infrastructure/db/schemas/Walletmodel";
+import { generateAccessToken, generaterefreshtoken } from "../../../infrastructure/generateToken";
 import { userModel } from "../../../infrastructure/db/schemas/Usermodel";
 import jwt from 'jsonwebtoken'
 
@@ -28,16 +29,27 @@ export class Login{
                     ownerId:newadmin._id,
                     userType:"admin"
                 })
-                const accesstoken=jwt.sign({email:newadmin.email},process.env.JWT_SECRET!, { expiresIn: "15m" });
-                const refreshtoken=jwt.sign({email: newadmin.email }, process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
+
+                const payload={email:newadmin.email}
+
+                const accesstoken=generateAccessToken(payload)
+                const refreshtoken=generaterefreshtoken(payload)
+                // const accesstoken=jwt.sign({email:newadmin.email},process.env.JWT_SECRET!, { expiresIn: "15m" });
+                // const refreshtoken=jwt.sign({email: newadmin.email }, process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
                 return {admin:newadmin,accesstoken, refreshtoken}
             }else{
                 if (password !=adminpassword) {
                     throw new Error("Invalid password for admin.");
                 }
                 console.log(admin.password)
-                const accesstoken=jwt.sign({email:admin.email},process.env.JWT_SECRET!, { expiresIn: "15m" });
-                const refreshtoken=jwt.sign({email: admin.email }, process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
+
+                const payload={email:admin.email}
+
+                const accesstoken=generateAccessToken(payload)
+                const refreshtoken=generaterefreshtoken(payload)
+
+                // const accesstoken=jwt.sign({email:admin.email},process.env.JWT_SECRET!, { expiresIn: "15m" });
+                // const refreshtoken=jwt.sign({email: admin.email }, process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
             return {admin:admin,accesstoken, refreshtoken}
 
 

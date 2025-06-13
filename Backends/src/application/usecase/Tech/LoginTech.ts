@@ -1,7 +1,7 @@
 import { ITechRepository } from "../../../domain/repository/Techrepository";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-
+import { generateAccessToken, generaterefreshtoken } from "../../../infrastructure/generateToken";
 
 export class LoginTech{
     constructor(private _techrepository:ITechRepository){}
@@ -27,8 +27,14 @@ export class LoginTech{
             throw new Error("tech is blocked by admin")
         }
 
-        const accesstoken=jwt.sign({email:tech.email},process.env.JWT_SECRET!,{expiresIn:"15m"})
-        const refreshtoken =jwt.sign({email:tech.email},process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
+        const payload={email:tech.email}
+
+        const accesstoken=generateAccessToken(payload)
+        const refreshtoken=generaterefreshtoken(payload)
+        
+
+        // const accesstoken=jwt.sign({email:tech.email},process.env.JWT_SECRET!,{expiresIn:"15m"})
+        // const refreshtoken =jwt.sign({email:tech.email},process.env.JWT_REFRESH_SECRET!, { expiresIn: "7d" });
 
         return { tech, accesstoken, refreshtoken };
     }
