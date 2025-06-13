@@ -97,8 +97,13 @@ export class UserRepositoryImpl implements IUserRepository{
           }
     }
 
-    async findOneuser(userId: string): Promise<IUser | null> {
-        return await userModel.findById(userId)
+    async findOneuser(userId: string): Promise<UserprofileDTO | null> {
+        let user= await userModel.findById(userId)
+        if(!user){
+            return null
+        }
+        const safeuser=adminusermapper(user)
+        return safeuser
     }
 
     async edituser(userId: string, update: Partial<IUser>): Promise<IUser> {
