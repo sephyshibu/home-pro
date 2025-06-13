@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { CheckUserStatus } from "../../application/usecase/User/CheckuserStatus";
 import { UserRepositoryImpl } from "../repository/UserRepositoryImpl";
 import jwt ,{TokenExpiredError} from 'jsonwebtoken';
-import { UserRepository } from "../../domain/repository/Userrepository";
+import { IUserRepository } from "../../domain/repository/Userrepository";
 
-const userrepository: UserRepository = new UserRepositoryImpl();
+const userrepository: IUserRepository = new UserRepositoryImpl();
 const checkuserstatuss = new CheckUserStatus(userrepository);
 
 interface CustomRequest extends Request {

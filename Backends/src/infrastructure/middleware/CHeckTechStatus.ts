@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express"; 
 import { ChecktechStatus } from "../../application/usecase/Tech/CheckTechStatus";
 import jwt ,{TokenExpiredError} from 'jsonwebtoken';
-import { TechRepository } from "../../domain/repository/Techrepository";
+import { ITechRepository } from "../../domain/repository/Techrepository";
 import { TechRepositoryImpl } from "../repository/TechRepositoryImpl";
-const techrepository: TechRepository = new TechRepositoryImpl();
+const techrepository: ITechRepository = new TechRepositoryImpl();
 const checktechstatuss = new ChecktechStatus(techrepository);
 
 interface CustomRequest extends Request {
