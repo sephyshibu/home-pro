@@ -16,3 +16,12 @@ export interface UpdateTechnicianProfileDTO {
   availability?: boolean;
   image?: string;
 }
+
+export interface TechProfileDTO{
+  _id?:string,
+  name?:string,
+  email:string,
+  phone:string,
+  isBlocked:boolean,
+  
+}

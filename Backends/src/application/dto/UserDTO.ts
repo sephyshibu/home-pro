@@ -1,4 +1,4 @@
-
+import { IUser } from "../../domain/models/User";
 export interface CreateUserDTO {
   name: string;
   email: string;
@@ -19,3 +19,13 @@ export interface UpdateUserProfileDTO {
   address?: string;
   image?: string;
 }
+
+
+export interface UserprofileDTO{
+  _id?:string,
+  name:string,
+  email:string,
+  phone?:string,
+  isBlocked:boolean
+}
+

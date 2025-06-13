@@ -2,8 +2,8 @@ import { IAdmin } from "../../domain/models/Admin";
 import { AdminModel } from "../db/schemas/AdminModel";
 import { IAdminRepository, FilterOptions } from "../../domain/repository/Adminrepository";
 import { BookingModels } from "../db/schemas/BookingModel";
-
-
+import { admindashboardbookingsdetailsDTO } from "../../application/dto/AdminDashboardDTo";
+import { adminbookingmapper } from "../utils/adminbookingmapper";
 
 export class AdminRepositoryImpl implements IAdminRepository{
 
@@ -63,6 +63,8 @@ export class AdminRepositoryImpl implements IAdminRepository{
             select:"addressname"
         })
 
+        const safebookingdetails=bookings.map(adminbookingmapper)
+
         
 
         const totalOrders=bookings.length
@@ -79,7 +81,7 @@ export class AdminRepositoryImpl implements IAdminRepository{
                             .sort((a,b)=>new Date(a.date).getTime()- new Date(b.date).getTime())
 
         return {
-            totalOrders,totaladmincommision,graphData,bookingdetails:bookings
+            totalOrders,totaladmincommision,graphData,bookingdetails:safebookingdetails
         }
 
 

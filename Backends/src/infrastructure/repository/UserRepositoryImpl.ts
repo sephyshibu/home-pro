@@ -2,6 +2,10 @@ import { IUser } from "../../domain/models/User";
 import { userModel } from "../db/schemas/Usermodel";
 import { IUserRepository } from "../../domain/repository/Userrepository";
 import bcrypt from 'bcryptjs'
+import { adminusermapper } from "../utils/adminusermapper";
+import { UserprofileDTO } from "../../application/dto/UserDTO";
+
+
 export class UserRepositoryImpl implements IUserRepository{
     async createUser(userdata:IUser):Promise<IUser>{
         console.log("userdata",userdata)
@@ -35,7 +39,7 @@ export class UserRepositoryImpl implements IUserRepository{
         const user=await userModel.findOne({googleId})
         return user?user.toObject():null
     }
-    async fetchUser(sortBy: string = 'name', order: 'asc' | 'desc' = 'asc', skip:number, limit:number):Promise<{users:IUser[]|null,total: number}>{
+    async fetchUser(sortBy: string = 'name', order: 'asc' | 'desc' = 'asc', skip:number, limit:number):Promise<{users:UserprofileDTO[]|null,total: number}>{
         const sortOrder = order === 'asc' ? 1 : -1;
         const [users, total] = await Promise.all([
             userModel
@@ -46,8 +50,9 @@ export class UserRepositoryImpl implements IUserRepository{
             .limit(limit),
             userModel.countDocuments()
         ]);
+        const safeuser=users.map(adminusermapper)
 
-        return { users, total };
+        return { users:safeuser, total };
     }
 
     async fetchUsersBySearch(username: string): Promise<IUser[]|null> {

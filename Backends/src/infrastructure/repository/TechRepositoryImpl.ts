@@ -4,6 +4,8 @@ import { TechModel } from "../db/schemas/techModel";
 import { ITechRepository } from "../../domain/repository/Techrepository";
 import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
+import { admintechmapper } from "../utils/admintechmapper";
+import { TechProfileDTO } from "../../application/dto/TechDTO";
 
 export interface FilterOptions {
   fromDate?: string;
@@ -30,7 +32,7 @@ export class TechRepositoryImpl implements ITechRepository{
         return tech?tech.toObject():null
     }
 
-    async fetchTech(sortBy='name', order:'asc'|'desc'='asc',skip:number, limit:number): Promise<{tech:ITech[],total:number}> {
+    async fetchTech(sortBy='name', order:'asc'|'desc'='asc',skip:number, limit:number): Promise<{tech:TechProfileDTO[],total:number}> {
         const sortOrder = order === 'asc' ? 1 : -1;
         const [tech,total]=await Promise.all([
             TechModel
@@ -40,7 +42,8 @@ export class TechRepositoryImpl implements ITechRepository{
             .limit(limit),
             TechModel.countDocuments()
         ])
-        return{tech,total}
+        const safetech=tech.map(admintechmapper)
+        return{tech:safetech,total}
         
     }
 
