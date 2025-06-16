@@ -118,6 +118,7 @@ const AddCategory:React.FC=()=>{
                             placeholder="Password"
                             className="w-full rounded-md border px-3 py-2 text-sm"
                         />
+                        {error.image&& <p className="text-red-500 text-center text-sm">{error.image}</p>}
                         
                         
                         <button
