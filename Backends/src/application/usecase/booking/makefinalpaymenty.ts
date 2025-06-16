@@ -13,6 +13,8 @@ export class FinalPayment{
             const booking=await this._bookingrepository.findById(bookingId)
             if(!booking) throw new Error("no bookings")
 
+            const updatedtech=await this._bookingrepository.findTech(bookingId)
+
             let totalMinutes=calculateTotalWorkMinutes(booking.workTime)
             console.log("rate per  hour",booking.rateperhour)
             const ratePerMinute = booking.rateperhour! / 60;

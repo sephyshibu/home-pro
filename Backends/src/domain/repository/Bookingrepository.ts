@@ -1,4 +1,5 @@
 import { IBooking } from "../models/Bookings";
+import { ITech } from "../models/Tech";
 import { IUser } from "../models/User";
 export interface TechDashboardSummary {
   totalOrders: number;
@@ -7,6 +8,7 @@ export interface TechDashboardSummary {
 
 
 export interface IBookingRepository {
+    findTech(bookingId:string):Promise<ITech|null>
     creates(booking: IBooking): Promise<IBooking>;
     findBookingByUserTechDate(userId: string, technicianId: string, bookedDate: string): Promise<IBooking | null> 
     update(bookingId: Object, updatedBooking: Partial<IBooking>): Promise<IBooking>;

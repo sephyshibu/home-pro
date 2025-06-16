@@ -6,6 +6,7 @@ import { AddressModel } from "../db/schemas/AddressModel";
 import { IUser } from "../../domain/models/User";
 import mongoose from "mongoose";
 import { userModel } from "../db/schemas/Usermodel";
+import { ITech } from "../../domain/models/Tech";
 
 interface TechDashboardSummary {
   totalOrders: number;
@@ -488,6 +489,32 @@ export class bookingrepositoryImpl implements IBookingRepository{
       return bookings
     }
 
+  }
+
+  async findTech(bookingId: string): Promise<ITech|null> {
+      try {
+        const booking=await BookingModels.findById(bookingId).populate('technicianId')
+        
+        if(!booking || !booking.technicianId){
+          return null;
+        }
+        const techId=(booking.technicianId as any)._id
+        const bookeddate=booking.booked_date
+
+        const updatetech=await TechModel.findByIdAndUpdate(techId,
+                                                           {$pull:{
+                                                            bookedSlots:{date:bookeddate}
+                                                           }
+                                                          },{
+                                                            new:true
+                                                          })
+        return updatetech
+
+      
+      } catch (error) {
+         console.log("Error in remove booked date:", error);
+      throw new Error('Failed to move booked date');
+      }
   }
   async findbookingIdreturnIUser(id: string): Promise<IUser | null> {
      try {
