@@ -79,6 +79,7 @@ const AddCategory:React.FC=()=>{
     }  
     
     return(
+      
             <div className="p-6">
                 <button onClick={()=>setIsOpen(true)} className="bg-emerald-700 hover:bg-emerald-800 text-white py-2 px-4 rounded-md">
                     Add New Category

@@ -4,6 +4,11 @@ import axiosInstanceadmin from "../../../Axios/AdminAxios/axios";
 import toast from "react-hot-toast";
 import { uploadImageToCloudinary } from "../../../utils/cloudinaryUpload"; // <-- Make sure this exists
 
+import { useDispatch } from "react-redux";
+
+import { cleartoken } from "../../../features/AdmintokenSlice";
+import { logoutadmin } from "../../../features/AdminSlice";
+import logo from '../../../../public/images/Resized/Logo Landscape.png'
 interface Category {
   name: string;
   description: string;
@@ -12,13 +17,32 @@ interface Category {
 
 const EditCategory: React.FC = () => {
   const { catid } = useParams<{ catid: string }>();
-  const navigate = useNavigate();
+  const adminId=localStorage.getItem('adminId')
+
 
   const [formData, setFormData] = useState<Category>({
     name: "",
     description: "",
     image: ""
   });
+  const navigate=useNavigate()
+    const dispatch=useDispatch()
+  
+    const handleLogOut=async()=>{
+      if(adminId){
+        localStorage.removeItem('adminId')
+        
+      localStorage.removeItem('persist:admin');
+      localStorage.removeItem('admintoken');
+  
+      dispatch(logoutadmin());
+      dispatch(cleartoken());
+        // await persistor.purge()
+        navigate('/admin')
+      }else{
+        navigate('/admin/admindashboard')
+      }
+    }
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -76,7 +100,21 @@ const EditCategory: React.FC = () => {
   };
 
   return (
+    <>
+        <div className="bg-[#8EB69B] text-white flex justify-between items-center px-6 py-4">
+      <div className="flex items-center gap-2">
+        <img src={logo} alt="HomePro Logo" className="h-10" />
+      </div>
+      <button
+        type="button"
+        onClick={handleLogOut}
+        className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md text-white"
+      >
+        {adminId ? "LogOut" : "LogIn"}
+      </button>
+    </div>
     <div className="max-w-lg mx-auto mt-10 bg-white p-6 rounded shadow">
+        
       <h2 className="text-xl font-bold mb-4">Edit Category</h2>
 
       <input
@@ -114,6 +152,7 @@ const EditCategory: React.FC = () => {
         {loading ? "Saving..." : "Save Changes"}
       </button>
     </div>
+    </>
   );
 };
 
