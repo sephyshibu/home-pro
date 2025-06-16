@@ -79,9 +79,15 @@ export class TechRepositoryImpl implements ITechRepository{
         return tech
     }
 
-    async findOneTech(techid: string): Promise<ITech | null> {
+    async findOneTech(techid: string): Promise<TechProfileDTO | null> {
         console.log("findtech")
-        return await TechModel.findById(techid)
+        const techdetails= await TechModel.findById(techid)
+        if(!techdetails){
+            return null
+        }
+        const safetech=fetchtechinusermapper(techdetails)
+        console.log("safetecg", safetech)
+        return safetech
     }
 
     async fetchTechwithcategory(techid:string):Promise<TechProfileDTO|null>{

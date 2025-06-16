@@ -14,7 +14,7 @@ export interface ITechRepository{
     findByEmail(email:string):Promise<ITech|null>
     fetchTech(sortBy:string,order:'asc'|'desc',skip:number,limit:number):Promise<{tech:TechProfilesDTO[],total:number}>
     blockunblock(techid:string, isBlocked:boolean):Promise<ITech>
-    findOneTech(techid:string):Promise<ITech|null>
+    findOneTech(techid:string):Promise<TechProfileDTO|null>
     edittech(techid:string,update:Partial<ITech>):Promise<ITech>
     fetchTechbasedonavilablity(pincode:string, date:string, categoryId:string):Promise<TechAvailableDTO[]|null>
     fetchTechwithcategory(techid:string):Promise<TechProfileDTO|null>
