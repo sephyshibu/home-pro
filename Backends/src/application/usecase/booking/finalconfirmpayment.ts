@@ -12,6 +12,8 @@ export class FinalPaymentconfirm{
     const booking=await this._bookingrepository.findById(bookingId)
     if(!booking) throw new Error("no booking founded")
 
+    
+
     let totalMinutes=calculateTotalWorkMinutes(booking.workTime)
     const ratePerMinute = booking.rateperhour!/60;
     const workFinalAmount = Math.ceil(ratePerMinute * totalMinutes);

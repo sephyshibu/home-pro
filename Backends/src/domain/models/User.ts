@@ -1,3 +1,9 @@
+export interface Categorycount{
+    id:Object,
+    count:number
+
+}
+
 export interface IUser{
     _id?:Object,
     name:string,
@@ -6,6 +12,8 @@ export interface IUser{
     phone?:string,
     googleIds?:string|null,
     isBlocked:boolean,
-    googleVerified?:boolean
+    googleVerified?:boolean,
+    
+    
 
 }

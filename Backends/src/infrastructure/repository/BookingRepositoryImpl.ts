@@ -5,6 +5,7 @@ import { TechModel } from "../db/schemas/techModel";
 import { AddressModel } from "../db/schemas/AddressModel";
 import { IUser } from "../../domain/models/User";
 import mongoose from "mongoose";
+import { userModel } from "../db/schemas/Usermodel";
 
 interface TechDashboardSummary {
   totalOrders: number;
@@ -178,6 +179,8 @@ export class bookingrepositoryImpl implements IBookingRepository{
       async countBookingsByUserId(userId: string): Promise<number> {
       return await BookingModels.countDocuments({ userId });
     }
+
+   
     async countBookingBytechId(techId: string): Promise<number> {
         const count=await BookingModels.countDocuments({
           technicianId:techId,

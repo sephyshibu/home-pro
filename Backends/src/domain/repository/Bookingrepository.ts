@@ -26,4 +26,5 @@ export interface IBookingRepository {
     totalSales(techId: string): Promise<TechDashboardSummary>;
 
 
+
 }

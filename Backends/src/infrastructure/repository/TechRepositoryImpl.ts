@@ -17,6 +17,7 @@ export interface FilterOptions {
 }
 
 export class TechRepositoryImpl implements ITechRepository{
+    
     async createtech(tech: ITech): Promise<ITech> {
         console.log("tech data", tech)
         console.log("tech sign in")
