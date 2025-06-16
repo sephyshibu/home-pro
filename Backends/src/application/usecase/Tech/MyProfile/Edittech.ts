@@ -1,5 +1,6 @@
 import { ITechRepository } from "../../../../domain/repository/Techrepository";
 import { ITech } from "../../../../domain/models/Tech";
+import { TechProfileDTO } from "../../../dto/TechProfileDTO";
 
 export class EditTech{
     constructor(private _techrepository:ITechRepository){}
@@ -16,7 +17,7 @@ export class EditTech{
         profileimgurl: string;
         consulationFee: number;
         workphotos: string[];
-      }):Promise<{message:string,updatetech?:ITech}>{
+      }):Promise<{message:string,updatetech?:TechProfileDTO}>{
         const existingtech=await this._techrepository.findOneTech(techId)
         console.log("existing tech inside edittech in  usecase",existingtech)
         if(!existingtech){
@@ -27,7 +28,7 @@ export class EditTech{
         console.log("updated tech", updatetech)
         return {
             message:"Updarted",
-            updatetech
+            updatetech:updatetech??undefined
         }
       }
 }

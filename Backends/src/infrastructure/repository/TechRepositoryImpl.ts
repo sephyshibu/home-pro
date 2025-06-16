@@ -103,11 +103,14 @@ export class TechRepositoryImpl implements ITechRepository{
         return safetechdetails
     }
 
-    async edittech(techid: string, update: Partial<ITech>): Promise<ITech> {
+    async edittech(techid: string, update: Partial<ITech>): Promise<TechProfileDTO> {
         console.log("edit tech",techid, update)
+
         const updated=await TechModel.findByIdAndUpdate(techid,update,{new:true})
         if(!updated) throw new Error("Tech Updation is failed")
-        return updated
+        const safetech=await admintechmapper(updated)
+
+        return safetech
     }
 
     async findById(techid: string): Promise<{ isBlocked: boolean; email: string } | null> {

@@ -7,7 +7,7 @@ export class PasswordChange{
     constructor(private _techrepository:ITechRepository){}
 
 
-    async editpassword(techId:string,password:string):Promise<{message:string,updatetech?:ITech}>{
+    async editpassword(techId:string,password:string):Promise<{message:string}>{
  
         const existingtech =await this._techrepository.findOneTech(techId)
         if(!existingtech){
@@ -23,7 +23,7 @@ export class PasswordChange{
     
             return {
                 message: "Password updated successfully",
-                updatetech
+          
             };
         } catch (error) {
             console.error("Error while updating password:", error);
