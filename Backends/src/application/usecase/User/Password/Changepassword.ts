@@ -1,13 +1,14 @@
 import { IUserRepository } from "../../../../domain/repository/Userrepository";
 import { IUser } from "../../../../domain/models/User";
 import bcrypt from "bcryptjs"
+import { UserprofileDTO } from "../../../dto/UserDTO";
 
 
 export class PasswordChange{
     constructor(private _userrepository:IUserRepository){}
 
 
-    async editpassword(userId:string,oldpassword:string,password:string):Promise<{message:string,updateuser?:IUser}>{
+    async editpassword(userId:string,oldpassword:string,password:string):Promise<{message:string,updateuser?:UserprofileDTO}>{
  
         const existinguser =await this._userrepository.findOneuser(userId)
         if(!existinguser){
@@ -29,7 +30,7 @@ export class PasswordChange{
     
             return {
                 message: "Password updated successfully",
-                updateuser
+               updateuser: updateuser ?? undefined // convert null to undefined
             };
         } catch (error) {
             console.error("Error while updating password:", error);

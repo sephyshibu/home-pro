@@ -5,7 +5,7 @@ export class GetUserById{
 
 
     async getuserById(userId:string){
-        const user=await this._userrepository.findOneuser(userId)
+        const user=await this._userrepository.findOneuserProfile(userId)
         if(!user) throw new Error("No user found")
         return user
 
