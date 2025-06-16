@@ -84,6 +84,7 @@ const ChangePasswords:React.FC=()=>{
       
          
             toast.success(result)
+            setformdata({password:"", confirmpassword:""})
             
         } catch (error:any) {
             console.error("password change",error)
