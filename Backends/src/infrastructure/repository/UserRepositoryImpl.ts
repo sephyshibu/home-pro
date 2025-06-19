@@ -102,8 +102,8 @@ export class UserRepositoryImpl implements IUserRepository{
             return null
         }
         const safeuser=adminusermapper(user)
-        return safeuser
-    }
+        return safeuser
+}
 
     async findOneuser(userId: string): Promise<IUser | null> {
         return await userModel.findById(userId)
