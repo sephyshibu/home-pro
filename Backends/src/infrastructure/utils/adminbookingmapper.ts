@@ -1,4 +1,4 @@
-import { admindashboardbookingsdetailsDTO } from "../../application/dto/AdminDashboardDTo";
+import { admindashboardbookingsdetailsDTO } from "../../application/dto/AdminDashboardDTO";
 
 export function adminbookingmapper(booking:any):admindashboardbookingsdetailsDTO{
     return{

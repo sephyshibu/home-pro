@@ -2,7 +2,7 @@ import { IAdmin } from "../../domain/models/Admin";
 import { AdminModel } from "../db/schemas/AdminModel";
 import { IAdminRepository, FilterOptions } from "../../domain/repository/Adminrepository";
 import { BookingModels } from "../db/schemas/BookingModel";
-import { admindashboardbookingsdetailsDTO } from "../../application/dto/AdminDashboardDTo";
+// import { admindashboardbookingsdetailsDTO } from "../../application/dto/AdminDashboardDTo";
 import { adminbookingmapper } from "../utils/adminbookingmapper";
 
 export class AdminRepositoryImpl implements IAdminRepository{
