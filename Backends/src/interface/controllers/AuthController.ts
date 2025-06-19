@@ -138,7 +138,12 @@ export class AuthController{
             console.log("google")
             const{email, sub, name}=req.body
             const result=await this._googleLogin.GoogleLogin(email, sub, name);
-            res.status(HTTPStatusCode.OK).json({ message: userMessage.GOOGLE_LOGIN_SUCCESS, user: result.user, token: result.token });
+            res.cookie(process.env.COOKIE_NAME_USER ||"refreshtokenuser", result.refreshtoken,{
+                httpOnly:process.env.COOKIE_HTTPONLY==='true',
+                secure:process.env.COOKIE_SECURE==='false',
+                maxAge:parseInt(process.env.COOKIE_MAXAGE || "604800000"),
+            })
+            res.status(HTTPStatusCode.OK).json({ message: userMessage.GOOGLE_LOGIN_SUCCESS, user: result.user, token: result.accesstoken });
         } catch (err: any) {
             res.status(HTTPStatusCode.BAD_REQUEST).json({ message: err.message });
             }
