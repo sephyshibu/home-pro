@@ -4,7 +4,8 @@ import { TransactionModel } from "../db/schemas/TransactionMode";
 import { WalletModel } from "../db/schemas/Walletmodel";
 import mongoose from "mongoose";
 export class TransactionRepositoryImpl implements ITransactionRepository {
-    async create(transaction: Omit<ITransaction, "id">): Promise<ITransaction> {
+    
+  async create(transaction: Omit<ITransaction, "id">): Promise<ITransaction> {
         console.log("efewf")
       const newTx = await TransactionModel.create(transaction);
       const saved = await newTx.save();
